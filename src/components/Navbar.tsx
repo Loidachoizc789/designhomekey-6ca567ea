@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import logoImg from "@/assets/logo-dhk.png";
 
 const navLinks = [
   { href: "#about", label: "Giới thiệu" },
@@ -39,8 +40,8 @@ const Navbar = () => {
         <div className="section-container">
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* Logo */}
-            <a href="#" className="font-display text-xl md:text-2xl font-bold gradient-text">
-              DesignHomeKey
+            <a href="#" className="flex items-center gap-2">
+              <img src={logoImg} alt="DesignHomeKey" className="h-10 md:h-12 w-auto" />
             </a>
 
             {/* Desktop Navigation */}

@@ -46,10 +46,9 @@ const HeroSection = () => {
             transition={{ delay: 0.3, duration: 0.8 }}
             className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight"
           >
-            Giải pháp{" "}
-            <span className="gradient-text">Phim Trường 3D</span>,
+            <span className="gradient-text">Phim Trường 3D</span> · Thiết Kế 2D
             <br />
-            Thiết Kế 2D & Model 3D
+            Model 3D · Nội Thất · Ngoại Thất
           </motion.h1>
 
           {/* Subtitle */}
