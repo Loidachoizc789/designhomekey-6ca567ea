@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button";
 
 const navLinks = [
   { href: "#about", label: "Giới thiệu" },
-  { href: "#featured", label: "Phim trường 3D" },
+  { href: "#categories", label: "Danh mục" },
   { href: "#benefits", label: "Lợi ích" },
-  { href: "#testimonials", label: "Đánh giá" },
+  { href: "#use-cases", label: "Ứng dụng" },
+  { href: "#collaboration", label: "Hợp tác" },
   { href: "#contact", label: "Liên hệ" },
 ];
 
@@ -39,11 +40,11 @@ const Navbar = () => {
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* Logo */}
             <a href="#" className="font-display text-xl md:text-2xl font-bold gradient-text">
-              VirtualPro VN
+              DesignHomeKey
             </a>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-8">
+            <div className="hidden lg:flex items-center gap-6">
               {navLinks.map((link) => (
                 <a
                   key={link.href}
@@ -56,7 +57,7 @@ const Navbar = () => {
             </div>
 
             {/* Desktop CTA */}
-            <div className="hidden md:flex items-center gap-4">
+            <div className="hidden lg:flex items-center gap-4">
               <Button variant="default" size="sm">
                 Bắt đầu ngay
               </Button>
@@ -65,7 +66,7 @@ const Navbar = () => {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 text-foreground"
+              className="lg:hidden p-2 text-foreground"
             >
               {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -81,7 +82,7 @@ const Navbar = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-x-0 top-16 z-40 glass border-b border-glass-border md:hidden"
+            className="fixed inset-x-0 top-16 z-40 glass border-b border-glass-border lg:hidden"
           >
             <div className="section-container py-6">
               <div className="flex flex-col gap-4">

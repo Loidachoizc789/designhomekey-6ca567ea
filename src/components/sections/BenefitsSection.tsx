@@ -7,33 +7,39 @@ import {
   Expand, 
   Video, 
   Lightbulb,
+  Repeat,
   CheckCircle2 
 } from "lucide-react";
 
 const benefits = [
   {
     icon: Wallet,
-    title: "Tiết kiệm chi phí thuê phim trường vật lý",
-    description: "Giảm đáng kể chi phí thuê studio, nhân công dựng set và vận hành thiết bị.",
-  },
-  {
-    icon: Layers,
-    title: "Tạo nhiều bối cảnh từ một dự án",
-    description: "Dễ dàng chuyển đổi giữa các cảnh khác nhau mà không cần thay đổi vị trí.",
-  },
-  {
-    icon: Expand,
-    title: "Dễ mở rộng concept theo yêu cầu",
-    description: "Tùy chỉnh và mở rộng thiết kế theo brand guidelines của khách hàng.",
-  },
-  {
-    icon: Video,
-    title: "Phù hợp livestream, TV show, quảng cáo",
-    description: "Đáp ứng mọi nhu cầu sản xuất từ livestream đến các chương trình truyền hình.",
+    title: "Giảm chi phí dựng bối cảnh vật lý",
+    description: "Tiết kiệm đáng kể chi phí thuê studio, nhân công dựng set và vận hành thiết bị.",
   },
   {
     icon: Lightbulb,
-    title: "Realtime lighting & camera tracking",
+    title: "Tăng tốc độ sản xuất dự án",
+    description: "Rút ngắn thời gian từ ý tưởng đến sản phẩm hoàn thiện chỉ trong vài giờ.",
+  },
+  {
+    icon: Repeat,
+    title: "Một asset dùng cho nhiều dự án",
+    description: "Tái sử dụng linh hoạt cho nhiều khách hàng, tiết kiệm thời gian thiết kế.",
+  },
+  {
+    icon: Expand,
+    title: "Dễ scale từ nhỏ đến lớn",
+    description: "Bắt đầu từ asset nhỏ, ráp thành dự án lớn theo nhu cầu thực tế.",
+  },
+  {
+    icon: Video,
+    title: "Phù hợp livestream, TV show, event, quảng cáo",
+    description: "Đáp ứng mọi nhu cầu sản xuất từ livestream đến các chương trình truyền hình.",
+  },
+  {
+    icon: Layers,
+    title: "Realtime lighting & camera",
     description: "Hỗ trợ đầy đủ các tính năng virtual production hiện đại nhất.",
   },
 ];
@@ -56,11 +62,11 @@ const BenefitsSection = () => {
           className="text-center max-w-3xl mx-auto mb-16"
         >
           <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold mb-6">
-            Lợi ích khi sử dụng{" "}
-            <span className="gradient-text">Phim Trường 3D</span>
+            Vì sao nên dùng{" "}
+            <span className="gradient-text">Hệ sinh thái 3D & 2D</span> này?
           </h2>
           <p className="text-lg text-muted-foreground">
-            Tối ưu quy trình sản xuất, nâng cao chất lượng nội dung với giải pháp virtual production.
+            Tối ưu quy trình sản xuất, nâng cao chất lượng nội dung với giải pháp virtual production toàn diện.
           </p>
         </motion.div>
 

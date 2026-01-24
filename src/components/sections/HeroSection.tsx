@@ -36,7 +36,7 @@ const HeroSection = () => {
             className="inline-flex items-center gap-2 glass-card px-4 py-2 mb-8"
           >
             <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-            <span className="text-sm text-muted-foreground">Powered by Unreal Engine 5</span>
+            <span className="text-sm text-muted-foreground">Powered by Unreal Engine 5 & Blender</span>
           </motion.div>
 
           {/* Main Heading */}
@@ -47,9 +47,9 @@ const HeroSection = () => {
             className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight"
           >
             Giải pháp{" "}
-            <span className="gradient-text">Phim Trường 3D</span>
+            <span className="gradient-text">Phim Trường 3D</span>,
             <br />
-            & Virtual Production
+            Thiết Kế 2D & Model 3D
           </motion.h1>
 
           {/* Subtitle */}
@@ -59,8 +59,8 @@ const HeroSection = () => {
             transition={{ delay: 0.5, duration: 0.8 }}
             className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10"
           >
-            Phim trường 3D chất lượng cao xây dựng trên Unreal Engine, tích hợp Aximmetry, 
-            hỗ trợ render realtime – sẵn sàng cho livestream, TV show và quảng cáo.
+            Hệ sinh thái asset dựng trên Unreal Engine & Blender: phim trường 3D, thiết kế 2D 
+            và model 3D – tối ưu realtime, dễ tùy chỉnh, sẵn sàng cho livestream, TV show, sự kiện và quảng cáo.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -71,8 +71,8 @@ const HeroSection = () => {
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
             <Button variant="hero" size="xl" asChild>
-              <a href="#featured">
-                Khám phá phim trường 3D
+              <a href="#categories">
+                Khám phá thư viện asset
                 <ArrowRight className="w-5 h-5" />
               </a>
             </Button>

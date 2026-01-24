@@ -1,28 +1,38 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { Zap, Clock, Palette, Layers } from "lucide-react";
+import { Box, Palette, Layers, Repeat, Settings, Cpu } from "lucide-react";
 
 const features = [
   {
-    icon: Zap,
-    title: "Giảm chi phí",
-    description: "Tiết kiệm đáng kể so với dựng bối cảnh vật lý truyền thống",
-  },
-  {
-    icon: Clock,
-    title: "Tăng tốc sản xuất",
-    description: "Rút ngắn thời gian từ ý tưởng đến sản phẩm hoàn thiện",
-  },
-  {
-    icon: Palette,
-    title: "Linh hoạt thay đổi",
-    description: "Thay đổi không gian, màu sắc, ánh sáng chỉ trong vài phút",
+    icon: Box,
+    title: "Phim trường 3D",
+    description: "Talkshow, livestream, TV show, event – sẵn sàng render realtime",
   },
   {
     icon: Layers,
-    title: "Chuẩn Virtual Production",
-    description: "Tối ưu cho UE5 và hệ thống quay realtime chuyên nghiệp",
+    title: "Model 3D",
+    description: "Props, background, modular set – tối ưu UE5 & Blender",
+  },
+  {
+    icon: Palette,
+    title: "Thiết kế 2D",
+    description: "Visual, backdrop, layout – đồng bộ với set 3D",
+  },
+  {
+    icon: Repeat,
+    title: "Tái sử dụng linh hoạt",
+    description: "Một asset dùng cho nhiều dự án, nhiều khách hàng",
+  },
+  {
+    icon: Settings,
+    title: "Dễ tùy chỉnh",
+    description: "Thay đổi theo brand, concept, ngân sách",
+  },
+  {
+    icon: Cpu,
+    title: "Tối ưu realtime",
+    description: "Unreal Engine 5, Aximmetry, render – livestream – event",
   },
 ];
 
@@ -45,16 +55,17 @@ const AboutSection = () => {
           className="text-center max-w-3xl mx-auto mb-16"
         >
           <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold mb-6">
-            Vì sao chúng tôi tạo ra các{" "}
-            <span className="gradient-text">phim trường 3D</span> này?
+            Chúng tôi đang xây dựng{" "}
+            <span className="gradient-text">điều gì?</span>
           </h2>
           <p className="text-lg text-muted-foreground">
-            Chúng tôi chia sẻ và cung cấp các phim trường 3D nhằm giúp studio, agency 
-            và cá nhân sản xuất nội dung chuyên nghiệp với chi phí tối ưu.
+            Chúng tôi xây dựng một tập hợp các thiết kế nhỏ gồm phim trường 3D, model 3D và thiết kế 2D – 
+            tất cả đều hướng tới mục tiêu: ráp nhanh thành dự án lớn, tái sử dụng cho nhiều khách hàng, 
+            linh hoạt chỉnh sửa theo brand, concept, ngân sách.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature, index) => (
             <motion.div
               key={feature.title}

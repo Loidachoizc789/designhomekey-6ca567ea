@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { ArrowRight, MessageCircle } from "lucide-react";
+import { ArrowRight, MessageCircle, Library } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const CTASection = () => {
@@ -26,20 +26,19 @@ const CTASection = () => {
           className="glass-card p-12 md:p-16 text-center max-w-4xl mx-auto glow-primary"
         >
           <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold mb-6">
-            Bắt đầu với{" "}
-            <span className="gradient-text">Phim Trường 3D</span>
-            <br />
-            Ngay Hôm Nay
+            Bắt đầu dự án của bạn{" "}
+            <span className="gradient-text">ngay hôm nay</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-10">
-            Khám phá bộ sưu tập phim trường 3D chất lượng cao hoặc liên hệ với chúng tôi 
-            để được tư vấn giải pháp phù hợp nhất cho dự án của bạn.
+            Khám phá toàn bộ thư viện phim trường 3D, thiết kế 2D và model 3D – 
+            hoặc liên hệ với chúng tôi để được tư vấn giải pháp phù hợp nhất cho dự án của bạn.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button variant="hero" size="xl" asChild>
-              <a href="#featured">
-                Xem toàn bộ phim trường 3D
+              <a href="#categories">
+                <Library className="w-5 h-5" />
+                Xem toàn bộ thư viện
                 <ArrowRight className="w-5 h-5" />
               </a>
             </Button>
