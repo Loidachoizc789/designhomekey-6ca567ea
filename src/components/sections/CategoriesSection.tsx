@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { ArrowRight, Video, Palette, Box, Zap, Sun, Move, Layers, Monitor, Image } from "lucide-react";
+import { ArrowRight, Video, Palette, Box, Zap, Sun, Move, Layers, Monitor, Image, Home, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import setTalkshow from "@/assets/set-talkshow.jpg";
 import setLivestream from "@/assets/set-livestream.jpg";
@@ -51,6 +51,34 @@ const categories = [
     ],
     cta: "Xem model 3D",
     tags: ["Props", "Nội thất", "Modular", "UE5"],
+  },
+  {
+    id: "interior-design",
+    title: "Thiết Kế Nội Thất",
+    description: "Render 3D nội thất căn hộ, biệt thự, văn phòng, showroom – chuẩn thực tế ảo",
+    icon: Home,
+    image: setNews,
+    features: [
+      { icon: Sun, text: "Ánh sáng tự nhiên tối ưu" },
+      { icon: Layers, text: "Vật liệu chân thực" },
+      { icon: Monitor, text: "Hỗ trợ VR walkthrough" },
+    ],
+    cta: "Xem nội thất",
+    tags: ["Căn hộ", "Biệt thự", "Văn phòng", "Showroom"],
+  },
+  {
+    id: "exterior-design",
+    title: "Thiết Kế Ngoại Thất",
+    description: "Phối cảnh mặt tiền, sân vườn, cảnh quan khu đô thị – render chất lượng cao",
+    icon: Building2,
+    image: setTalkshow,
+    features: [
+      { icon: Sun, text: "Render ánh sáng ngày/đêm" },
+      { icon: Move, text: "Cảnh quan linh hoạt" },
+      { icon: Zap, text: "Tối ưu cho presentation" },
+    ],
+    cta: "Xem ngoại thất",
+    tags: ["Mặt tiền", "Sân vườn", "Khu đô thị", "Cảnh quan"],
   },
 ];
 
