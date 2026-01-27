@@ -3,13 +3,13 @@ import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { ArrowRight, MessageCircle, Library } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
 const CTASection = () => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
-  return (
-    <section id="cta" className="py-24 relative overflow-hidden" ref={ref}>
+  const isInView = useInView(ref, {
+    once: true,
+    margin: "-100px"
+  });
+  return <section id="cta" className="py-24 relative overflow-hidden" ref={ref}>
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-glow-secondary/10" />
       <div className="absolute inset-0 grid-pattern opacity-10" />
@@ -19,13 +19,16 @@ const CTASection = () => {
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-glow-secondary/20 rounded-full blur-3xl" />
 
       <div className="section-container relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="glass-card p-12 md:p-16 text-center max-w-4xl mx-auto glow-primary"
-        >
-          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold mb-6">
+        <motion.div initial={{
+        opacity: 0,
+        y: 30
+      }} animate={isInView ? {
+        opacity: 1,
+        y: 0
+      } : {}} transition={{
+        duration: 0.8
+      }} className="glass-card p-12 md:p-16 text-center max-w-4xl mx-auto glow-primary">
+          <h2 className="font-display text-3xl sm:text-4xl font-bold mb-6 md:text-6xl">
             Bắt đầu dự án của bạn{" "}
             <span className="gradient-text">ngay hôm nay</span>
           </h2>
@@ -62,8 +65,6 @@ const CTASection = () => {
           </div>
         </motion.div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default CTASection;
