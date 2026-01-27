@@ -169,55 +169,54 @@ const CategoriesSection = () => {
                 {/* CTA with Submenu */}
                 {category.hasSubmenu ? (
                   <div className="space-y-4">
-                    <div className="flex flex-wrap gap-3">
-                      <Button variant="hero" size="lg" asChild>
-                        <Link to={category.link}>
-                          {category.cta}
-                          <ArrowRight className="w-5 h-5" />
-                        </Link>
-                      </Button>
-                      <Collapsible 
-                        open={openSubmenu === category.id} 
-                        onOpenChange={(open) => setOpenSubmenu(open ? category.id : null)}
-                      >
+                    <Collapsible 
+                      open={openSubmenu === category.id} 
+                      onOpenChange={(open) => setOpenSubmenu(open ? category.id : null)}
+                    >
+                      <div className="flex flex-wrap gap-3">
+                        <Button variant="hero" size="lg" asChild>
+                          <Link to={category.link}>
+                            {category.cta}
+                            <ArrowRight className="w-5 h-5" />
+                          </Link>
+                        </Button>
                         <CollapsibleTrigger asChild>
                           <Button variant="outline" size="lg" className="gap-2">
                             Xem hạng mục
                             <ChevronDown className={`w-4 h-4 transition-transform ${openSubmenu === category.id ? 'rotate-180' : ''}`} />
                           </Button>
                         </CollapsibleTrigger>
-                        <CollapsibleContent className="mt-4">
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            {category.submenuItems?.map((item) => (
-                              <Link
-                                key={item.label}
-                                to={`${category.link}?tab=${item.tab}`}
-                                className="flex items-center gap-4 p-4 rounded-xl bg-card/50 border border-border hover:border-primary/50 hover:bg-primary/5 transition-all group/item"
-                              >
-                                <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
-                                  <item.icon className="w-5 h-5 text-primary" />
-                                </div>
-                                <div>
-                                  <span className="font-semibold text-foreground group-hover/item:text-primary transition-colors block">
-                                    {item.label}
-                                  </span>
-                                  <span className="text-xs text-muted-foreground">{item.description}</span>
-                                </div>
-                              </Link>
-                            ))}
-                          </div>
-                        </CollapsibleContent>
-                      </Collapsible>
-                    </div>
+                      </div>
+                      <CollapsibleContent className="mt-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          {category.submenuItems?.map((item) => (
+                            <Link
+                              key={item.label}
+                              to={`${category.link}?tab=${item.tab}`}
+                              className="flex items-center gap-4 p-4 rounded-xl bg-card/50 border border-border hover:border-primary/50 hover:bg-primary/5 transition-all group/item"
+                            >
+                              <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
+                                <item.icon className="w-5 h-5 text-primary" />
+                              </div>
+                              <div>
+                                <span className="font-semibold text-foreground group-hover/item:text-primary transition-colors block">
+                                  {item.label}
+                                </span>
+                                <span className="text-xs text-muted-foreground">{item.description}</span>
+                              </div>
+                            </Link>
+                          ))}
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
                   </div>
                 ) : (
                   <div className="flex flex-wrap gap-3">
-                    <Button variant="hero" size="lg">
-                      {category.cta}
-                      <ArrowRight className="w-5 h-5" />
-                    </Button>
-                    <Button variant="outline" size="lg" asChild>
-                      <Link to={category.link}>Xem chi tiết</Link>
+                    <Button variant="hero" size="lg" asChild>
+                      <Link to={category.link}>
+                        {category.cta}
+                        <ArrowRight className="w-5 h-5" />
+                      </Link>
                     </Button>
                   </div>
                 )}
