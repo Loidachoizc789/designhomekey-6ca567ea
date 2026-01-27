@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { ArrowLeft, Home, Building2, Sun, Layers, Monitor, Move, Zap, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProductGallery from "@/components/ProductGallery";
 import Navbar from "@/components/Navbar";
@@ -157,6 +157,9 @@ const specs = [
 ];
 
 const InteriorExterior = () => {
+  const [searchParams] = useSearchParams();
+  const defaultTab = searchParams.get("tab") === "exterior" ? "exterior" : "interior";
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -202,7 +205,7 @@ const InteriorExterior = () => {
       {/* Tabs Section */}
       <section className="py-16">
         <div className="section-container">
-          <Tabs defaultValue="interior" className="w-full">
+          <Tabs defaultValue={defaultTab} className="w-full">
             <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-12">
               <TabsTrigger value="interior" className="flex items-center gap-2">
                 <Home className="w-4 h-4" />

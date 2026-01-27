@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
-import { useRef } from "react";
-import { ArrowRight, Video, Palette, Box, Zap, Sun, Move, Layers, Monitor, Image, Home, Building2 } from "lucide-react";
+import { useRef, useState } from "react";
+import { ArrowRight, Video, Palette, Box, Zap, Sun, Move, Layers, Monitor, Image, Home, Building2, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import setTalkshow from "@/assets/set-talkshow.jpg";
 import setLivestream from "@/assets/set-livestream.jpg";
 import setEvent from "@/assets/set-event.jpg";
@@ -57,40 +58,32 @@ const categories = [
     link: "/model-3d",
   },
   {
-    id: "interior-design",
-    title: "Thiết Kế Nội Thất",
-    description: "Render 3D nội thất căn hộ, biệt thự, văn phòng, showroom – chuẩn thực tế ảo",
+    id: "interior-exterior",
+    title: "Thiết Kế Nội Ngoại Thất",
+    description: "Render 3D nội thất căn hộ, biệt thự, văn phòng và phối cảnh ngoại thất mặt tiền, cảnh quan",
     icon: Home,
     image: setNews,
     features: [
       { icon: Sun, text: "Ánh sáng tự nhiên tối ưu" },
       { icon: Layers, text: "Vật liệu chân thực" },
       { icon: Monitor, text: "Hỗ trợ VR walkthrough" },
-    ],
-    cta: "Xem nội thất",
-    tags: ["Căn hộ", "Biệt thự", "Văn phòng", "Showroom"],
-    link: "/noi-ngoai-that",
-  },
-  {
-    id: "exterior-design",
-    title: "Thiết Kế Ngoại Thất",
-    description: "Phối cảnh mặt tiền, sân vườn, cảnh quan khu đô thị – render chất lượng cao",
-    icon: Building2,
-    image: setTalkshow,
-    features: [
-      { icon: Sun, text: "Render ánh sáng ngày/đêm" },
       { icon: Move, text: "Cảnh quan linh hoạt" },
-      { icon: Zap, text: "Tối ưu cho presentation" },
     ],
-    cta: "Xem ngoại thất",
-    tags: ["Mặt tiền", "Sân vườn", "Khu đô thị", "Cảnh quan"],
+    cta: "Xem chi tiết",
+    tags: ["Nội thất", "Ngoại thất", "Biệt thự", "Căn hộ"],
     link: "/noi-ngoai-that",
+    hasSubmenu: true,
+    submenuItems: [
+      { label: "Nội Thất", description: "Căn hộ, biệt thự, văn phòng, showroom", icon: Home, tab: "interior" },
+      { label: "Ngoại Thất", description: "Mặt tiền, sân vườn, khu đô thị", icon: Building2, tab: "exterior" },
+    ],
   },
 ];
 
 const CategoriesSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
 
   return (
     <section id="categories" className="py-24 relative overflow-hidden" ref={ref}>
@@ -173,22 +166,61 @@ const CategoriesSection = () => {
                   ))}
                 </div>
 
-                {/* CTA */}
-                <div className="flex flex-wrap gap-3">
-                  <Button variant="hero" size="lg">
-                    {category.cta}
-                    <ArrowRight className="w-5 h-5" />
-                  </Button>
-                  {(category as any).link ? (
+                {/* CTA with Submenu */}
+                {category.hasSubmenu ? (
+                  <div className="space-y-4">
+                    <div className="flex flex-wrap gap-3">
+                      <Button variant="hero" size="lg" asChild>
+                        <Link to={category.link}>
+                          {category.cta}
+                          <ArrowRight className="w-5 h-5" />
+                        </Link>
+                      </Button>
+                      <Collapsible 
+                        open={openSubmenu === category.id} 
+                        onOpenChange={(open) => setOpenSubmenu(open ? category.id : null)}
+                      >
+                        <CollapsibleTrigger asChild>
+                          <Button variant="outline" size="lg" className="gap-2">
+                            Xem hạng mục
+                            <ChevronDown className={`w-4 h-4 transition-transform ${openSubmenu === category.id ? 'rotate-180' : ''}`} />
+                          </Button>
+                        </CollapsibleTrigger>
+                        <CollapsibleContent className="mt-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            {category.submenuItems?.map((item) => (
+                              <Link
+                                key={item.label}
+                                to={`${category.link}?tab=${item.tab}`}
+                                className="flex items-center gap-4 p-4 rounded-xl bg-card/50 border border-border hover:border-primary/50 hover:bg-primary/5 transition-all group/item"
+                              >
+                                <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
+                                  <item.icon className="w-5 h-5 text-primary" />
+                                </div>
+                                <div>
+                                  <span className="font-semibold text-foreground group-hover/item:text-primary transition-colors block">
+                                    {item.label}
+                                  </span>
+                                  <span className="text-xs text-muted-foreground">{item.description}</span>
+                                </div>
+                              </Link>
+                            ))}
+                          </div>
+                        </CollapsibleContent>
+                      </Collapsible>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-wrap gap-3">
+                    <Button variant="hero" size="lg">
+                      {category.cta}
+                      <ArrowRight className="w-5 h-5" />
+                    </Button>
                     <Button variant="outline" size="lg" asChild>
-                      <Link to={(category as any).link}>Xem chi tiết</Link>
+                      <Link to={category.link}>Xem chi tiết</Link>
                     </Button>
-                  ) : (
-                    <Button variant="outline" size="lg">
-                      Xem chi tiết
-                    </Button>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </motion.div>
           ))}
