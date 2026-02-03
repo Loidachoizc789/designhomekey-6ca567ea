@@ -7,6 +7,7 @@ import UseCasesSection from "@/components/sections/UseCasesSection";
 import CollaborationSection from "@/components/sections/CollaborationSection";
 import CTASection from "@/components/sections/CTASection";
 import Footer from "@/components/sections/Footer";
+import ScrollToTop from "@/components/ScrollToTop";
 
 const Index = () => {
   return (
@@ -20,6 +21,7 @@ const Index = () => {
       <CollaborationSection />
       <CTASection />
       <Footer />
+      <ScrollToTop />
     </main>
   );
 };
