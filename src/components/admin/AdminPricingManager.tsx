@@ -41,11 +41,12 @@ interface PricingNotes {
 
 const CATEGORY_SLUGS = [
   { slug: "thiet-ke-2d", name: "Thiết Kế 2D" },
-  { slug: "phim-truong-3d", name: "Phim Trường 3D" },
+  { slug: "3d-virtual", name: "3D Virtual" },
   { slug: "3d-event", name: "3D Event" },
-  { slug: "after-effects", name: "After Effects" },
-  { slug: "noi-ngoai-that", name: "Nội Ngoại Thất" },
   { slug: "model-3d", name: "Model 3D" },
+  { slug: "noi-that", name: "Nội Thất" },
+  { slug: "ngoai-that", name: "Ngoại Thất" },
+  { slug: "after-effects", name: "After Effects" },
 ];
 
 const AdminPricingManager = () => {

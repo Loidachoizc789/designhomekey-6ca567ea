@@ -4,8 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Link, useSearchParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProductGallery from "@/components/ProductGallery";
-import Navbar from "@/components/Navbar";
+import CategoryNavbar from "@/components/CategoryNavbar";
 import Footer from "@/components/sections/Footer";
+import { useCategoryImages } from "@/hooks/useCategoryImages";
+import { useCategoryPricing } from "@/hooks/useCategoryPricing";
+import CategoryPricingDisplay from "@/components/CategoryPricingDisplay";
 import setLivestream from "@/assets/set-livestream.jpg";
 import setTalkshow from "@/assets/set-talkshow.jpg";
 import setEvent from "@/assets/set-event.jpg";
@@ -157,12 +160,50 @@ const specs = [
 ];
 
 const InteriorExterior = () => {
-  const [searchParams] = useSearchParams();
-  const defaultTab = searchParams.get("tab") === "exterior" ? "exterior" : "interior";
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentTab = searchParams.get("tab") === "exterior" ? "exterior" : "interior";
+
+  const { images: interiorDbImages, loading: interiorLoading } = useCategoryImages("noi-that");
+  const { images: exteriorDbImages, loading: exteriorLoading } = useCategoryImages("ngoai-that");
+
+  const {
+    pricing: interiorPricing,
+    notes: interiorNotes,
+    loading: interiorPricingLoading,
+  } = useCategoryPricing("noi-that");
+  const {
+    pricing: exteriorPricing,
+    notes: exteriorNotes,
+    loading: exteriorPricingLoading,
+  } = useCategoryPricing("ngoai-that");
+
+  const interiorGalleryItems = interiorDbImages.length > 0
+    ? interiorDbImages.map((img, index) => ({
+        id: index + 1,
+        title: img.title,
+        description: img.description || "",
+        image: img.image_url,
+        category: "Nội Thất",
+      }))
+    : interiorItems;
+
+  const exteriorGalleryItems = exteriorDbImages.length > 0
+    ? exteriorDbImages.map((img, index) => ({
+        id: index + 1,
+        title: img.title,
+        description: img.description || "",
+        image: img.image_url,
+        category: "Ngoại Thất",
+      }))
+    : exteriorItems;
+
+  const handleTabChange = (value: string) => {
+    setSearchParams({ tab: value });
+  };
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
+      <CategoryNavbar />
 
       {/* Hero Section */}
       <section className="pt-24 pb-16 relative overflow-hidden">
@@ -205,7 +246,7 @@ const InteriorExterior = () => {
       {/* Tabs Section */}
       <section className="py-16">
         <div className="section-container">
-          <Tabs defaultValue={defaultTab} className="w-full">
+          <Tabs value={currentTab} onValueChange={handleTabChange} className="w-full">
             <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-12">
               <TabsTrigger value="interior" className="flex items-center gap-2">
                 <Home className="w-4 h-4" />
@@ -253,7 +294,13 @@ const InteriorExterior = () => {
                 </p>
               </motion.div>
 
-              <ProductGallery items={interiorItems} />
+              {interiorLoading ? (
+                <div className="text-center py-12">
+                  <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full mx-auto" />
+                </div>
+              ) : (
+                <ProductGallery items={interiorGalleryItems} />
+              )}
             </TabsContent>
 
             <TabsContent value="exterior">
@@ -292,11 +339,25 @@ const InteriorExterior = () => {
                 </p>
               </motion.div>
 
-              <ProductGallery items={exteriorItems} />
+              {exteriorLoading ? (
+                <div className="text-center py-12">
+                  <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full mx-auto" />
+                </div>
+              ) : (
+                <ProductGallery items={exteriorGalleryItems} />
+              )}
             </TabsContent>
           </Tabs>
         </div>
       </section>
+
+      {/* Pricing (theo tab) */}
+      <CategoryPricingDisplay
+        pricing={currentTab === "interior" ? interiorPricing : exteriorPricing}
+        notes={currentTab === "interior" ? interiorNotes : exteriorNotes}
+        loading={currentTab === "interior" ? interiorPricingLoading : exteriorPricingLoading}
+        categoryTitle={currentTab === "interior" ? "Nội thất 3D" : "Ngoại thất 3D"}
+      />
 
       {/* Technical Specs */}
       <section className="py-16 bg-card/30">

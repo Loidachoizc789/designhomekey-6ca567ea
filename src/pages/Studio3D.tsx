@@ -1,8 +1,26 @@
 import { motion } from "framer-motion";
-import { ArrowLeft, Video, Zap, Monitor, Sun, Move, Phone, Mail, CheckCircle, Play } from "lucide-react";
+import {
+  ArrowLeft,
+  Video,
+  Zap,
+  Monitor,
+  Sun,
+  Move,
+  Phone,
+  Mail,
+  CheckCircle,
+  Play,
+  Layers,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import ProductGallery from "@/components/ProductGallery";
+import CategoryNavbar from "@/components/CategoryNavbar";
+import Footer from "@/components/sections/Footer";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useCategoryImages } from "@/hooks/useCategoryImages";
+import { useCategoryPricing } from "@/hooks/useCategoryPricing";
+import CategoryPricingDisplay from "@/components/CategoryPricingDisplay";
 import setTalkshow from "@/assets/set-talkshow.jpg";
 import setLivestream from "@/assets/set-livestream.jpg";
 import setEvent from "@/assets/set-event.jpg";
@@ -53,6 +71,9 @@ const studioSamples = [
   },
 ];
 
+const defaultVirtualItems = studioSamples.filter((x) => x.category !== "Event");
+const defaultEventItems = studioSamples.filter((x) => x.category === "Event");
+
 const deliverables = [
   "File Unreal Engine 5 project hoàn chỉnh",
   "File Aximmetry project (nếu yêu cầu)",
@@ -81,8 +102,53 @@ const specs = [
 ];
 
 const Studio3D = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentTab = searchParams.get("tab") === "event" ? "event" : "virtual";
+
+  const { images: virtualImages, loading: virtualLoading } = useCategoryImages("3d-virtual");
+  const { images: eventImages, loading: eventLoading } = useCategoryImages("3d-event");
+
+  const {
+    pricing: virtualPricing,
+    notes: virtualNotes,
+    loading: virtualPricingLoading,
+  } = useCategoryPricing("3d-virtual");
+  const {
+    pricing: eventPricing,
+    notes: eventNotes,
+    loading: eventPricingLoading,
+  } = useCategoryPricing("3d-event");
+
+  const galleryItems =
+    currentTab === "virtual"
+      ? virtualImages.length > 0
+        ? virtualImages.map((img, index) => ({
+            id: index + 1,
+            title: img.title,
+            description: img.description || "",
+            image: img.image_url,
+            category: "3D Virtual",
+          }))
+        : defaultVirtualItems
+      : eventImages.length > 0
+        ? eventImages.map((img, index) => ({
+            id: index + 1,
+            title: img.title,
+            description: img.description || "",
+            image: img.image_url,
+            category: "3D Event",
+          }))
+        : defaultEventItems;
+
+  const handleTabChange = (value: string) => {
+    setSearchParams({ tab: value });
+  };
+
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground">
+      <CategoryNavbar />
+
+      <main>
       {/* Hero Section */}
       <section className="relative py-24 md:py-32 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/10 via-background to-background" />
@@ -112,7 +178,9 @@ const Studio3D = () => {
             </div>
 
             <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-              Phim Trường <span className="gradient-text">3D / Virtual Production</span>
+              Phim Trường{" "}
+              <span className="gradient-text">3D / {currentTab === "virtual" ? "Virtual" : "Event"}</span>
+              <span className="gradient-text"> Production</span>
             </h1>
             
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl">
@@ -180,7 +248,38 @@ const Studio3D = () => {
             </p>
           </motion.div>
 
-          <ProductGallery items={studioSamples} />
+          <Tabs value={currentTab} onValueChange={handleTabChange} className="w-full">
+            <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-10">
+              <TabsTrigger value="virtual" className="flex items-center gap-2">
+                <Video className="w-4 h-4" />
+                3D Virtual
+              </TabsTrigger>
+              <TabsTrigger value="event" className="flex items-center gap-2">
+                <Layers className="w-4 h-4" />
+                3D Event
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="virtual">
+              {virtualLoading ? (
+                <div className="text-center py-12">
+                  <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full mx-auto" />
+                </div>
+              ) : (
+                <ProductGallery items={galleryItems} />
+              )}
+            </TabsContent>
+
+            <TabsContent value="event">
+              {eventLoading ? (
+                <div className="text-center py-12">
+                  <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full mx-auto" />
+                </div>
+              ) : (
+                <ProductGallery items={galleryItems} />
+              )}
+            </TabsContent>
+          </Tabs>
         </div>
       </section>
 
@@ -310,7 +409,18 @@ const Studio3D = () => {
           </motion.div>
         </div>
       </section>
-    </main>
+
+      {/* Pricing (theo tab) */}
+      <CategoryPricingDisplay
+        pricing={currentTab === "virtual" ? virtualPricing : eventPricing}
+        notes={currentTab === "virtual" ? virtualNotes : eventNotes}
+        loading={currentTab === "virtual" ? virtualPricingLoading : eventPricingLoading}
+        categoryTitle={currentTab === "virtual" ? "3D Virtual / Livestream" : "3D Event / Sân khấu"}
+      />
+      </main>
+
+      <Footer />
+    </div>
   );
 };
 

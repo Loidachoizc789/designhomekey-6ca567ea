@@ -3,6 +3,11 @@ import { ArrowLeft, Palette, Layers, Image, Zap, Phone, Mail, CheckCircle } from
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import ProductGallery from "@/components/ProductGallery";
+import CategoryNavbar from "@/components/CategoryNavbar";
+import Footer from "@/components/sections/Footer";
+import { useCategoryImages } from "@/hooks/useCategoryImages";
+import { useCategoryPricing } from "@/hooks/useCategoryPricing";
+import CategoryPricingDisplay from "@/components/CategoryPricingDisplay";
 import setEvent from "@/assets/set-event.jpg";
 import setTalkshow from "@/assets/set-talkshow.jpg";
 import setLivestream from "@/assets/set-livestream.jpg";
@@ -72,8 +77,24 @@ const features = [
 ];
 
 const Design2D = () => {
+  const { images, loading } = useCategoryImages("thiet-ke-2d");
+  const { pricing, notes, loading: pricingLoading } = useCategoryPricing("thiet-ke-2d");
+
+  const galleryItems = images.length > 0
+    ? images.map((img, index) => ({
+        id: index + 1,
+        title: img.title,
+        description: img.description || "",
+        image: img.image_url,
+        category: "Thiết Kế 2D",
+      }))
+    : designSamples;
+
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground">
+      <CategoryNavbar />
+
+      <main>
       {/* Hero Section */}
       <section className="relative py-24 md:py-32 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/10 via-background to-background" />
@@ -168,9 +189,23 @@ const Design2D = () => {
             </p>
           </motion.div>
 
-          <ProductGallery items={designSamples} />
+          {loading ? (
+            <div className="text-center py-12">
+              <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full mx-auto" />
+            </div>
+          ) : (
+            <ProductGallery items={galleryItems} />
+          )}
         </div>
       </section>
+
+      {/* Pricing */}
+      <CategoryPricingDisplay
+        pricing={pricing}
+        notes={notes}
+        loading={pricingLoading}
+        categoryTitle="Thiết Kế 2D"
+      />
 
       {/* Deliverables Section */}
       <section className="py-24 bg-card/50">
@@ -265,7 +300,10 @@ const Design2D = () => {
           </motion.div>
         </div>
       </section>
-    </main>
+      </main>
+
+      <Footer />
+    </div>
   );
 };
 

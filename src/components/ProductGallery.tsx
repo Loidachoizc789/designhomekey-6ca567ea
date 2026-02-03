@@ -25,6 +25,16 @@ interface ProductGalleryProps {
 const ProductGallery = ({ items }: ProductGalleryProps) => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
+  const isVideoUrl = (url: string) => {
+    const clean = url.split("?")[0].toLowerCase();
+    return (
+      clean.endsWith(".mp4") ||
+      clean.endsWith(".webm") ||
+      clean.endsWith(".mov") ||
+      clean.endsWith(".m4v")
+    );
+  };
+
   const selectedItem = selectedIndex !== null ? items[selectedIndex] : null;
 
   const handlePrevious = () => {
@@ -60,11 +70,22 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
           >
             <div className="glass-card overflow-hidden card-hover">
               <div className="relative aspect-video overflow-hidden">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
+                {isVideoUrl(item.image) ? (
+                  <video
+                    src={item.image}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    muted
+                    playsInline
+                    preload="metadata"
+                  />
+                ) : (
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    loading="lazy"
+                  />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 
                 {/* Category Badge */}
@@ -112,11 +133,21 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
               >
                 {/* Image */}
                 <div className="relative aspect-video w-full overflow-hidden rounded-t-lg">
-                  <img
-                    src={selectedItem.image}
-                    alt={selectedItem.title}
-                    className="w-full h-full object-cover"
-                  />
+                  {isVideoUrl(selectedItem.image) ? (
+                    <video
+                      src={selectedItem.image}
+                      className="w-full h-full object-cover"
+                      controls
+                      autoPlay
+                      playsInline
+                    />
+                  ) : (
+                    <img
+                      src={selectedItem.image}
+                      alt={selectedItem.title}
+                      className="w-full h-full object-cover"
+                    />
+                  )}
                   
                   {/* Navigation Arrows */}
                   <Button

@@ -9,7 +9,7 @@ const categories = [
   { name: "Phim Trường 3D", href: "/phim-truong-3d" },
   { name: "Model 3D", href: "/model-3d" },
   { name: "Nội Ngoại Thất", href: "/noi-ngoai-that" },
-  { name: "Motion Graphics", href: "/motion-graphics" },
+  { name: "After Effects", href: "/after-effects" },
 ];
 
 const CategoryNavbar = () => {
@@ -26,7 +26,12 @@ const CategoryNavbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const isActive = (href: string) => location.pathname === href;
+  const isActive = (href: string) => {
+    if (href === "/after-effects") {
+      return location.pathname === "/after-effects" || location.pathname === "/motion-graphics";
+    }
+    return location.pathname === href;
+  };
 
   return (
     <nav

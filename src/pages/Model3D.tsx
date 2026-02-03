@@ -3,14 +3,17 @@ import { ArrowLeft, Box, Layers, Move, Zap, Download, Settings, Palette, Monitor
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import ProductGallery from "@/components/ProductGallery";
-import Navbar from "@/components/Navbar";
+import CategoryNavbar from "@/components/CategoryNavbar";
 import Footer from "@/components/sections/Footer";
+import { useCategoryImages } from "@/hooks/useCategoryImages";
+import { useCategoryPricing } from "@/hooks/useCategoryPricing";
+import CategoryPricingDisplay from "@/components/CategoryPricingDisplay";
 import setLivestream from "@/assets/set-livestream.jpg";
 import setTalkshow from "@/assets/set-talkshow.jpg";
 import setEvent from "@/assets/set-event.jpg";
 import setNews from "@/assets/set-news.jpg";
 
-const galleryItems = [
+const defaultGalleryItems = [
   {
     id: 1,
     title: "Props Sân Khấu Hiện Đại",
@@ -88,9 +91,22 @@ const specs = [
 ];
 
 const Model3D = () => {
+  const { images, loading } = useCategoryImages("model-3d");
+  const { pricing, notes, loading: pricingLoading } = useCategoryPricing("model-3d");
+
+  const galleryItems = images.length > 0
+    ? images.map((img, index) => ({
+        id: index + 1,
+        title: img.title,
+        description: img.description || "",
+        image: img.image_url,
+        category: "Model 3D",
+      }))
+    : defaultGalleryItems;
+
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
+      <CategoryNavbar />
 
       {/* Hero Section */}
       <section className="pt-24 pb-16 relative overflow-hidden">
@@ -170,7 +186,13 @@ const Model3D = () => {
             </p>
           </motion.div>
 
-          <ProductGallery items={galleryItems} />
+          {loading ? (
+            <div className="text-center py-12">
+              <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full mx-auto" />
+            </div>
+          ) : (
+            <ProductGallery items={galleryItems} />
+          )}
         </div>
       </section>
 
@@ -274,6 +296,14 @@ const Model3D = () => {
           </div>
         </div>
       </section>
+
+      {/* Pricing */}
+      <CategoryPricingDisplay
+        pricing={pricing}
+        notes={notes}
+        loading={pricingLoading}
+        categoryTitle="Model 3D / Asset"
+      />
 
       <Footer />
     </div>

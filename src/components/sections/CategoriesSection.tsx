@@ -53,12 +53,12 @@ const categories = [
   {
     id: "motion-graphics",
     category: "AFTER EFFECTS",
-    title: "Motion Graphics",
+    title: "After Effects",
     description: "Motion logo, video quảng cáo, template AE, gói livestream visual, lower third",
     icon: Film,
     image: setTalkshow,
     tags: ["Motion logo", "Livestream pack", "Social video"],
-    link: "/motion-graphics",
+    link: "/after-effects",
   },
 ];
 

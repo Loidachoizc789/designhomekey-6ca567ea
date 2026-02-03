@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import RouteScrollToTop from "@/components/RouteScrollToTop";
 import Index from "./pages/Index";
 import Design2D from "./pages/Design2D";
 import Studio3D from "./pages/Studio3D";
@@ -22,6 +23,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <RouteScrollToTop />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/thiet-ke-2d" element={<Design2D />} />
@@ -29,6 +31,8 @@ const App = () => (
           <Route path="/model-3d" element={<Model3D />} />
           <Route path="/noi-ngoai-that" element={<InteriorExterior />} />
           <Route path="/motion-graphics" element={<MotionGraphics />} />
+          {/* Alias để slug DB khớp URL */}
+          <Route path="/after-effects" element={<MotionGraphics />} />
           <Route path="/admin/setup" element={<AdminSetup />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin" element={<AdminDashboard />} />
@@ -41,3 +45,4 @@ const App = () => (
 );
 
 export default App;
+
