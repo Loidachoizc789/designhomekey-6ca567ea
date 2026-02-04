@@ -38,32 +38,32 @@ const Navbar = () => {
       >
         <div className="section-container">
           <div className="flex items-center justify-between h-16 md:h-20">
-            {/* Logo */}
-            <a href="#" className="flex items-center gap-2">
+            {/* Logo - Larger and left aligned */}
+            <a href="#" className="flex items-center">
               <img
                 alt="DesignHomeKey"
-                className="h-10 md:h-12 w-auto"
+                className="h-8 md:h-10 w-auto"
                 src="/lovable-uploads/1052d8d6-1118-4206-be15-c73ee5a0188e.png"
               />
             </a>
 
-            {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-8">
+            {/* Desktop Navigation - Centered */}
+            <div className="hidden lg:flex items-center gap-10">
               {navLinks.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
-                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors animated-underline"
+                  className="text-base font-medium text-muted-foreground hover:text-foreground transition-colors animated-underline"
                 >
                   {link.label}
                 </a>
               ))}
             </div>
 
-            {/* Desktop CTA */}
-            <div className="hidden lg:flex items-center gap-4">
+            {/* Desktop CTA - Right aligned */}
+            <div className="hidden lg:flex items-center">
               <Button 
-                className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-6"
+                className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 py-5 text-base font-medium"
                 asChild
               >
                 <a href="#contact">Liên hệ</a>
@@ -105,7 +105,7 @@ const Navbar = () => {
                 ))}
                 <div className="pt-4 border-t border-border">
                   <Button 
-                    className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-full"
+                    className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-full text-base py-5"
                     asChild
                   >
                     <a href="#contact" onClick={() => setIsMobileMenuOpen(false)}>

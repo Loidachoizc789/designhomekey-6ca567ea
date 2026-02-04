@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Check, X, MessageCircle } from "lucide-react";
+import { Check, X, MessageCircle, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface PricingItem {
@@ -25,6 +25,13 @@ interface CategoryPricingDisplayProps {
   loading: boolean;
   categoryTitle: string;
 }
+
+const generalRules = [
+  { label: "Đặt cọc", value: "30–50%" },
+  { label: "Chỉnh sửa miễn phí", value: "2 lần" },
+  { label: "Sửa thêm", value: "200k – 400k / lần" },
+  { label: "Deadline gấp", value: "+20–30%" },
+];
 
 const CategoryPricingDisplay = ({
   pricing,
@@ -57,16 +64,17 @@ const CategoryPricingDisplay = ({
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="font-display text-3xl md:text-4xl font-bold mb-4 italic">
             Bảng Giá <span className="gradient-text">Tham Khảo</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Giá tham khảo cho các dịch vụ {categoryTitle}
+            Liên hệ để nhận báo giá chi tiết theo yêu cầu cụ thể của bạn.
           </p>
         </motion.div>
 
-        <div className="max-w-4xl mx-auto">
-          <div className="glass-card overflow-hidden">
+        <div className="max-w-5xl mx-auto">
+          {/* Pricing Grid - Like reference image-27 */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             {pricing.map((group, index) => (
               <motion.div
                 key={group.id}
@@ -74,67 +82,87 @@ const CategoryPricingDisplay = ({
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className={`p-6 ${index > 0 ? "border-t border-border" : ""}`}
+                className="glass-card p-5"
               >
-                <h3 className="font-display text-lg font-semibold text-primary mb-4">
+                <h3 className="font-display text-base font-semibold text-primary mb-4 uppercase tracking-wide">
                   {group.service_name}
                 </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-3">
                   {group.items.map((item, itemIndex) => (
-                    <div
-                      key={itemIndex}
-                      className="flex justify-between items-center p-3 bg-card/50 rounded-lg"
-                    >
-                      <span className="text-sm text-foreground">{item.label}</span>
-                      <span className="text-primary font-medium text-sm">{item.price}</span>
+                    <div key={itemIndex} className="flex justify-between items-start gap-2">
+                      <span className="text-sm text-muted-foreground leading-relaxed">{item.label}</span>
+                      <span className="text-sm font-semibold text-foreground whitespace-nowrap">{item.price}</span>
                     </div>
                   ))}
                 </div>
               </motion.div>
             ))}
-
-            {/* Notes */}
-            {(notes.includes.length > 0 || notes.excludes.length > 0) && (
-              <div className="p-6 border-t border-border">
-                <div className="flex flex-wrap gap-3">
-                  {notes.includes.map((item, index) => (
-                    <span
-                      key={`include-${index}`}
-                      className="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary"
-                    >
-                      <Check className="w-3.5 h-3.5" />
-                      {item}
-                    </span>
-                  ))}
-                  {notes.excludes.map((item, index) => (
-                    <span
-                      key={`exclude-${index}`}
-                      className="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-full bg-muted text-muted-foreground"
-                    >
-                      <X className="w-3.5 h-3.5" />
-                      {item}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
+
+          {/* Notes - Includes / Excludes */}
+          {(notes.includes.length > 0 || notes.excludes.length > 0) && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="flex flex-wrap justify-center gap-3 mb-10"
+            >
+              {notes.includes.map((item, index) => (
+                <span
+                  key={`include-${index}`}
+                  className="inline-flex items-center gap-2 text-sm px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary"
+                >
+                  <Check className="w-4 h-4" />
+                  {item}
+                </span>
+              ))}
+              {notes.excludes.map((item, index) => (
+                <span
+                  key={`exclude-${index}`}
+                  className="inline-flex items-center gap-2 text-sm px-4 py-2 rounded-full bg-muted text-muted-foreground"
+                >
+                  <X className="w-4 h-4" />
+                  {item}
+                </span>
+              ))}
+            </motion.div>
+          )}
+
+          {/* General Rules */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="glass-card p-6 mb-8"
+          >
+            <h3 className="font-display text-lg font-bold text-center mb-5">
+              Quy Định Chung
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {generalRules.map((rule) => (
+                <div key={rule.label} className="text-center p-3 rounded-xl bg-card/50 border border-border/50">
+                  <p className="text-xs text-muted-foreground mb-1">{rule.label}</p>
+                  <p className="font-bold text-primary">{rule.value}</p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
 
           {/* CTA */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mt-8"
+            className="text-center"
           >
             <Button
               size="lg"
-              className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 py-6 text-base"
               asChild
             >
               <a href="tel:0862098408">
-                <MessageCircle className="w-5 h-5 mr-2" />
-                Liên hệ báo giá chi tiết
+                <RotateCcw className="w-5 h-5 mr-2" />
+                Nhận báo giá chi tiết
               </a>
             </Button>
             <p className="text-sm text-muted-foreground mt-3">
