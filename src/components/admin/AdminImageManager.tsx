@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
-import { Loader2, Plus, Trash2, Edit2, Upload, X, GripVertical, Video, Image } from "lucide-react";
+import { Loader2, Plus, Trash2, Edit2, Upload, X, Video, Image as ImageIcon, Images } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -13,6 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import ProductMediaManager from "./ProductMediaManager";
 
 interface CategoryImage {
   id: string;
@@ -32,6 +33,8 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [mediaDialogOpen, setMediaDialogOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<CategoryImage | null>(null);
   const [editingImage, setEditingImage] = useState<CategoryImage | null>(null);
   const [formData, setFormData] = useState({
     title: "",
@@ -70,7 +73,6 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Check file size (max 10MB)
     if (file.size > 10 * 1024 * 1024) {
       toast({
         title: "Lỗi",
@@ -126,7 +128,6 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
 
     try {
       if (editingImage) {
-        // Update existing
         const { error } = await supabase
           .from("category_images")
           .update({
@@ -139,7 +140,6 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
         if (error) throw error;
         toast({ title: "Đã cập nhật ảnh" });
       } else {
-        // Create new
         const { error } = await supabase.from("category_images").insert({
           title: formData.title,
           description: formData.description || null,
@@ -204,6 +204,11 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
     setDialogOpen(true);
   };
 
+  const openMediaManager = (product: CategoryImage) => {
+    setSelectedProduct(product);
+    setMediaDialogOpen(true);
+  };
+
   if (loading) {
     return (
       <div className="glass-card p-8 text-center">
@@ -223,13 +228,13 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
           <DialogTrigger asChild>
             <Button onClick={openAddDialog}>
               <Plus className="w-4 h-4 mr-2" />
-              Thêm ảnh
+              Thêm sản phẩm
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-lg">
             <DialogHeader>
               <DialogTitle>
-                {editingImage ? "Chỉnh sửa ảnh" : "Thêm ảnh mới"}
+                {editingImage ? "Chỉnh sửa sản phẩm" : "Thêm sản phẩm mới"}
               </DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -258,14 +263,20 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
               </div>
 
               <div className="space-y-2">
-                <Label>Ảnh *</Label>
+                <Label>Ảnh đại diện *</Label>
                 {formData.image_url ? (
                   <div className="relative">
-                    <img
-                      src={formData.image_url}
-                      alt="Preview"
-                      className="w-full h-48 object-cover rounded-lg"
-                    />
+                    {formData.image_url.match(/\.(mp4|webm|mov)$/i) ? (
+                      <div className="w-full h-48 bg-card flex items-center justify-center rounded-lg">
+                        <Video className="w-12 h-12 text-muted-foreground" />
+                      </div>
+                    ) : (
+                      <img
+                        src={formData.image_url}
+                        alt="Preview"
+                        className="w-full h-48 object-cover rounded-lg"
+                      />
+                    )}
                     <Button
                       type="button"
                       variant="destructive"
@@ -337,11 +348,11 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
       {/* Images Grid */}
       {images.length === 0 ? (
         <div className="glass-card p-12 text-center">
-          <Image className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+          <ImageIcon className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
           <p className="text-muted-foreground">Chưa có ảnh nào trong danh mục này</p>
           <Button className="mt-4" onClick={openAddDialog}>
             <Plus className="w-4 h-4 mr-2" />
-            Thêm ảnh đầu tiên
+            Thêm sản phẩm đầu tiên
           </Button>
         </div>
       ) : (
@@ -352,7 +363,7 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
               className="glass-card overflow-hidden group"
             >
               <div className="relative aspect-video">
-                {image.image_url.includes(".mp4") || image.image_url.includes(".webm") ? (
+                {image.image_url.match(/\.(mp4|webm|mov)$/i) ? (
                   <div className="w-full h-full bg-card flex items-center justify-center">
                     <Video className="w-12 h-12 text-muted-foreground" />
                   </div>
@@ -367,6 +378,13 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
                   <Button size="sm" variant="secondary" onClick={() => handleEdit(image)}>
                     <Edit2 className="w-4 h-4" />
                   </Button>
+                  <Button 
+                    size="sm" 
+                    variant="default"
+                    onClick={() => openMediaManager(image)}
+                  >
+                    <Images className="w-4 h-4" />
+                  </Button>
                   <Button
                     size="sm"
                     variant="destructive"
@@ -377,7 +395,18 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
                 </div>
               </div>
               <div className="p-3">
-                <h3 className="font-medium text-sm truncate">{image.title}</h3>
+                <div className="flex items-center justify-between">
+                  <h3 className="font-medium text-sm truncate">{image.title}</h3>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-xs text-primary"
+                    onClick={() => openMediaManager(image)}
+                  >
+                    <Images className="w-3 h-3 mr-1" />
+                    Media
+                  </Button>
+                </div>
                 {image.description && (
                   <p className="text-xs text-muted-foreground truncate mt-1">
                     {image.description}
@@ -388,6 +417,21 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
           ))}
         </div>
       )}
+
+      {/* Media Manager Dialog */}
+      <Dialog open={mediaDialogOpen} onOpenChange={setMediaDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Images className="w-5 h-5 text-primary" />
+              Quản lý Media: {selectedProduct?.title}
+            </DialogTitle>
+          </DialogHeader>
+          {selectedProduct && (
+            <ProductMediaManager productId={selectedProduct.id} />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

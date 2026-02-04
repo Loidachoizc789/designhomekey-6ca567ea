@@ -7,6 +7,25 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { supabase } from "@/integrations/supabase/client";
 
+// Color configurations for each menu item
+const iconColors = {
+  "thiet-ke-2d": { bg: "bg-pink-500/20", text: "text-pink-400", glow: "shadow-pink-500/20" },
+  "phim-truong-3d": { bg: "bg-cyan-500/20", text: "text-cyan-400", glow: "shadow-cyan-500/20" },
+  "3d-event": { bg: "bg-orange-500/20", text: "text-orange-400", glow: "shadow-orange-500/20" },
+  "motion-graphics": { bg: "bg-red-500/20", text: "text-red-400", glow: "shadow-red-500/20" },
+  "noi-ngoai-that": { bg: "bg-green-500/20", text: "text-green-400", glow: "shadow-green-500/20" },
+  "model-3d": { bg: "bg-purple-500/20", text: "text-purple-400", glow: "shadow-purple-500/20" },
+};
+
+const titleColors = {
+  "thiet-ke-2d": "bg-gradient-to-r from-pink-400 to-orange-400 bg-clip-text text-transparent",
+  "phim-truong-3d": "text-foreground",
+  "3d-event": "text-foreground",
+  "motion-graphics": "bg-gradient-to-r from-cyan-400 to-primary bg-clip-text text-transparent",
+  "noi-ngoai-that": "text-foreground",
+  "model-3d": "text-foreground",
+};
+
 const pricingGroups = [
   {
     id: "thiet-ke-2d",
@@ -161,7 +180,6 @@ const PricingSection = () => {
     };
     fetchCombos();
 
-    // Realtime subscription
     const channel = supabase
       .channel("combo-packages-realtime")
       .on(
@@ -184,7 +202,6 @@ const PricingSection = () => {
     );
   };
 
-  // Parse price to get min/max
   const parsePrice = (priceStr: string) => {
     const numbers = priceStr.match(/[\d.]+/g);
     if (numbers && numbers.length >= 2) {
@@ -202,173 +219,182 @@ const PricingSection = () => {
       <div className="absolute inset-0 grid-pattern opacity-5" />
 
       <div className="section-container relative z-10">
-        {/* Header */}
+        {/* Header - Simplified */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
-          className="text-center max-w-3xl mx-auto mb-12"
+          className="text-center max-w-3xl mx-auto mb-16"
         >
-          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold mb-4 italic">
-            Menu Giá{" "}
-            <br className="sm:hidden" />
+          <motion.span
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-6"
+          >
+            <Sparkles className="w-4 h-4" />
+            BẢNG GIÁ DỊCH VỤ
+          </motion.span>
+          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold mb-4 italic">
+            Menu Giá
+            <br />
             <span className="gradient-text">& Combo Trọn Gói</span>
           </h2>
-          <p className="text-muted-foreground">
-            Studio Design 2D – 3D – Event – Motion
-            <br />
-            Studio nhỏ 1–3 người · Thị trường Việt Nam
-          </p>
         </motion.div>
 
         {/* Tabs */}
         <Tabs defaultValue="single" className="max-w-6xl mx-auto">
-          <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-8 bg-card border border-border rounded-full p-1">
+          <TabsList className="grid w-full max-w-lg mx-auto grid-cols-2 mb-10 bg-card border border-border rounded-full p-1.5 h-14">
             <TabsTrigger 
               value="single" 
-              className="rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+              className="rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-base py-3"
             >
-              <Palette className="w-4 h-4 mr-2" />
+              <Palette className="w-5 h-5 mr-2" />
               Dịch vụ đơn lẻ
             </TabsTrigger>
             <TabsTrigger 
               value="combo"
-              className="rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+              className="rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-base py-3"
             >
-              <Gift className="w-4 h-4 mr-2" />
+              <Gift className="w-5 h-5 mr-2" />
               Combo Trọn Gói
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="single" className="space-y-4">
-            {pricingGroups.map((group, index) => (
-              <motion.div
-                key={group.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <Collapsible 
-                  open={openGroups.includes(group.id)}
-                  onOpenChange={() => toggleGroup(group.id)}
+            {pricingGroups.map((group, index) => {
+              const colors = iconColors[group.id as keyof typeof iconColors] || iconColors["thiet-ke-2d"];
+              const titleColor = titleColors[group.id as keyof typeof titleColors] || "";
+              
+              return (
+                <motion.div
+                  key={group.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
-                  <div className="glass-card overflow-hidden">
-                    <CollapsibleTrigger className="w-full p-6 flex items-center justify-between hover:bg-primary/5 transition-colors">
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
-                          <group.icon className="w-6 h-6 text-primary" />
+                  <Collapsible 
+                    open={openGroups.includes(group.id)}
+                    onOpenChange={() => toggleGroup(group.id)}
+                  >
+                    <div className="glass-card overflow-hidden">
+                      <CollapsibleTrigger className="w-full p-6 flex items-center justify-between hover:bg-primary/5 transition-colors">
+                        <div className="flex items-center gap-5">
+                          <div className={`w-14 h-14 rounded-2xl ${colors.bg} flex items-center justify-center shadow-lg ${colors.glow}`}>
+                            <group.icon className={`w-7 h-7 ${colors.text}`} />
+                          </div>
+                          <div className="text-left">
+                            <h3 className={`font-display text-xl md:text-2xl font-bold ${titleColor}`}>
+                              {group.title}
+                            </h3>
+                            <p className="text-sm text-muted-foreground">{group.subtitle}</p>
+                          </div>
                         </div>
-                        <div className="text-left">
-                          <h3 className="font-display text-lg font-semibold text-primary">
-                            {group.title}
-                          </h3>
-                          <p className="text-sm text-muted-foreground">{group.subtitle}</p>
-                        </div>
-                      </div>
-                      <ChevronUp className={`w-5 h-5 transition-transform ${openGroups.includes(group.id) ? "" : "rotate-180"}`} />
-                    </CollapsibleTrigger>
+                        <ChevronUp className={`w-6 h-6 text-muted-foreground transition-transform ${openGroups.includes(group.id) ? "" : "rotate-180"}`} />
+                      </CollapsibleTrigger>
 
-                    <CollapsibleContent>
-                      <div className="px-6 pb-6 border-t border-border pt-6">
-                        {/* Main pricing grid */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                          {/* Giá lẻ column */}
-                          <div>
-                            <h4 className="text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
-                              Giá Lẻ
-                            </h4>
-                            <div className="space-y-3">
-                              {group.items.map((item) => (
-                                <div key={item.name} className="flex justify-between items-start gap-2">
-                                  <span className="text-sm text-muted-foreground">{item.name}</span>
-                                  <span className="text-sm font-medium text-foreground whitespace-nowrap">{item.price}</span>
-                                </div>
-                              ))}
+                      <CollapsibleContent>
+                        <div className="px-6 pb-6 border-t border-border pt-6">
+                          {/* Main pricing grid */}
+                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {/* Giá lẻ column */}
+                            <div>
+                              <h4 className="text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
+                                Giá Lẻ
+                              </h4>
+                              <div className="space-y-3">
+                                {group.items.map((item) => (
+                                  <div key={item.name} className="flex justify-between items-start gap-2">
+                                    <span className="text-sm text-muted-foreground">{item.name}</span>
+                                    <span className="text-sm font-medium text-foreground whitespace-nowrap">{item.price}</span>
+                                  </div>
+                                ))}
+                              </div>
                             </div>
+
+                            {/* Combo columns */}
+                            {group.combos?.map((combo) => (
+                              <div key={combo.name} className="glass-card p-4 border border-border/50">
+                                <h4 className="text-primary font-semibold mb-2 text-sm uppercase tracking-wider">
+                                  {combo.name}
+                                </h4>
+                                <p className="text-sm text-muted-foreground mb-3">{combo.desc}</p>
+                                <p className="text-primary font-bold">{combo.price}</p>
+                              </div>
+                            ))}
+
+                            {/* Interior section specific columns */}
+                            {group.exteriorItems && (
+                              <div>
+                                <h4 className="text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
+                                  Ngoại thất
+                                </h4>
+                                <div className="space-y-3">
+                                  {group.exteriorItems.map((item) => (
+                                    <div key={item.name} className="flex justify-between items-start gap-2">
+                                      <span className="text-sm text-muted-foreground">{item.name}</span>
+                                      <span className="text-sm font-medium text-foreground whitespace-nowrap">{item.price}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {group.animationItems && (
+                              <div>
+                                <h4 className="text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
+                                  Animation
+                                </h4>
+                                <div className="space-y-3">
+                                  {group.animationItems.map((item) => (
+                                    <div key={item.name} className="flex justify-between items-start gap-2">
+                                      <span className="text-sm text-muted-foreground">{item.name}</span>
+                                      <span className="text-sm font-medium text-foreground whitespace-nowrap">{item.price}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {group.studioItems && (
+                              <div>
+                                <h4 className="text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
+                                  Không gian / Studio
+                                </h4>
+                                <div className="space-y-3">
+                                  {group.studioItems.map((item) => (
+                                    <div key={item.name} className="flex justify-between items-start gap-2">
+                                      <span className="text-sm text-muted-foreground">{item.name}</span>
+                                      <span className="text-sm font-medium text-foreground whitespace-nowrap">{item.price}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
                           </div>
 
-                          {/* Combo columns */}
-                          {group.combos?.map((combo) => (
-                            <div key={combo.name} className="glass-card p-4 border border-border/50">
-                              <h4 className="text-primary font-semibold mb-2 text-sm uppercase tracking-wider">
-                                {combo.name}
-                              </h4>
-                              <p className="text-sm text-muted-foreground mb-3">{combo.desc}</p>
-                              <p className="text-primary font-bold">{combo.price}</p>
-                            </div>
-                          ))}
-
-                          {/* Interior section specific columns */}
-                          {group.exteriorItems && (
-                            <div>
-                              <h4 className="text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
-                                Ngoại thất
-                              </h4>
-                              <div className="space-y-3">
-                                {group.exteriorItems.map((item) => (
-                                  <div key={item.name} className="flex justify-between items-start gap-2">
-                                    <span className="text-sm text-muted-foreground">{item.name}</span>
-                                    <span className="text-sm font-medium text-foreground whitespace-nowrap">{item.price}</span>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-
-                          {group.animationItems && (
-                            <div>
-                              <h4 className="text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
-                                Animation
-                              </h4>
-                              <div className="space-y-3">
-                                {group.animationItems.map((item) => (
-                                  <div key={item.name} className="flex justify-between items-start gap-2">
-                                    <span className="text-sm text-muted-foreground">{item.name}</span>
-                                    <span className="text-sm font-medium text-foreground whitespace-nowrap">{item.price}</span>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-
-                          {group.studioItems && (
-                            <div>
-                              <h4 className="text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
-                                Không gian / Studio
-                              </h4>
-                              <div className="space-y-3">
-                                {group.studioItems.map((item) => (
-                                  <div key={item.name} className="flex justify-between items-start gap-2">
-                                    <span className="text-sm text-muted-foreground">{item.name}</span>
-                                    <span className="text-sm font-medium text-foreground whitespace-nowrap">{item.price}</span>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          )}
+                          {/* Includes / Excludes */}
+                          <div className="flex flex-wrap gap-3 mt-6 pt-4 border-t border-border/50">
+                            {group.includes.map((item) => (
+                              <span key={item} className="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary">
+                                <Check className="w-3.5 h-3.5" />
+                                {item}
+                              </span>
+                            ))}
+                            {group.excludes.map((item) => (
+                              <span key={item} className="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-full bg-muted text-muted-foreground">
+                                <X className="w-3.5 h-3.5" />
+                                {item}
+                              </span>
+                            ))}
+                          </div>
                         </div>
-
-                        {/* Includes / Excludes */}
-                        <div className="flex flex-wrap gap-3 mt-6 pt-4 border-t border-border/50">
-                          {group.includes.map((item) => (
-                            <span key={item} className="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary">
-                              <Check className="w-3.5 h-3.5" />
-                              {item}
-                            </span>
-                          ))}
-                          {group.excludes.map((item) => (
-                            <span key={item} className="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-full bg-muted text-muted-foreground">
-                              <X className="w-3.5 h-3.5" />
-                              {item}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </CollapsibleContent>
-                  </div>
-                </Collapsible>
-              </motion.div>
-            ))}
+                      </CollapsibleContent>
+                    </div>
+                  </Collapsible>
+                </motion.div>
+              );
+            })}
           </TabsContent>
 
           <TabsContent value="combo">
@@ -390,67 +416,48 @@ const PricingSection = () => {
             <div className="grid md:grid-cols-3 gap-6">
               {combos.length > 0 ? (
                 combos.map((combo, index) => {
-                  const { min, max } = parsePrice(combo.price);
-                  const isPopular = index === 1; // Middle card is "most popular"
-
+                  const price = parsePrice(combo.price);
                   return (
                     <motion.div
                       key={combo.id}
-                      initial={{ opacity: 0, y: 30 }}
+                      initial={{ opacity: 0, y: 20 }}
                       animate={isInView ? { opacity: 1, y: 0 } : {}}
-                      transition={{ duration: 0.5, delay: index * 0.15 }}
-                      className={`glass-card p-6 relative ${isPopular ? "ring-2 ring-primary" : ""}`}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      className="glass-card p-6 card-hover relative overflow-hidden"
                     >
-                      {isPopular && (
-                        <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary text-primary-foreground text-xs font-medium">
-                            <Sparkles className="w-3 h-3" />
-                            Phổ biến nhất
-                          </span>
+                      {index === 1 && (
+                        <div className="absolute top-3 right-3 px-3 py-1 rounded-full bg-primary text-primary-foreground text-xs font-medium">
+                          Phổ biến nhất
                         </div>
                       )}
-
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${combo.color} flex items-center justify-center`}>
-                          <Gift className="w-6 h-6 text-white" />
-                        </div>
-                        <div>
-                          <h4 className="font-display font-bold text-lg">{combo.name}</h4>
-                          <p className="text-sm text-muted-foreground">{combo.description}</p>
-                        </div>
-                      </div>
-
-                      {/* Price */}
-                      <div className="mb-6">
-                        <div className="flex items-baseline gap-2">
-                          <span className="text-2xl md:text-3xl font-bold gradient-text">{min}</span>
-                          <span className="text-muted-foreground">–</span>
-                        </div>
-                        <div className="text-xl md:text-2xl font-bold text-primary">
-                          {max}đ
-                        </div>
-                        <p className="text-xs text-muted-foreground uppercase mt-1">
-                          Tùy theo scope dự án
-                        </p>
-                      </div>
-
-                      {/* Includes */}
-                      <div className="space-y-3 mb-6">
-                        <p className="text-xs uppercase text-muted-foreground font-medium">Bao gồm</p>
-                        {combo.includes.map((item, i) => (
-                          <div key={i} className="flex items-center gap-2 text-sm">
-                            <Check className="w-4 h-4 text-primary flex-shrink-0" />
-                            <span>{item}</span>
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* CTA */}
-                      <Button 
-                        className="w-full rounded-full" 
-                        variant={isPopular ? "default" : "outline"}
-                        asChild
+                      
+                      <div 
+                        className="w-16 h-16 rounded-2xl mb-4 flex items-center justify-center"
+                        style={{ background: combo.color || "linear-gradient(135deg, hsl(180 70% 50%), hsl(200 80% 45%))" }}
                       >
+                        <Gift className="w-8 h-8 text-background" />
+                      </div>
+                      
+                      <h4 className="font-display text-xl font-bold mb-2">{combo.name}</h4>
+                      <p className="text-muted-foreground text-sm mb-4">{combo.description}</p>
+                      
+                      <div className="mb-4">
+                        <span className="font-display text-2xl font-bold gradient-text">{price.min}</span>
+                        <span className="text-muted-foreground mx-2">–</span>
+                        <span className="font-display text-2xl font-bold gradient-text">{price.max}</span>
+                        <span className="text-muted-foreground text-sm">đ</span>
+                      </div>
+
+                      <ul className="space-y-2 mb-6">
+                        {combo.includes.map((item, i) => (
+                          <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                            <Check className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+
+                      <Button variant="outline" className="w-full rounded-full" asChild>
                         <a href="#contact">
                           Liên hệ báo giá
                           <ArrowRight className="w-4 h-4 ml-2" />
@@ -460,78 +467,28 @@ const PricingSection = () => {
                   );
                 })
               ) : (
-                // Default combo cards if no data from DB
-                <>
-                  {[
-                    { name: "COMBO EVENT START", desc: "Event nhỏ – tiết kiệm chi phí", min: "18.000.000", max: "25.000.000", includes: ["KV 2D", "Sân khấu 3D", "POSM cơ bản", "Motion intro"] },
-                    { name: "COMBO EVENT FULL", desc: "Gói bán chạy nhất", min: "35.000.000", max: "50.000.000", includes: ["Concept 2D", "Sân khấu + Gate + Booth", "POSM đầy đủ", "Video trình chiếu"] },
-                    { name: "COMBO EVENT PREMIUM", desc: "Event lớn, agency, thương hiệu mạnh", min: "60.000.000", max: "90.000.000", includes: ["Branding event", "Virtual Production", "Full POSM", "Motion + Video 3D"] },
-                  ].map((combo, index) => {
-                    const isPopular = index === 1;
-                    return (
-                      <motion.div
-                        key={combo.name}
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={isInView ? { opacity: 1, y: 0 } : {}}
-                        transition={{ duration: 0.5, delay: index * 0.15 }}
-                        className={`glass-card p-6 relative ${isPopular ? "ring-2 ring-primary" : ""}`}
-                      >
-                        {isPopular && (
-                          <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary text-primary-foreground text-xs font-medium">
-                              <Sparkles className="w-3 h-3" />
-                              Phổ biến nhất
-                            </span>
-                          </div>
-                        )}
-
-                        <div className="flex items-center gap-3 mb-4">
-                          <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center">
-                            <Gift className="w-6 h-6 text-white" />
-                          </div>
-                          <div>
-                            <h4 className="font-display font-bold text-lg">{combo.name}</h4>
-                            <p className="text-sm text-muted-foreground">{combo.desc}</p>
-                          </div>
-                        </div>
-
-                        <div className="mb-6">
-                          <div className="flex items-baseline gap-2">
-                            <span className="text-2xl md:text-3xl font-bold gradient-text">{combo.min}</span>
-                            <span className="text-muted-foreground">–</span>
-                          </div>
-                          <div className="text-xl md:text-2xl font-bold text-primary">
-                            {combo.max}đ
-                          </div>
-                          <p className="text-xs text-muted-foreground uppercase mt-1">
-                            Tùy theo scope dự án
-                          </p>
-                        </div>
-
-                        <div className="space-y-3 mb-6">
-                          <p className="text-xs uppercase text-muted-foreground font-medium">Bao gồm</p>
-                          {combo.includes.map((item, i) => (
-                            <div key={i} className="flex items-center gap-2 text-sm">
-                              <Check className="w-4 h-4 text-primary flex-shrink-0" />
-                              <span>{item}</span>
-                            </div>
-                          ))}
-                        </div>
-
-                        <Button 
-                          className="w-full rounded-full" 
-                          variant={isPopular ? "default" : "outline"}
-                          asChild
-                        >
-                          <a href="#contact">
-                            Liên hệ báo giá
-                            <ArrowRight className="w-4 h-4 ml-2" />
-                          </a>
-                        </Button>
-                      </motion.div>
-                    );
-                  })}
-                </>
+                // Default combo cards if no data
+                [
+                  { name: "Combo A", price: "18.000.000đ", desc: "Sân khấu + POSM + Motion intro" },
+                  { name: "Combo B", price: "35.000.000đ", desc: "Sân khấu + Photobooth + Video LED" },
+                  { name: "Combo C", price: "60.000.000đ", desc: "Fullpack event: Concept + 3D + Motion" },
+                  { name: "Combo D", price: "90.000.000đ", desc: "Enterprise: All-in-one solution" },
+                ].map((combo, index) => (
+                  <motion.div
+                    key={combo.name}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={isInView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    className="glass-card p-6 card-hover"
+                  >
+                    <h4 className="font-display text-xl font-bold mb-2 gradient-text">{combo.name}</h4>
+                    <p className="text-muted-foreground text-sm mb-4">{combo.desc}</p>
+                    <p className="font-display text-2xl font-bold gradient-text mb-4">{combo.price}</p>
+                    <Button variant="outline" className="w-full rounded-full" asChild>
+                      <a href="#contact">Liên hệ</a>
+                    </Button>
+                  </motion.div>
+                ))
               )}
             </div>
           </TabsContent>
@@ -541,37 +498,31 @@ const PricingSection = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="max-w-5xl mx-auto mt-12"
+          transition={{ duration: 0.8, delay: 0.5 }}
+          className="mt-16 max-w-4xl mx-auto"
         >
-          <div className="glass-card p-8">
-            <h3 className="text-center font-display text-xl font-semibold mb-6">
+          <div className="glass-card p-6 md:p-8">
+            <h3 className="font-display text-xl font-bold text-center mb-6">
               Quy Định Chung
             </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {generalRules.map((rule) => (
-                <div key={rule.label} className="text-center p-4 rounded-xl bg-card/50 border border-border/50">
-                  <div className="text-muted-foreground text-sm mb-1">{rule.label}</div>
-                  <div className="text-primary font-semibold">{rule.value}</div>
+                <div key={rule.label} className="text-center p-4 rounded-xl bg-card/50">
+                  <p className="text-sm text-muted-foreground mb-1">{rule.label}</p>
+                  <p className="font-bold text-primary text-lg">{rule.value}</p>
                 </div>
               ))}
             </div>
+          </div>
 
-            <div className="text-center mt-8">
-              <Button 
-                size="lg" 
-                className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full"
-                asChild
-              >
-                <a href="tel:0862098408">
-                  <MessageCircle className="w-5 h-5 mr-2" />
-                  Liên hệ báo giá: 0862 098 408
-                </a>
-              </Button>
-              <p className="text-sm text-muted-foreground mt-3">
-                Tư vấn miễn phí · Báo giá trong 24h
-              </p>
-            </div>
+          {/* CTA */}
+          <div className="text-center mt-8">
+            <Button variant="hero" size="xl" asChild>
+              <a href="#contact">
+                <MessageCircle className="w-5 h-5" />
+                Nhận báo giá chi tiết
+              </a>
+            </Button>
           </div>
         </motion.div>
       </div>
