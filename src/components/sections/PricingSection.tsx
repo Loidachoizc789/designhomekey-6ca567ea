@@ -1,10 +1,11 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
-import { useRef, useState } from "react";
-import { ChevronUp, Check, X, Palette, Video, Layers, Film, Home, Box, MessageCircle } from "lucide-react";
+import { useRef, useState, useEffect } from "react";
+import { ChevronUp, Check, X, Palette, Video, Layers, Film, Home, Box, MessageCircle, Gift, Sparkles, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { supabase } from "@/integrations/supabase/client";
 
 const pricingGroups = [
   {
@@ -42,8 +43,8 @@ const pricingGroups = [
       { name: "COMBO VP STANDARD", desc: "1–2 không gian + Concept + Camera cinematic", price: "15.000.000 – 20.000.000đ" },
       { name: "COMBO VP PRO", desc: "2–3 không gian + Virtual Production + Test kỹ thuật", price: "28.000.000 – 40.000.000đ" },
     ],
-    includes: ["Render realtime Unreal / Aximmetry", "File scene + ảnh preview"],
-    excludes: ["Vận hành quay thực tế"],
+    includes: ["Render realtime Unreal / Aximmetry", "File scene + ảnh preview", "Dùng cho livestream, talkshow, quảng cáo"],
+    excludes: ["Vận hành quay thực tế", "Thiết bị ánh sáng", "Sửa thêm: 200k–400k/lần"],
   },
   {
     id: "3d-event",
@@ -130,13 +131,50 @@ const generalRules = [
   { label: "Chỉnh sửa miễn phí", value: "2 lần" },
   { label: "Sửa thêm", value: "200k – 400k / lần" },
   { label: "Deadline gấp", value: "+20–30%" },
-  { label: "Combo nhiều dịch vụ", value: "Giảm giá" },
 ];
+
+interface ComboPackage {
+  id: string;
+  name: string;
+  description: string;
+  price: string;
+  includes: string[];
+  color: string;
+  is_active: boolean;
+  display_order: number;
+}
 
 const PricingSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [openGroups, setOpenGroups] = useState<string[]>(["thiet-ke-2d"]);
+  const [combos, setCombos] = useState<ComboPackage[]>([]);
+
+  useEffect(() => {
+    const fetchCombos = async () => {
+      const { data } = await supabase
+        .from("combo_packages")
+        .select("*")
+        .eq("is_active", true)
+        .order("display_order", { ascending: true });
+      if (data) setCombos(data);
+    };
+    fetchCombos();
+
+    // Realtime subscription
+    const channel = supabase
+      .channel("combo-packages-realtime")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "combo_packages" },
+        () => fetchCombos()
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   const toggleGroup = (id: string) => {
     setOpenGroups(prev => 
@@ -144,6 +182,18 @@ const PricingSection = () => {
         ? prev.filter(g => g !== id)
         : [...prev, id]
     );
+  };
+
+  // Parse price to get min/max
+  const parsePrice = (priceStr: string) => {
+    const numbers = priceStr.match(/[\d.]+/g);
+    if (numbers && numbers.length >= 2) {
+      return { min: numbers[0], max: numbers[1] };
+    }
+    if (numbers && numbers.length === 1) {
+      return { min: numbers[0], max: numbers[0] };
+    }
+    return { min: "0", max: "0" };
   };
 
   return (
@@ -172,7 +222,7 @@ const PricingSection = () => {
         </motion.div>
 
         {/* Tabs */}
-        <Tabs defaultValue="single" className="max-w-5xl mx-auto">
+        <Tabs defaultValue="single" className="max-w-6xl mx-auto">
           <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-8 bg-card border border-border rounded-full p-1">
             <TabsTrigger 
               value="single" 
@@ -185,7 +235,7 @@ const PricingSection = () => {
               value="combo"
               className="rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
             >
-              <Box className="w-4 h-4 mr-2" />
+              <Gift className="w-4 h-4 mr-2" />
               Combo Trọn Gói
             </TabsTrigger>
           </TabsList>
@@ -205,7 +255,7 @@ const PricingSection = () => {
                   <div className="glass-card overflow-hidden">
                     <CollapsibleTrigger className="w-full p-6 flex items-center justify-between hover:bg-primary/5 transition-colors">
                       <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                        <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
                           <group.icon className="w-6 h-6 text-primary" />
                         </div>
                         <div className="text-left">
@@ -229,9 +279,9 @@ const PricingSection = () => {
                             </h4>
                             <div className="space-y-3">
                               {group.items.map((item) => (
-                                <div key={item.name} className="bg-card/50 rounded-lg p-3">
-                                  <div className="text-sm text-foreground mb-1">{item.name}</div>
-                                  <div className="text-primary font-medium text-sm">{item.price}</div>
+                                <div key={item.name} className="flex justify-between items-start gap-2">
+                                  <span className="text-sm text-muted-foreground">{item.name}</span>
+                                  <span className="text-sm font-medium text-foreground whitespace-nowrap">{item.price}</span>
                                 </div>
                               ))}
                             </div>
@@ -239,14 +289,12 @@ const PricingSection = () => {
 
                           {/* Combo columns */}
                           {group.combos?.map((combo) => (
-                            <div key={combo.name}>
-                              <h4 className="text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
+                            <div key={combo.name} className="glass-card p-4 border border-border/50">
+                              <h4 className="text-primary font-semibold mb-2 text-sm uppercase tracking-wider">
                                 {combo.name}
                               </h4>
-                              <div className="bg-card/50 rounded-lg p-3">
-                                <div className="text-sm text-foreground mb-2">{combo.desc}</div>
-                                <div className="text-primary font-medium text-sm">{combo.price}</div>
-                              </div>
+                              <p className="text-sm text-muted-foreground mb-3">{combo.desc}</p>
+                              <p className="text-primary font-bold">{combo.price}</p>
                             </div>
                           ))}
 
@@ -258,9 +306,9 @@ const PricingSection = () => {
                               </h4>
                               <div className="space-y-3">
                                 {group.exteriorItems.map((item) => (
-                                  <div key={item.name} className="bg-card/50 rounded-lg p-3">
-                                    <div className="text-sm text-foreground mb-1">{item.name}</div>
-                                    <div className="text-primary font-medium text-sm">{item.price}</div>
+                                  <div key={item.name} className="flex justify-between items-start gap-2">
+                                    <span className="text-sm text-muted-foreground">{item.name}</span>
+                                    <span className="text-sm font-medium text-foreground whitespace-nowrap">{item.price}</span>
                                   </div>
                                 ))}
                               </div>
@@ -274,9 +322,9 @@ const PricingSection = () => {
                               </h4>
                               <div className="space-y-3">
                                 {group.animationItems.map((item) => (
-                                  <div key={item.name} className="bg-card/50 rounded-lg p-3">
-                                    <div className="text-sm text-foreground mb-1">{item.name}</div>
-                                    <div className="text-primary font-medium text-sm">{item.price}</div>
+                                  <div key={item.name} className="flex justify-between items-start gap-2">
+                                    <span className="text-sm text-muted-foreground">{item.name}</span>
+                                    <span className="text-sm font-medium text-foreground whitespace-nowrap">{item.price}</span>
                                   </div>
                                 ))}
                               </div>
@@ -290,9 +338,9 @@ const PricingSection = () => {
                               </h4>
                               <div className="space-y-3">
                                 {group.studioItems.map((item) => (
-                                  <div key={item.name} className="bg-card/50 rounded-lg p-3">
-                                    <div className="text-sm text-foreground mb-1">{item.name}</div>
-                                    <div className="text-primary font-medium text-sm">{item.price}</div>
+                                  <div key={item.name} className="flex justify-between items-start gap-2">
+                                    <span className="text-sm text-muted-foreground">{item.name}</span>
+                                    <span className="text-sm font-medium text-foreground whitespace-nowrap">{item.price}</span>
                                   </div>
                                 ))}
                               </div>
@@ -324,8 +372,167 @@ const PricingSection = () => {
           </TabsContent>
 
           <TabsContent value="combo">
-            <div className="text-center py-12">
-              <p className="text-muted-foreground mb-4">Vui lòng chọn tab "Dịch vụ đơn lẻ" để xem chi tiết các combo trong từng nhóm dịch vụ.</p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6 }}
+              className="text-center mb-10"
+            >
+              <h3 className="font-display text-2xl md:text-3xl font-bold mb-2">
+                Combo Event <span className="gradient-text">Trọn Gói</span>
+              </h3>
+              <p className="text-muted-foreground">
+                Gói tổng thể cho sự kiện từ nhỏ đến lớn
+              </p>
+            </motion.div>
+
+            {/* Combo Cards */}
+            <div className="grid md:grid-cols-3 gap-6">
+              {combos.length > 0 ? (
+                combos.map((combo, index) => {
+                  const { min, max } = parsePrice(combo.price);
+                  const isPopular = index === 1; // Middle card is "most popular"
+
+                  return (
+                    <motion.div
+                      key={combo.id}
+                      initial={{ opacity: 0, y: 30 }}
+                      animate={isInView ? { opacity: 1, y: 0 } : {}}
+                      transition={{ duration: 0.5, delay: index * 0.15 }}
+                      className={`glass-card p-6 relative ${isPopular ? "ring-2 ring-primary" : ""}`}
+                    >
+                      {isPopular && (
+                        <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary text-primary-foreground text-xs font-medium">
+                            <Sparkles className="w-3 h-3" />
+                            Phổ biến nhất
+                          </span>
+                        </div>
+                      )}
+
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${combo.color} flex items-center justify-center`}>
+                          <Gift className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                          <h4 className="font-display font-bold text-lg">{combo.name}</h4>
+                          <p className="text-sm text-muted-foreground">{combo.description}</p>
+                        </div>
+                      </div>
+
+                      {/* Price */}
+                      <div className="mb-6">
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-2xl md:text-3xl font-bold gradient-text">{min}</span>
+                          <span className="text-muted-foreground">–</span>
+                        </div>
+                        <div className="text-xl md:text-2xl font-bold text-primary">
+                          {max}đ
+                        </div>
+                        <p className="text-xs text-muted-foreground uppercase mt-1">
+                          Tùy theo scope dự án
+                        </p>
+                      </div>
+
+                      {/* Includes */}
+                      <div className="space-y-3 mb-6">
+                        <p className="text-xs uppercase text-muted-foreground font-medium">Bao gồm</p>
+                        {combo.includes.map((item, i) => (
+                          <div key={i} className="flex items-center gap-2 text-sm">
+                            <Check className="w-4 h-4 text-primary flex-shrink-0" />
+                            <span>{item}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* CTA */}
+                      <Button 
+                        className="w-full rounded-full" 
+                        variant={isPopular ? "default" : "outline"}
+                        asChild
+                      >
+                        <a href="#contact">
+                          Liên hệ báo giá
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </a>
+                      </Button>
+                    </motion.div>
+                  );
+                })
+              ) : (
+                // Default combo cards if no data from DB
+                <>
+                  {[
+                    { name: "COMBO EVENT START", desc: "Event nhỏ – tiết kiệm chi phí", min: "18.000.000", max: "25.000.000", includes: ["KV 2D", "Sân khấu 3D", "POSM cơ bản", "Motion intro"] },
+                    { name: "COMBO EVENT FULL", desc: "Gói bán chạy nhất", min: "35.000.000", max: "50.000.000", includes: ["Concept 2D", "Sân khấu + Gate + Booth", "POSM đầy đủ", "Video trình chiếu"] },
+                    { name: "COMBO EVENT PREMIUM", desc: "Event lớn, agency, thương hiệu mạnh", min: "60.000.000", max: "90.000.000", includes: ["Branding event", "Virtual Production", "Full POSM", "Motion + Video 3D"] },
+                  ].map((combo, index) => {
+                    const isPopular = index === 1;
+                    return (
+                      <motion.div
+                        key={combo.name}
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={isInView ? { opacity: 1, y: 0 } : {}}
+                        transition={{ duration: 0.5, delay: index * 0.15 }}
+                        className={`glass-card p-6 relative ${isPopular ? "ring-2 ring-primary" : ""}`}
+                      >
+                        {isPopular && (
+                          <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary text-primary-foreground text-xs font-medium">
+                              <Sparkles className="w-3 h-3" />
+                              Phổ biến nhất
+                            </span>
+                          </div>
+                        )}
+
+                        <div className="flex items-center gap-3 mb-4">
+                          <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center">
+                            <Gift className="w-6 h-6 text-white" />
+                          </div>
+                          <div>
+                            <h4 className="font-display font-bold text-lg">{combo.name}</h4>
+                            <p className="text-sm text-muted-foreground">{combo.desc}</p>
+                          </div>
+                        </div>
+
+                        <div className="mb-6">
+                          <div className="flex items-baseline gap-2">
+                            <span className="text-2xl md:text-3xl font-bold gradient-text">{combo.min}</span>
+                            <span className="text-muted-foreground">–</span>
+                          </div>
+                          <div className="text-xl md:text-2xl font-bold text-primary">
+                            {combo.max}đ
+                          </div>
+                          <p className="text-xs text-muted-foreground uppercase mt-1">
+                            Tùy theo scope dự án
+                          </p>
+                        </div>
+
+                        <div className="space-y-3 mb-6">
+                          <p className="text-xs uppercase text-muted-foreground font-medium">Bao gồm</p>
+                          {combo.includes.map((item, i) => (
+                            <div key={i} className="flex items-center gap-2 text-sm">
+                              <Check className="w-4 h-4 text-primary flex-shrink-0" />
+                              <span>{item}</span>
+                            </div>
+                          ))}
+                        </div>
+
+                        <Button 
+                          className="w-full rounded-full" 
+                          variant={isPopular ? "default" : "outline"}
+                          asChild
+                        >
+                          <a href="#contact">
+                            Liên hệ báo giá
+                            <ArrowRight className="w-4 h-4 ml-2" />
+                          </a>
+                        </Button>
+                      </motion.div>
+                    );
+                  })}
+                </>
+              )}
             </div>
           </TabsContent>
         </Tabs>
@@ -338,12 +545,12 @@ const PricingSection = () => {
           className="max-w-5xl mx-auto mt-12"
         >
           <div className="glass-card p-8">
-            <h3 className="text-center font-display text-xl font-semibold mb-6 flex items-center justify-center gap-2">
-              📌 Quy Định Chung
+            <h3 className="text-center font-display text-xl font-semibold mb-6">
+              Quy Định Chung
             </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {generalRules.map((rule) => (
-                <div key={rule.label} className="text-center p-4 rounded-xl bg-card/50">
+                <div key={rule.label} className="text-center p-4 rounded-xl bg-card/50 border border-border/50">
                   <div className="text-muted-foreground text-sm mb-1">{rule.label}</div>
                   <div className="text-primary font-semibold">{rule.value}</div>
                 </div>
