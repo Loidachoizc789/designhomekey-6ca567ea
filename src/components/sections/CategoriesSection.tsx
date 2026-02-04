@@ -115,18 +115,22 @@ const CategoriesSection = () => {
             className="mb-12"
           >
             <div className="relative flex items-center justify-center gap-4 lg:gap-8 overflow-hidden px-4">
-              {/* Previous Item - Blurred and smaller */}
+              {/* Previous Item - Blurred peek effect */}
               <motion.div
                 key={`prev-${prevIndex}`}
-                initial={{ opacity: 0.3 }}
-                animate={{ opacity: 0.4 }}
-                className="hidden lg:block absolute left-0 w-64 h-72 blur-[2px] scale-75 z-0"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.5 }}
+                transition={{ duration: 0.5 }}
+                className="hidden lg:flex absolute left-4 xl:left-12 w-48 xl:w-64 h-64 xl:h-80 z-0 items-center"
               >
-                <img
-                  src={categories[prevIndex].image}
-                  alt={categories[prevIndex].title}
-                  className="w-full h-full object-cover rounded-2xl opacity-60"
-                />
+                <div className="relative w-full h-full rounded-2xl overflow-hidden blur-[3px] scale-90 opacity-50">
+                  <img
+                    src={categories[prevIndex].image}
+                    alt={categories[prevIndex].title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-transparent" />
+                </div>
               </motion.div>
 
               {/* Main Carousel Item */}
@@ -193,18 +197,22 @@ const CategoriesSection = () => {
                 </div>
               </div>
 
-              {/* Next Item - Blurred and smaller */}
+              {/* Next Item - Blurred peek effect */}
               <motion.div
                 key={`next-${nextIndex}`}
-                initial={{ opacity: 0.3 }}
-                animate={{ opacity: 0.4 }}
-                className="hidden lg:block absolute right-0 w-64 h-72 blur-[2px] scale-75 z-0"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.5 }}
+                transition={{ duration: 0.5 }}
+                className="hidden lg:flex absolute right-4 xl:right-12 w-48 xl:w-64 h-64 xl:h-80 z-0 items-center"
               >
-                <img
-                  src={categories[nextIndex].image}
-                  alt={categories[nextIndex].title}
-                  className="w-full h-full object-cover rounded-2xl opacity-60"
-                />
+                <div className="relative w-full h-full rounded-2xl overflow-hidden blur-[3px] scale-90 opacity-50">
+                  <img
+                    src={categories[nextIndex].image}
+                    alt={categories[nextIndex].title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-l from-background via-transparent to-transparent" />
+                </div>
               </motion.div>
             </div>
 

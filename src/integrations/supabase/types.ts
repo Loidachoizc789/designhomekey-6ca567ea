@@ -176,6 +176,36 @@ export type Database = {
         }
         Relationships: []
       }
+      homepage_stats: {
+        Row: {
+          created_at: string
+          display_order: number
+          id: string
+          stat_key: string
+          stat_label: string
+          stat_value: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          stat_key: string
+          stat_label: string
+          stat_value: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          stat_key?: string
+          stat_label?: string
+          stat_value?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       product_media: {
         Row: {
           created_at: string
