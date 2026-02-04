@@ -21,6 +21,7 @@ import GalaxyBackground from "@/components/GalaxyBackground";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCategoryImages } from "@/hooks/useCategoryImages";
 import { useCategoryPricing } from "@/hooks/useCategoryPricing";
+import { useCategoryPageImage } from "@/hooks/useCategoryPageImage";
 import CategoryPricingDisplay from "@/components/CategoryPricingDisplay";
 import setTalkshow from "@/assets/set-talkshow.jpg";
 import setLivestream from "@/assets/set-livestream.jpg";
@@ -94,6 +95,7 @@ const Studio3D = () => {
 
   const { images: virtualImages, loading: virtualLoading } = useCategoryImages("3d-virtual");
   const { images: eventImages, loading: eventLoading } = useCategoryImages("3d-event");
+  const { imageUrl: deliverablesImage } = useCategoryPageImage("phim-truong-3d", "deliverables");
 
   const {
     pricing: virtualPricing,
@@ -343,7 +345,7 @@ const Studio3D = () => {
               >
                 <div className="aspect-video rounded-2xl overflow-hidden">
                   <img 
-                    src={setTalkshow} 
+                    src={deliverablesImage || setTalkshow} 
                     alt="Virtual production studio" 
                     className="w-full h-full object-cover"
                   />

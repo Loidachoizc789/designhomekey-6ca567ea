@@ -8,6 +8,7 @@ import FloatingShapes from "@/components/FloatingShapes";
 import GalaxyBackground from "@/components/GalaxyBackground";
 import { useCategoryImages } from "@/hooks/useCategoryImages";
 import { useCategoryPricing } from "@/hooks/useCategoryPricing";
+import { useCategoryPageImage } from "@/hooks/useCategoryPageImage";
 import CategoryPricingDisplay from "@/components/CategoryPricingDisplay";
 import setLivestream from "@/assets/set-livestream.jpg";
 import setTalkshow from "@/assets/set-talkshow.jpg";
@@ -94,6 +95,7 @@ const specs = [
 const MotionGraphics = () => {
   const { images, loading } = useCategoryImages("after-effects");
   const { pricing, notes, loading: pricingLoading } = useCategoryPricing("after-effects");
+  const { imageUrl: deliverablesImage } = useCategoryPageImage("after-effects", "deliverables");
 
   const galleryItems = images.length > 0 
     ? images.map((img, index) => ({

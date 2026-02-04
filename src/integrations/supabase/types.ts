@@ -80,6 +80,33 @@ export type Database = {
         }
         Relationships: []
       }
+      category_page_images: {
+        Row: {
+          category_slug: string
+          created_at: string
+          id: string
+          image_url: string | null
+          section_key: string
+          updated_at: string
+        }
+        Insert: {
+          category_slug: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          section_key: string
+          updated_at?: string
+        }
+        Update: {
+          category_slug?: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          section_key?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       category_pricing: {
         Row: {
           category_slug: string
