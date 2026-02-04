@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Home } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 
 const categories = [
   { name: "Thiết Kế 2D", href: "/thiet-ke-2d" },
-  { name: "Phim Trường 3D", href: "/phim-truong-3d" },
+  { name: "Thiết Kế 3D", href: "/phim-truong-3d" },
   { name: "Model 3D", href: "/model-3d" },
   { name: "Nội Ngoại Thất", href: "/noi-ngoai-that" },
   { name: "After Effects", href: "/after-effects" },
@@ -37,26 +37,26 @@ const CategoryNavbar = () => {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
           ? "bg-background/90 backdrop-blur-xl border-b border-border shadow-lg"
-          : "bg-transparent"
+          : "bg-background/50 backdrop-blur-xl border-b border-border/50"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-20 md:h-24">
+          {/* Logo - Larger and pushed to left edge */}
+          <Link to="/" className="flex items-center flex-shrink-0">
             <img
               src="/lovable-uploads/1052d8d6-1118-4206-be15-c73ee5a0188e.png"
               alt="DesignHomeKey"
-              className="h-8 md:h-10 w-auto"
+              className="h-12 sm:h-14 md:h-16 lg:h-20 w-auto"
             />
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-1">
+          {/* Desktop Navigation - Centered with larger text */}
+          <div className="hidden lg:flex items-center gap-8">
             {/* Home Link */}
             <Link
               to="/"
-              className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
+              className="text-base lg:text-lg font-medium text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
             >
               Trang chủ
             </Link>
@@ -66,7 +66,7 @@ const CategoryNavbar = () => {
               <Link
                 key={category.href}
                 to={category.href}
-                className={`px-3 py-2 text-sm font-medium transition-colors rounded-full ${
+                className={`text-base lg:text-lg font-medium transition-colors whitespace-nowrap px-5 py-2.5 rounded-full ${
                   isActive(category.href)
                     ? "text-primary-foreground bg-primary"
                     : "text-muted-foreground hover:text-foreground"
@@ -77,10 +77,11 @@ const CategoryNavbar = () => {
             ))}
           </div>
 
-          {/* CTA Button */}
-          <div className="hidden lg:flex items-center gap-4">
+          {/* CTA Button - Pushed to right edge */}
+          <div className="hidden lg:flex items-center flex-shrink-0">
             <Button
-              className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full"
+              size="lg"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-10 py-6 text-lg font-medium"
               asChild
             >
               <a href="tel:0862098408">Liên hệ ngay</a>
@@ -110,7 +111,7 @@ const CategoryNavbar = () => {
               <Link
                 to="/"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block px-4 py-3 text-base font-medium text-muted-foreground hover:text-foreground transition-colors"
+                className="block px-4 py-3 text-lg font-medium text-muted-foreground hover:text-foreground transition-colors"
               >
                 Trang chủ
               </Link>
@@ -120,7 +121,7 @@ const CategoryNavbar = () => {
                   key={category.href}
                   to={category.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`block px-4 py-3 text-base font-medium transition-colors ${
+                  className={`block px-4 py-3 text-lg font-medium transition-colors ${
                     isActive(category.href)
                       ? "text-primary bg-primary/10 rounded-lg"
                       : "text-muted-foreground hover:text-foreground"
@@ -132,7 +133,8 @@ const CategoryNavbar = () => {
 
               <div className="pt-4">
                 <Button
-                  className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-full"
+                  size="lg"
+                  className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-full text-base py-5"
                   asChild
                 >
                   <a href="tel:0862098408">Liên hệ ngay</a>

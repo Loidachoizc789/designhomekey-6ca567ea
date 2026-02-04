@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
   Video,
   Zap,
   Monitor,
@@ -13,11 +12,12 @@ import {
   Layers,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import ProductGallery from "@/components/ProductGallery";
 import CategoryNavbar from "@/components/CategoryNavbar";
 import Footer from "@/components/sections/Footer";
 import FloatingShapes from "@/components/FloatingShapes";
+import GalaxyBackground from "@/components/GalaxyBackground";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCategoryImages } from "@/hooks/useCategoryImages";
 import { useCategoryPricing } from "@/hooks/useCategoryPricing";
@@ -136,8 +136,9 @@ const Studio3D = () => {
       <CategoryNavbar />
 
       <main>
-        {/* Hero Section - Like reference */}
+        {/* Hero Section */}
         <section className="relative py-24 md:py-32 overflow-hidden">
+          <GalaxyBackground />
           <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-background to-background" />
           <div className="absolute inset-0 grid-pattern opacity-5" />
           <FloatingShapes />
@@ -160,7 +161,7 @@ const Studio3D = () => {
               </div>
 
               <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-                Phim Trường{" "}
+                Thiết Kế{" "}
                 <span className="gradient-text">3D / Virtual</span>
                 <br />
                 <span className="gradient-text">Production</span>
@@ -202,10 +203,10 @@ const Studio3D = () => {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   className="glass-card p-6 text-center"
                 >
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                    <feature.icon className="w-6 h-6 text-primary" />
+                  <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                    <feature.icon className="w-7 h-7 text-primary" />
                   </div>
-                  <h3 className="font-semibold mb-2">{feature.title}</h3>
+                  <h3 className="font-semibold text-lg mb-2">{feature.title}</h3>
                   <p className="text-sm text-muted-foreground">{feature.description}</p>
                 </motion.div>
               ))}
@@ -224,20 +225,20 @@ const Studio3D = () => {
               className="text-center max-w-3xl mx-auto mb-12"
             >
               <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
-                Thư Viện <span className="gradient-text">Phim Trường</span>
+                Thư Viện <span className="gradient-text">Thiết Kế 3D</span>
               </h2>
               <p className="text-muted-foreground">
-                Khám phá các mẫu phim trường 3D đã triển khai. Click vào hình để xem chi tiết.
+                Khám phá các mẫu thiết kế 3D đã triển khai. Click vào hình để xem chi tiết.
               </p>
             </motion.div>
 
             <Tabs value={currentTab} onValueChange={handleTabChange} className="w-full">
               <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-10">
-                <TabsTrigger value="virtual" className="flex items-center gap-2">
+                <TabsTrigger value="virtual" className="flex items-center gap-2 text-base py-3">
                   <Video className="w-4 h-4" />
                   3D Virtual
                 </TabsTrigger>
-                <TabsTrigger value="event" className="flex items-center gap-2">
+                <TabsTrigger value="event" className="flex items-center gap-2 text-base py-3">
                   <Layers className="w-4 h-4" />
                   3D Event
                 </TabsTrigger>
@@ -289,10 +290,10 @@ const Studio3D = () => {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.05 }}
-                  className="glass-card p-4 text-center"
+                  className="glass-card p-5 text-center"
                 >
-                  <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">{spec.label}</p>
-                  <p className="font-semibold text-primary">{spec.value}</p>
+                  <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">{spec.label}</p>
+                  <p className="font-semibold text-primary text-sm">{spec.value}</p>
                 </motion.div>
               ))}
             </div>
@@ -313,7 +314,7 @@ const Studio3D = () => {
                   Sản Phẩm <span className="gradient-text">Bàn Giao</span>
                 </h2>
                 <p className="text-muted-foreground mb-8">
-                  Khi mua phim trường 3D, bạn sẽ nhận được bộ sản phẩm hoàn chỉnh để sử dụng ngay.
+                  Khi mua thiết kế 3D, bạn sẽ nhận được bộ sản phẩm hoàn chỉnh để sử dụng ngay.
                 </p>
 
                 <div className="grid gap-4">
@@ -365,7 +366,7 @@ const Studio3D = () => {
               className="glass-card p-8 md:p-12 text-center max-w-3xl mx-auto"
             >
               <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
-                Bắt đầu với <span className="gradient-text">Phim Trường 3D</span>
+                Bắt đầu với <span className="gradient-text">Thiết Kế 3D</span>
               </h2>
               <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
                 Liên hệ ngay để nhận tư vấn và báo giá chi tiết cho dự án virtual production của bạn.

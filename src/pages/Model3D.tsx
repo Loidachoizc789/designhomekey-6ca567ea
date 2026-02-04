@@ -1,10 +1,11 @@
 import { motion } from "framer-motion";
-import { ArrowLeft, Box, Layers, Move, Zap, Download, Settings, Palette, Monitor } from "lucide-react";
+import { Box, Layers, Move, Zap, Download, Settings, Palette, Monitor, Phone, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
 import ProductGallery from "@/components/ProductGallery";
 import CategoryNavbar from "@/components/CategoryNavbar";
 import Footer from "@/components/sections/Footer";
+import FloatingShapes from "@/components/FloatingShapes";
+import GalaxyBackground from "@/components/GalaxyBackground";
 import { useCategoryImages } from "@/hooks/useCategoryImages";
 import { useCategoryPricing } from "@/hooks/useCategoryPricing";
 import CategoryPricingDisplay from "@/components/CategoryPricingDisplay";
@@ -109,44 +110,56 @@ const Model3D = () => {
       <CategoryNavbar />
 
       {/* Hero Section */}
-      <section className="pt-24 pb-16 relative overflow-hidden">
+      <section className="relative py-24 md:py-32 overflow-hidden">
+        <GalaxyBackground />
         <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-background to-background" />
         <div className="absolute inset-0 grid-pattern opacity-5" />
+        <FloatingShapes />
 
         <div className="section-container relative z-10">
-          <Button variant="ghost" asChild className="mb-8">
-            <Link to="/" className="flex items-center gap-2">
-              <ArrowLeft className="w-4 h-4" />
-              Về trang chủ
-            </Link>
-          </Button>
-
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             className="max-w-4xl"
           >
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-16 h-16 rounded-2xl bg-primary/20 flex items-center justify-center">
-                <Box className="w-8 h-8 text-primary" />
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center">
+                <Box className="w-6 h-6 text-orange-400" />
               </div>
-              <div>
-                <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold">
-                  Model 3D / <span className="gradient-text">Asset</span>
-                </h1>
+              <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
+                <Layers className="w-6 h-6 text-primary" />
               </div>
             </div>
-            <p className="text-xl text-muted-foreground max-w-2xl">
+
+            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+              Model 3D / <span className="gradient-text">Asset</span>
+            </h1>
+            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mb-10">
               Props sân khấu, Nội thất 3D, Background modular – Asset tối ưu cho UE5 / Blender, 
               sẵn sàng cho production chuyên nghiệp.
             </p>
+
+            <div className="flex flex-wrap gap-4">
+              <Button variant="hero" size="xl" asChild>
+                <a href="tel:0862098408">
+                  <Phone className="w-5 h-5" />
+                  Liên hệ mua asset
+                </a>
+              </Button>
+              <Button variant="outline" size="xl" asChild>
+                <a href="#gallery">
+                  <Play className="w-5 h-5" />
+                  Xem thư viện
+                </a>
+              </Button>
+            </div>
           </motion.div>
         </div>
       </section>
 
       {/* Features Grid */}
-      <section className="py-16">
+      <section className="py-16 bg-card/50">
         <div className="section-container">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature, index) => (
@@ -156,10 +169,10 @@ const Model3D = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="glass-card p-6 card-hover"
+                className="glass-card p-6 card-hover text-center"
               >
-                <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center mb-4">
-                  <feature.icon className="w-6 h-6 text-primary" />
+                <div className="w-14 h-14 rounded-xl bg-primary/20 flex items-center justify-center mx-auto mb-4">
+                  <feature.icon className="w-7 h-7 text-primary" />
                 </div>
                 <h3 className="font-semibold text-lg mb-2">{feature.title}</h3>
                 <p className="text-sm text-muted-foreground">{feature.description}</p>
@@ -170,7 +183,7 @@ const Model3D = () => {
       </section>
 
       {/* Gallery Section */}
-      <section className="py-16 bg-card/30">
+      <section id="gallery" className="py-24">
         <div className="section-container">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -196,8 +209,16 @@ const Model3D = () => {
         </div>
       </section>
 
+      {/* Pricing */}
+      <CategoryPricingDisplay
+        pricing={pricing}
+        notes={notes}
+        loading={pricingLoading}
+        categoryTitle="Model 3D / Asset"
+      />
+
       {/* Technical Specs */}
-      <section className="py-16">
+      <section className="py-16 bg-card/30">
         <div className="section-container">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <motion.div
@@ -246,10 +267,10 @@ const Model3D = () => {
               </ul>
 
               <div className="mt-8 flex flex-wrap gap-4">
-                <Button variant="hero" asChild>
+                <Button variant="hero" size="lg" asChild>
                   <a href="tel:0862098408">Liên hệ mua asset</a>
                 </Button>
-                <Button variant="outline" asChild>
+                <Button variant="outline" size="lg" asChild>
                   <a href="mailto:designhomekey@gmail.com">Email báo giá</a>
                 </Button>
               </div>
@@ -259,7 +280,7 @@ const Model3D = () => {
       </section>
 
       {/* Categories */}
-      <section className="py-16 bg-card/30">
+      <section className="py-16">
         <div className="section-container">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -287,23 +308,15 @@ const Model3D = () => {
                 transition={{ delay: index * 0.1 }}
                 className="glass-card p-6 text-center card-hover"
               >
-                <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center mx-auto mb-3">
-                  <cat.icon className="w-6 h-6 text-primary" />
+                <div className="w-14 h-14 rounded-xl bg-primary/20 flex items-center justify-center mx-auto mb-3">
+                  <cat.icon className="w-7 h-7 text-primary" />
                 </div>
-                <span className="font-medium">{cat.label}</span>
+                <span className="font-medium text-base">{cat.label}</span>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
-
-      {/* Pricing */}
-      <CategoryPricingDisplay
-        pricing={pricing}
-        notes={notes}
-        loading={pricingLoading}
-        categoryTitle="Model 3D / Asset"
-      />
 
       <Footer />
     </div>

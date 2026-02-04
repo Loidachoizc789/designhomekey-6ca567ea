@@ -77,6 +77,8 @@ const CategoriesSection = () => {
   };
 
   const currentCategory = categories[currentIndex];
+  const prevIndex = (currentIndex - 1 + categories.length) % categories.length;
+  const nextIndex = (currentIndex + 1) % categories.length;
 
   return (
     <section id="categories" className="py-24 relative overflow-hidden" ref={ref}>
@@ -96,7 +98,7 @@ const CategoriesSection = () => {
             DỊCH VỤ CỦA CHÚNG TÔI
           </span>
           <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold mb-6">
-            Danh Mục <span className="gradient-text">Sản Phẩm</span>
+            Danh Mục <span className="gradient-text italic">Sản Phẩm</span>
           </h2>
           <p className="text-muted-foreground text-base sm:text-lg">
             Khám phá hệ sinh thái asset đa dạng – từ phim trường 3D, thiết kế 2D đến model 3D – tất cả
@@ -104,7 +106,7 @@ const CategoriesSection = () => {
           </p>
         </motion.div>
 
-        {/* Carousel View */}
+        {/* Carousel View with Peek Effect */}
         {!isGridView && (
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -112,9 +114,23 @@ const CategoriesSection = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="mb-12"
           >
-            <div className="flex items-center gap-8 justify-center">
-              {/* Carousel Item */}
-              <div className="max-w-4xl w-full">
+            <div className="relative flex items-center justify-center gap-4 lg:gap-8 overflow-hidden px-4">
+              {/* Previous Item - Blurred and smaller */}
+              <motion.div
+                key={`prev-${prevIndex}`}
+                initial={{ opacity: 0.3 }}
+                animate={{ opacity: 0.4 }}
+                className="hidden lg:block absolute left-0 w-64 h-72 blur-[2px] scale-75 z-0"
+              >
+                <img
+                  src={categories[prevIndex].image}
+                  alt={categories[prevIndex].title}
+                  className="w-full h-full object-cover rounded-2xl opacity-60"
+                />
+              </motion.div>
+
+              {/* Main Carousel Item */}
+              <div className="max-w-4xl w-full relative z-10">
                 <div className="flex flex-col lg:flex-row items-center gap-8">
                   {/* Image */}
                   <div className="relative w-full lg:w-1/2 aspect-square max-w-md">
@@ -128,10 +144,10 @@ const CategoriesSection = () => {
                       <img
                         src={currentCategory.image}
                         alt={currentCategory.title}
-                        className="w-full h-full object-cover rounded-2xl"
+                        className="w-full h-full object-cover rounded-2xl shadow-2xl"
                       />
-                      {/* Icon overlay */}
-                      <div className="absolute top-4 left-4 w-12 h-12 rounded-xl bg-background/80 backdrop-blur-sm flex items-center justify-center">
+                      {/* Icon overlay with glow effect */}
+                      <div className="absolute top-4 left-4 w-12 h-12 rounded-xl bg-background/80 backdrop-blur-sm flex items-center justify-center shadow-lg">
                         <currentCategory.icon className="w-6 h-6 text-primary" />
                       </div>
                     </motion.div>
@@ -148,10 +164,10 @@ const CategoriesSection = () => {
                     <span className="text-primary text-xs font-medium uppercase tracking-wider mb-2 block">
                       {currentCategory.category}
                     </span>
-                    <h3 className="font-display text-2xl sm:text-3xl font-bold mb-4">
+                    <h3 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">
                       {currentCategory.title}
                     </h3>
-                    <p className="text-muted-foreground mb-6">
+                    <p className="text-muted-foreground text-base lg:text-lg mb-6">
                       {currentCategory.description}
                     </p>
 
@@ -160,22 +176,36 @@ const CategoriesSection = () => {
                       {currentCategory.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="px-4 py-1.5 text-xs font-medium bg-primary/10 border border-primary/20 rounded-full text-primary"
+                          className="px-4 py-2 text-sm font-medium bg-primary/10 border border-primary/20 rounded-full text-primary"
                         >
                           {tag}
                         </span>
                       ))}
                     </div>
 
-                    <Button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full" asChild>
+                    <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 py-6 text-base" asChild>
                       <Link to={currentCategory.link}>
                         Xem chi tiết
-                        <ArrowRight className="w-4 h-4 ml-2" />
+                        <ArrowRight className="w-5 h-5 ml-2" />
                       </Link>
                     </Button>
                   </motion.div>
                 </div>
               </div>
+
+              {/* Next Item - Blurred and smaller */}
+              <motion.div
+                key={`next-${nextIndex}`}
+                initial={{ opacity: 0.3 }}
+                animate={{ opacity: 0.4 }}
+                className="hidden lg:block absolute right-0 w-64 h-72 blur-[2px] scale-75 z-0"
+              >
+                <img
+                  src={categories[nextIndex].image}
+                  alt={categories[nextIndex].title}
+                  className="w-full h-full object-cover rounded-2xl opacity-60"
+                />
+              </motion.div>
             </div>
 
             {/* Navigation */}
@@ -209,11 +239,6 @@ const CategoriesSection = () => {
                 <ChevronRight className="w-5 h-5" />
               </button>
             </div>
-
-            {/* Slide counter */}
-            <div className="text-center text-muted-foreground text-sm mt-4">
-              {currentIndex + 1} / {categories.length}
-            </div>
           </motion.div>
         )}
 
@@ -221,7 +246,8 @@ const CategoriesSection = () => {
         <div className="text-center mb-8">
           <Button
             variant="outline"
-            className="rounded-full border-border"
+            size="lg"
+            className="rounded-full border-border text-base"
             onClick={() => setIsGridView(!isGridView)}
           >
             {isGridView ? "Thu gọn" : "Xem tất cả hạng mục"}
@@ -263,7 +289,7 @@ const CategoriesSection = () => {
                   <span className="text-primary text-xs font-medium uppercase tracking-wider mb-2 block">
                     {category.category}
                   </span>
-                  <h3 className="font-display text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
+                  <h3 className="font-display text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
                     {category.title}
                   </h3>
                   <p className="text-muted-foreground text-sm mb-4 line-clamp-2">

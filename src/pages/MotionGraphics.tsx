@@ -1,10 +1,11 @@
 import { motion } from "framer-motion";
-import { ArrowLeft, Film, Sparkles, Zap, Video, Play } from "lucide-react";
+import { Film, Sparkles, Zap, Video, Play, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
 import ProductGallery from "@/components/ProductGallery";
 import CategoryNavbar from "@/components/CategoryNavbar";
 import Footer from "@/components/sections/Footer";
+import FloatingShapes from "@/components/FloatingShapes";
+import GalaxyBackground from "@/components/GalaxyBackground";
 import { useCategoryImages } from "@/hooks/useCategoryImages";
 import { useCategoryPricing } from "@/hooks/useCategoryPricing";
 import CategoryPricingDisplay from "@/components/CategoryPricingDisplay";
@@ -109,44 +110,56 @@ const MotionGraphics = () => {
       <CategoryNavbar />
 
       {/* Hero Section */}
-      <section className="pt-24 pb-16 relative overflow-hidden">
+      <section className="relative py-24 md:py-32 overflow-hidden">
+        <GalaxyBackground />
         <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-background to-background" />
         <div className="absolute inset-0 grid-pattern opacity-5" />
+        <FloatingShapes />
 
         <div className="section-container relative z-10">
-          <Button variant="ghost" asChild className="mb-8">
-            <Link to="/" className="flex items-center gap-2">
-              <ArrowLeft className="w-4 h-4" />
-              Về trang chủ
-            </Link>
-          </Button>
-
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             className="max-w-4xl"
           >
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-16 h-16 rounded-2xl bg-primary/20 flex items-center justify-center">
-                <Film className="w-8 h-8 text-primary" />
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                <Film className="w-6 h-6 text-purple-400" />
               </div>
-              <div>
-                <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold">
-                  After Effects / <span className="gradient-text">Motion Graphics</span>
-                </h1>
+              <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
+                <Sparkles className="w-6 h-6 text-primary" />
               </div>
             </div>
-            <p className="text-xl text-muted-foreground max-w-2xl">
+
+            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+              After Effects / <span className="gradient-text">Motion Graphics</span>
+            </h1>
+            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mb-10">
               Motion logo, video quảng cáo, template AE, gói livestream visual, lower third – 
               Tất cả được thiết kế chuyên nghiệp và dễ customize.
             </p>
+
+            <div className="flex flex-wrap gap-4">
+              <Button variant="hero" size="xl" asChild>
+                <a href="tel:0862098408">
+                  <Phone className="w-5 h-5" />
+                  Liên hệ đặt hàng
+                </a>
+              </Button>
+              <Button variant="outline" size="xl" asChild>
+                <a href="#gallery">
+                  <Play className="w-5 h-5" />
+                  Xem thư viện
+                </a>
+              </Button>
+            </div>
           </motion.div>
         </div>
       </section>
 
       {/* Features Grid */}
-      <section className="py-16">
+      <section className="py-16 bg-card/50">
         <div className="section-container">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature, index) => (
@@ -156,10 +169,10 @@ const MotionGraphics = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="glass-card p-6 card-hover"
+                className="glass-card p-6 card-hover text-center"
               >
-                <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center mb-4">
-                  <feature.icon className="w-6 h-6 text-primary" />
+                <div className="w-14 h-14 rounded-xl bg-primary/20 flex items-center justify-center mx-auto mb-4">
+                  <feature.icon className="w-7 h-7 text-primary" />
                 </div>
                 <h3 className="font-semibold text-lg mb-2">{feature.title}</h3>
                 <p className="text-sm text-muted-foreground">{feature.description}</p>
@@ -170,7 +183,7 @@ const MotionGraphics = () => {
       </section>
 
       {/* Gallery Section */}
-      <section className="py-16 bg-card/30">
+      <section id="gallery" className="py-24">
         <div className="section-container">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -196,8 +209,16 @@ const MotionGraphics = () => {
         </div>
       </section>
 
+      {/* Pricing Section */}
+      <CategoryPricingDisplay 
+        pricing={pricing} 
+        notes={notes} 
+        loading={pricingLoading}
+        categoryTitle="After Effects / Motion Graphics"
+      />
+
       {/* Technical Specs */}
-      <section className="py-16">
+      <section className="py-16 bg-card/30">
         <div className="section-container">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <motion.div
@@ -245,10 +266,10 @@ const MotionGraphics = () => {
               </ul>
 
               <div className="mt-8 flex flex-wrap gap-4">
-                <Button variant="hero" asChild>
+                <Button variant="hero" size="lg" asChild>
                   <a href="tel:0862098408">Liên hệ đặt hàng</a>
                 </Button>
-                <Button variant="outline" asChild>
+                <Button variant="outline" size="lg" asChild>
                   <a href="mailto:designhomekey@gmail.com">Email báo giá</a>
                 </Button>
               </div>
@@ -256,14 +277,6 @@ const MotionGraphics = () => {
           </div>
         </div>
       </section>
-
-      {/* Pricing Section */}
-      <CategoryPricingDisplay 
-        pricing={pricing} 
-        notes={notes} 
-        loading={pricingLoading}
-        categoryTitle="After Effects / Motion Graphics"
-      />
 
       <Footer />
     </div>

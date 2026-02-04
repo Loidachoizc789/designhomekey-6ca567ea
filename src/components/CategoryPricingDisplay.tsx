@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Check, X, MessageCircle, RotateCcw } from "lucide-react";
+import { Check, X, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface PricingItem {
@@ -72,9 +72,9 @@ const CategoryPricingDisplay = ({
           </p>
         </motion.div>
 
-        <div className="max-w-5xl mx-auto">
-          {/* Pricing Grid - Like reference image-27 */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="max-w-6xl mx-auto">
+          {/* Pricing Grid - 4 columns with fixed layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
             {pricing.map((group, index) => (
               <motion.div
                 key={group.id}
@@ -82,16 +82,16 @@ const CategoryPricingDisplay = ({
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="glass-card p-5"
+                className="glass-card p-6 flex flex-col"
               >
-                <h3 className="font-display text-base font-semibold text-primary mb-4 uppercase tracking-wide">
+                <h3 className="font-display text-lg font-semibold text-primary mb-5 uppercase tracking-wide">
                   {group.service_name}
                 </h3>
-                <div className="space-y-3">
+                <div className="space-y-4 flex-1">
                   {group.items.map((item, itemIndex) => (
-                    <div key={itemIndex} className="flex justify-between items-start gap-2">
+                    <div key={itemIndex} className="flex flex-col gap-1">
                       <span className="text-sm text-muted-foreground leading-relaxed">{item.label}</span>
-                      <span className="text-sm font-semibold text-foreground whitespace-nowrap">{item.price}</span>
+                      <span className="text-base font-bold text-foreground">{item.price}</span>
                     </div>
                   ))}
                 </div>
@@ -110,7 +110,7 @@ const CategoryPricingDisplay = ({
               {notes.includes.map((item, index) => (
                 <span
                   key={`include-${index}`}
-                  className="inline-flex items-center gap-2 text-sm px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary"
+                  className="inline-flex items-center gap-2 text-sm px-5 py-2.5 rounded-full bg-primary/10 border border-primary/20 text-primary"
                 >
                   <Check className="w-4 h-4" />
                   {item}
@@ -119,7 +119,7 @@ const CategoryPricingDisplay = ({
               {notes.excludes.map((item, index) => (
                 <span
                   key={`exclude-${index}`}
-                  className="inline-flex items-center gap-2 text-sm px-4 py-2 rounded-full bg-muted text-muted-foreground"
+                  className="inline-flex items-center gap-2 text-sm px-5 py-2.5 rounded-full bg-muted text-muted-foreground"
                 >
                   <X className="w-4 h-4" />
                   {item}
@@ -133,16 +133,16 @@ const CategoryPricingDisplay = ({
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="glass-card p-6 mb-8"
+            className="glass-card p-6 mb-10"
           >
-            <h3 className="font-display text-lg font-bold text-center mb-5">
+            <h3 className="font-display text-xl font-bold text-center mb-6">
               Quy Định Chung
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {generalRules.map((rule) => (
-                <div key={rule.label} className="text-center p-3 rounded-xl bg-card/50 border border-border/50">
-                  <p className="text-xs text-muted-foreground mb-1">{rule.label}</p>
-                  <p className="font-bold text-primary">{rule.value}</p>
+                <div key={rule.label} className="text-center p-4 rounded-xl bg-card/50 border border-border/50">
+                  <p className="text-sm text-muted-foreground mb-1">{rule.label}</p>
+                  <p className="text-lg font-bold text-primary">{rule.value}</p>
                 </div>
               ))}
             </div>
@@ -157,7 +157,7 @@ const CategoryPricingDisplay = ({
           >
             <Button
               size="lg"
-              className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 py-6 text-base"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-10 py-6 text-lg"
               asChild
             >
               <a href="tel:0862098408">
@@ -165,7 +165,7 @@ const CategoryPricingDisplay = ({
                 Nhận báo giá chi tiết
               </a>
             </Button>
-            <p className="text-sm text-muted-foreground mt-3">
+            <p className="text-sm text-muted-foreground mt-4">
               Tư vấn miễn phí · Báo giá trong 24h
             </p>
           </motion.div>

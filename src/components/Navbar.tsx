@@ -36,24 +36,24 @@ const Navbar = () => {
             : "bg-background/50 border-border/50"
         }`}
       >
-      <div className="w-full px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-6 sm:px-8 lg:px-12">
           <div className="flex items-center justify-between h-20 md:h-24">
-            {/* Logo - Much larger and pushed to left edge */}
+            {/* Logo - Large and pushed to left edge */}
             <a href="#" className="flex items-center flex-shrink-0">
               <img
                 alt="DesignHomeKey"
-                className="h-12 sm:h-14 md:h-16 lg:h-20 w-auto"
+                className="h-14 sm:h-16 md:h-20 lg:h-24 w-auto"
                 src="/lovable-uploads/1052d8d6-1118-4206-be15-c73ee5a0188e.png"
               />
             </a>
 
-            {/* Desktop Navigation - Centered with more spacing */}
-            <div className="hidden lg:flex items-center gap-12">
+            {/* Desktop Navigation - Centered with larger text */}
+            <div className="hidden lg:flex items-center gap-10 xl:gap-14">
               {navLinks.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
-                  className="text-base lg:text-lg font-medium text-muted-foreground hover:text-foreground transition-colors animated-underline whitespace-nowrap"
+                  className="text-base xl:text-lg font-medium text-muted-foreground hover:text-foreground transition-colors animated-underline whitespace-nowrap"
                 >
                   {link.label}
                 </a>
@@ -63,6 +63,7 @@ const Navbar = () => {
             {/* Desktop CTA - Pushed to right edge */}
             <div className="hidden lg:flex items-center flex-shrink-0">
               <Button 
+                size="lg"
                 className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-10 py-6 text-lg font-medium"
                 asChild
               >

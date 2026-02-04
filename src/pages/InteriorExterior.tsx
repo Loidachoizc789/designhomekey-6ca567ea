@@ -1,11 +1,13 @@
 import { motion } from "framer-motion";
-import { ArrowLeft, Home, Building2, Sun, Layers, Monitor, Move, Zap, Download } from "lucide-react";
+import { Home, Building2, Sun, Layers, Monitor, Move, Zap, Download, Phone, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProductGallery from "@/components/ProductGallery";
 import CategoryNavbar from "@/components/CategoryNavbar";
 import Footer from "@/components/sections/Footer";
+import FloatingShapes from "@/components/FloatingShapes";
+import GalaxyBackground from "@/components/GalaxyBackground";
 import { useCategoryImages } from "@/hooks/useCategoryImages";
 import { useCategoryPricing } from "@/hooks/useCategoryPricing";
 import CategoryPricingDisplay from "@/components/CategoryPricingDisplay";
@@ -43,20 +45,6 @@ const interiorItems = [
     image: setEvent,
     category: "Biệt thự",
   },
-  {
-    id: 5,
-    title: "Phòng Ngủ Master",
-    description: "Thiết kế phòng ngủ master với tone màu ấm áp",
-    image: setNews,
-    category: "Phòng ngủ",
-  },
-  {
-    id: 6,
-    title: "Kitchen Modern",
-    description: "Nhà bếp hiện đại với island và tủ bếp âm tường",
-    image: setTalkshow,
-    category: "Nhà bếp",
-  },
 ];
 
 const exteriorItems = [
@@ -87,20 +75,6 @@ const exteriorItems = [
     description: "Render mặt tiền nhà phố kết hợp kinh doanh",
     image: setNews,
     category: "Nhà phố",
-  },
-  {
-    id: 5,
-    title: "Resort Bể Bơi",
-    description: "Phối cảnh khu resort với bể bơi vô cực",
-    image: setTalkshow,
-    category: "Resort",
-  },
-  {
-    id: 6,
-    title: "Công Trình Công Cộng",
-    description: "Render ngoại thất tòa nhà văn phòng hiện đại",
-    image: setEvent,
-    category: "Văn phòng",
   },
 ];
 
@@ -206,53 +180,63 @@ const InteriorExterior = () => {
       <CategoryNavbar />
 
       {/* Hero Section */}
-      <section className="pt-24 pb-16 relative overflow-hidden">
+      <section className="relative py-24 md:py-32 overflow-hidden">
+        <GalaxyBackground />
         <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-background to-background" />
         <div className="absolute inset-0 grid-pattern opacity-5" />
+        <FloatingShapes />
 
         <div className="section-container relative z-10">
-          <Button variant="ghost" asChild className="mb-8">
-            <Link to="/" className="flex items-center gap-2">
-              <ArrowLeft className="w-4 h-4" />
-              Về trang chủ
-            </Link>
-          </Button>
-
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             className="max-w-4xl"
           >
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-16 h-16 rounded-2xl bg-primary/20 flex items-center justify-center">
-                <Home className="w-8 h-8 text-primary" />
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center">
+                <Home className="w-6 h-6 text-amber-400" />
               </div>
-              <div className="w-16 h-16 rounded-2xl bg-primary/20 flex items-center justify-center">
-                <Building2 className="w-8 h-8 text-primary" />
+              <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
+                <Building2 className="w-6 h-6 text-primary" />
               </div>
             </div>
-            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
+            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
               Thiết Kế <span className="gradient-text">Nội Ngoại Thất</span>
             </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl">
+            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mb-10">
               Render 3D nội thất căn hộ, biệt thự, văn phòng và phối cảnh ngoại thất – 
               chất lượng cao, hỗ trợ VR walkthrough.
             </p>
+
+            <div className="flex flex-wrap gap-4">
+              <Button variant="hero" size="xl" asChild>
+                <a href="tel:0862098408">
+                  <Phone className="w-5 h-5" />
+                  Liên hệ báo giá
+                </a>
+              </Button>
+              <Button variant="outline" size="xl" asChild>
+                <a href="#gallery">
+                  <Play className="w-5 h-5" />
+                  Xem dự án
+                </a>
+              </Button>
+            </div>
           </motion.div>
         </div>
       </section>
 
       {/* Tabs Section */}
-      <section className="py-16">
+      <section id="gallery" className="py-24">
         <div className="section-container">
           <Tabs value={currentTab} onValueChange={handleTabChange} className="w-full">
             <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-12">
-              <TabsTrigger value="interior" className="flex items-center gap-2">
+              <TabsTrigger value="interior" className="flex items-center gap-2 text-base py-3">
                 <Home className="w-4 h-4" />
                 Nội Thất
               </TabsTrigger>
-              <TabsTrigger value="exterior" className="flex items-center gap-2">
+              <TabsTrigger value="exterior" className="flex items-center gap-2 text-base py-3">
                 <Building2 className="w-4 h-4" />
                 Ngoại Thất
               </TabsTrigger>
@@ -268,10 +252,10 @@ const InteriorExterior = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="glass-card p-6 card-hover"
+                    className="glass-card p-6 card-hover text-center"
                   >
-                    <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center mb-4">
-                      <feature.icon className="w-6 h-6 text-primary" />
+                    <div className="w-14 h-14 rounded-xl bg-primary/20 flex items-center justify-center mx-auto mb-4">
+                      <feature.icon className="w-7 h-7 text-primary" />
                     </div>
                     <h3 className="font-semibold text-lg mb-2">{feature.title}</h3>
                     <p className="text-sm text-muted-foreground">{feature.description}</p>
@@ -313,10 +297,10 @@ const InteriorExterior = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="glass-card p-6 card-hover"
+                    className="glass-card p-6 card-hover text-center"
                   >
-                    <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center mb-4">
-                      <feature.icon className="w-6 h-6 text-primary" />
+                    <div className="w-14 h-14 rounded-xl bg-primary/20 flex items-center justify-center mx-auto mb-4">
+                      <feature.icon className="w-7 h-7 text-primary" />
                     </div>
                     <h3 className="font-semibold text-lg mb-2">{feature.title}</h3>
                     <p className="text-sm text-muted-foreground">{feature.description}</p>
@@ -409,10 +393,10 @@ const InteriorExterior = () => {
               </ul>
 
               <div className="mt-8 flex flex-wrap gap-4">
-                <Button variant="hero" asChild>
+                <Button variant="hero" size="lg" asChild>
                   <a href="tel:0862098408">Liên hệ báo giá</a>
                 </Button>
-                <Button variant="outline" asChild>
+                <Button variant="outline" size="lg" asChild>
                   <a href="mailto:designhomekey@gmail.com">Email tư vấn</a>
                 </Button>
               </div>
@@ -450,10 +434,10 @@ const InteriorExterior = () => {
                 transition={{ delay: index * 0.1 }}
                 className="glass-card p-6 text-center card-hover"
               >
-                <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center mx-auto mb-3">
-                  <cat.icon className="w-6 h-6 text-primary" />
+                <div className="w-14 h-14 rounded-xl bg-primary/20 flex items-center justify-center mx-auto mb-3">
+                  <cat.icon className="w-7 h-7 text-primary" />
                 </div>
-                <span className="font-medium">{cat.label}</span>
+                <span className="font-medium text-base">{cat.label}</span>
               </motion.div>
             ))}
           </div>
