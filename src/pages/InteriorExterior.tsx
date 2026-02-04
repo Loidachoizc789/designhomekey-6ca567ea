@@ -10,6 +10,7 @@ import FloatingShapes from "@/components/FloatingShapes";
 import GalaxyBackground from "@/components/GalaxyBackground";
 import { useCategoryImages } from "@/hooks/useCategoryImages";
 import { useCategoryPricing } from "@/hooks/useCategoryPricing";
+import { useCategoryPageImage } from "@/hooks/useCategoryPageImage";
 import CategoryPricingDisplay from "@/components/CategoryPricingDisplay";
 import setLivestream from "@/assets/set-livestream.jpg";
 import setTalkshow from "@/assets/set-talkshow.jpg";
@@ -139,6 +140,7 @@ const InteriorExterior = () => {
 
   const { images: interiorDbImages, loading: interiorLoading } = useCategoryImages("noi-that");
   const { images: exteriorDbImages, loading: exteriorLoading } = useCategoryImages("ngoai-that");
+  const { imageUrl: deliverablesImage } = useCategoryPageImage("noi-ngoai-that", "deliverables");
 
   const {
     pricing: interiorPricing,

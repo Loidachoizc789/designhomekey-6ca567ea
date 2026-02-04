@@ -8,6 +8,7 @@ import FloatingShapes from "@/components/FloatingShapes";
 import GalaxyBackground from "@/components/GalaxyBackground";
 import { useCategoryImages } from "@/hooks/useCategoryImages";
 import { useCategoryPricing } from "@/hooks/useCategoryPricing";
+import { useCategoryPageImage } from "@/hooks/useCategoryPageImage";
 import CategoryPricingDisplay from "@/components/CategoryPricingDisplay";
 import setEvent from "@/assets/set-event.jpg";
 import setTalkshow from "@/assets/set-talkshow.jpg";
@@ -80,6 +81,7 @@ const features = [
 const Design2D = () => {
   const { images, loading } = useCategoryImages("thiet-ke-2d");
   const { pricing, notes, loading: pricingLoading } = useCategoryPricing("thiet-ke-2d");
+  const { imageUrl: deliverablesImage } = useCategoryPageImage("thiet-ke-2d", "deliverables");
 
   const galleryItems = images.length > 0
     ? images.map((img, index) => ({
@@ -249,7 +251,7 @@ const Design2D = () => {
               >
                 <div className="aspect-square rounded-2xl overflow-hidden">
                   <img 
-                    src={setEvent} 
+                    src={deliverablesImage || setEvent} 
                     alt="Design samples" 
                     className="w-full h-full object-cover"
                   />

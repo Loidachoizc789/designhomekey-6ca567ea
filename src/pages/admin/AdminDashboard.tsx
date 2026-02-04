@@ -4,12 +4,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
-import { Loader2, LogOut, Image, DollarSign, Home, Gift, BarChart3 } from "lucide-react";
+import { Loader2, LogOut, Image, DollarSign, Home, Gift, BarChart3, Package } from "lucide-react";
 import AdminImageManager from "@/components/admin/AdminImageManager";
 import AdminPricingManager from "@/components/admin/AdminPricingManager";
 import AdminHomepageManager from "@/components/admin/AdminHomepageManager";
 import AdminComboManager from "@/components/admin/AdminComboManager";
 import AdminStatsManager from "@/components/admin/AdminStatsManager";
+import AdminDeliverableImageManager from "@/components/admin/AdminDeliverableImageManager";
 
 const CATEGORY_SLUGS = [
   { slug: "thiet-ke-2d", name: "Thiết Kế 2D" },
@@ -179,8 +180,9 @@ const AdminDashboard = () => {
             <AdminStatsManager />
           </TabsContent>
 
-          <TabsContent value="homepage">
+          <TabsContent value="homepage" className="space-y-6">
             <AdminHomepageManager />
+            <AdminDeliverableImageManager />
           </TabsContent>
         </Tabs>
       </main>
