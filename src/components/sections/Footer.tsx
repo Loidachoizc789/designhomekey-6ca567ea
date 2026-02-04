@@ -3,9 +3,9 @@ import {
   Youtube, 
   Instagram, 
   Mail, 
-  Phone, 
-  MessageCircle
+  Phone
 } from "lucide-react";
+import ZaloIcon from "@/assets/zalo-icon.png";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -25,7 +25,9 @@ const Footer = () => {
             </p>
             <div className="flex gap-4">
               <a 
-                href="#" 
+                href="https://www.facebook.com/profile.php?id=61587057484656" 
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors"
               >
                 <Facebook className="w-5 h-5" />
@@ -89,7 +91,7 @@ const Footer = () => {
                 </a>
               </li>
               <li className="flex items-center gap-3 text-muted-foreground">
-                <MessageCircle className="w-5 h-5 text-primary" />
+                <img src={ZaloIcon} alt="Zalo" className="w-5 h-5" />
                 <a href="https://zalo.me/0862098408" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
                   Zalo: 0862 098 408
                 </a>

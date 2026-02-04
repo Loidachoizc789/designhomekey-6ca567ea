@@ -432,10 +432,9 @@ const PricingSection = () => {
                       )}
                       
                       <div 
-                        className="w-16 h-16 rounded-2xl mb-4 flex items-center justify-center"
-                        style={{ background: combo.color || "linear-gradient(135deg, hsl(180 70% 50%), hsl(200 80% 45%))" }}
+                        className={`w-16 h-16 rounded-2xl mb-4 flex items-center justify-center bg-gradient-to-r ${combo.color || "from-cyan-500 to-blue-500"}`}
                       >
-                        <Gift className="w-8 h-8 text-background" />
+                        <Gift className="w-8 h-8 text-white" />
                       </div>
                       
                       <h4 className="font-display text-xl font-bold mb-2">{combo.name}</h4>
