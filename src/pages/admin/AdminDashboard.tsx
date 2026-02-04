@@ -4,10 +4,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
-import { Loader2, LogOut, Image, DollarSign, Home } from "lucide-react";
+import { Loader2, LogOut, Image, DollarSign, Home, Gift } from "lucide-react";
 import AdminImageManager from "@/components/admin/AdminImageManager";
 import AdminPricingManager from "@/components/admin/AdminPricingManager";
 import AdminHomepageManager from "@/components/admin/AdminHomepageManager";
+import AdminComboManager from "@/components/admin/AdminComboManager";
 
 const CATEGORY_SLUGS = [
   { slug: "thiet-ke-2d", name: "Thiết Kế 2D" },
@@ -120,7 +121,7 @@ const AdminDashboard = () => {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Tabs defaultValue="images" className="space-y-6">
-          <TabsList className="grid w-full max-w-lg grid-cols-3">
+          <TabsList className="grid w-full max-w-2xl grid-cols-4">
             <TabsTrigger value="images" className="flex items-center gap-2">
               <Image className="w-4 h-4" />
               Quản lý ảnh
@@ -128,6 +129,10 @@ const AdminDashboard = () => {
             <TabsTrigger value="pricing" className="flex items-center gap-2">
               <DollarSign className="w-4 h-4" />
               Bảng giá
+            </TabsTrigger>
+            <TabsTrigger value="combo" className="flex items-center gap-2">
+              <Gift className="w-4 h-4" />
+              Combo
             </TabsTrigger>
             <TabsTrigger value="homepage" className="flex items-center gap-2">
               <Home className="w-4 h-4" />
@@ -159,6 +164,10 @@ const AdminDashboard = () => {
 
           <TabsContent value="pricing">
             <AdminPricingManager />
+          </TabsContent>
+
+          <TabsContent value="combo">
+            <AdminComboManager />
           </TabsContent>
 
           <TabsContent value="homepage">

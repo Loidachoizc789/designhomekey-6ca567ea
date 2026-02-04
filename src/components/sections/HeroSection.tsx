@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import FloatingShapes from "@/components/FloatingShapes";
+import ParticleField from "@/components/ParticleField";
 
 const stats = [
   { value: "500+", label: "ASSET 3D" },
@@ -12,8 +13,11 @@ const stats = [
 const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
-      {/* Floating Glass Shapes */}
+      {/* Floating Glass Shapes - distributed on sides */}
       <FloatingShapes />
+      
+      {/* Particle Field */}
+      <ParticleField />
 
       {/* Grid Pattern Overlay */}
       <div className="absolute inset-0 grid-pattern opacity-10" />

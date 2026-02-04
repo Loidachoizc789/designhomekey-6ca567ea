@@ -1,10 +1,65 @@
 import { useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { Send, MessageCircle, Phone, Mail, Facebook } from "lucide-react";
+import { Send, MessageCircle, Phone, Mail, Facebook, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+
+// Floating shapes for contact section
+const FloatingContactShapes = () => {
+  const shapes = [
+    // Left side
+    { x: "5%", y: "10%", size: "w-16 h-24", color: "primary", delay: 0 },
+    { x: "8%", y: "35%", size: "w-20 h-28", color: "glow-secondary", delay: 0.3 },
+    { x: "3%", y: "60%", size: "w-14 h-20", color: "primary", delay: 0.6 },
+    { x: "10%", y: "80%", size: "w-18 h-26", color: "glow-secondary", delay: 0.9 },
+    
+    // Left-center
+    { x: "20%", y: "25%", size: "w-12 h-18", color: "primary", delay: 0.2 },
+    { x: "25%", y: "50%", size: "w-16 h-22", color: "glow-secondary", delay: 0.5 },
+    { x: "18%", y: "70%", size: "w-14 h-20", color: "primary", delay: 0.8 },
+    
+    // Right-center  
+    { x: "75%", y: "20%", size: "w-14 h-20", color: "glow-secondary", delay: 0.15 },
+    { x: "78%", y: "45%", size: "w-18 h-26", color: "primary", delay: 0.45 },
+    { x: "72%", y: "75%", size: "w-16 h-22", color: "glow-secondary", delay: 0.75 },
+    
+    // Right side
+    { x: "90%", y: "15%", size: "w-18 h-26", color: "primary", delay: 0.1 },
+    { x: "88%", y: "40%", size: "w-14 h-20", color: "glow-secondary", delay: 0.4 },
+    { x: "92%", y: "65%", size: "w-20 h-28", color: "primary", delay: 0.7 },
+    { x: "85%", y: "85%", size: "w-16 h-24", color: "glow-secondary", delay: 1 },
+  ];
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {shapes.map((shape, index) => (
+        <motion.div
+          key={index}
+          className={`absolute ${shape.size} rounded-2xl`}
+          style={{
+            left: shape.x,
+            top: shape.y,
+            background: shape.color === "primary" 
+              ? `linear-gradient(135deg, hsl(var(--primary) / 0.12) 0%, hsl(var(--primary) / 0.04) 100%)`
+              : `linear-gradient(135deg, hsl(var(--glow-secondary) / 0.12) 0%, hsl(var(--glow-secondary) / 0.04) 100%)`,
+            backdropFilter: "blur(6px)",
+            border: `1px solid ${shape.color === "primary" ? "hsl(var(--primary) / 0.15)" : "hsl(var(--glow-secondary) / 0.15)"}`,
+          }}
+          animate={{ 
+            y: [0, -12, 0],
+          }}
+          transition={{
+            duration: 4 + index * 0.2,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: shape.delay
+          }}
+        />
+      ))}
+    </div>
+  );
+};
 
 const ContactSection = () => {
   const ref = useRef(null);
@@ -14,7 +69,6 @@ const ContactSection = () => {
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
-    message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -50,7 +104,7 @@ const ContactSection = () => {
     
     // Construct Zalo message with customer info
     const zaloMessage = encodeURIComponent(
-      `Xin chào! Tôi là ${formData.name}\nSĐT: ${formData.phone}\n${formData.message ? `Nội dung: ${formData.message}` : "Tôi muốn tư vấn về dịch vụ của DesignHomeKey"}`
+      `Xin chào! Tôi là ${formData.name}\nSĐT: ${formData.phone}\nTôi muốn tư vấn về dịch vụ của DesignHomeKey`
     );
     
     // Open Zalo chat with pre-filled message
@@ -63,30 +117,9 @@ const ContactSection = () => {
     });
     
     // Reset form
-    setFormData({ name: "", phone: "", message: "" });
+    setFormData({ name: "", phone: "" });
     setIsSubmitting(false);
   };
-
-  const contactInfo = [
-    {
-      icon: Phone,
-      label: "Zalo",
-      value: "0962 968 388",
-      href: "https://zalo.me/0962968388",
-    },
-    {
-      icon: Mail,
-      label: "Email",
-      value: "designhomekey@gmail.com",
-      href: "mailto:designhomekey@gmail.com",
-    },
-    {
-      icon: Facebook,
-      label: "Facebook",
-      value: "DesignHomeKey",
-      href: "https://www.facebook.com/61587057484656",
-    },
-  ];
 
   return (
     <section
@@ -94,134 +127,98 @@ const ContactSection = () => {
       className="py-24 relative overflow-hidden"
       ref={ref}
     >
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-glow-secondary/5" />
-      <div className="absolute inset-0 grid-pattern opacity-5" />
-
-      {/* Glow Effects */}
-      <div className="absolute top-1/4 left-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-glow-secondary/10 rounded-full blur-3xl" />
+      {/* Background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-card/50" />
+      
+      {/* Floating shapes on both sides */}
+      <FloatingContactShapes />
 
       <div className="section-container relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          {/* Left: 3D Visual / Info */}
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+          {/* Left: CTA Card */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
+            initial={{ opacity: 0, x: -30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8 }}
             className="space-y-8"
           >
-            {/* Floating 3D Shapes Representation */}
-            <div className="relative h-64 lg:h-80">
-              <div className="absolute inset-0 flex items-center justify-center">
-                {/* Glass cube */}
-                <motion.div
-                  animate={{ rotateY: 360, rotateX: 15 }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                  className="w-32 h-32 glass border border-primary/30 rounded-xl shadow-2xl"
-                  style={{ transformStyle: "preserve-3d" }}
-                />
-                {/* Floating spheres */}
-                <motion.div
-                  animate={{ y: [-10, 10, -10] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute top-8 right-1/4 w-16 h-16 rounded-full bg-gradient-to-br from-primary/40 to-primary/10 blur-sm"
-                />
-                <motion.div
-                  animate={{ y: [10, -10, 10] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute bottom-8 left-1/4 w-12 h-12 rounded-full bg-gradient-to-br from-glow-secondary/40 to-glow-secondary/10 blur-sm"
-                />
+            {/* Collaboration Card */}
+            <div className="glass-card p-6 max-w-md">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+                  <Users className="w-6 h-6 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-display font-semibold text-lg">Mở rộng cộng đồng</h3>
+                  <p className="text-sm text-muted-foreground">Designer, artist, creator ở mọi nơi</p>
+                </div>
               </div>
-            </div>
-
-            {/* Contact Info Cards */}
-            <div className="space-y-4">
-              {contactInfo.map((item, index) => (
-                <motion.a
-                  key={item.label}
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
-                  className="flex items-center gap-4 p-4 glass rounded-xl hover:bg-white/10 transition-colors group"
-                >
-                  <div className="p-3 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                    <item.icon className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">{item.label}</p>
-                    <p className="font-medium">{item.value}</p>
-                  </div>
-                </motion.a>
-              ))}
+              <Button 
+                variant="outline" 
+                className="w-full rounded-full border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+                asChild
+              >
+                <a href="mailto:designhomekey@gmail.com">
+                  Liên hệ hợp tác →
+                </a>
+              </Button>
             </div>
           </motion.div>
 
           {/* Right: Contact Form */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
+            initial={{ opacity: 0, x: 30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="glass-card p-8 lg:p-10"
+            className="max-w-lg ml-auto"
           >
-            <h2 className="font-display text-2xl lg:text-3xl font-bold mb-2">
-              [ Thảo luận về dự án của bạn ]
+            <h2 className="font-display text-3xl lg:text-4xl font-bold mb-3">
+              <span className="text-primary">[</span>
+              Thảo luận về
+              <br />
+              dự án của bạn
+              <span className="text-primary">]</span>
             </h2>
             <p className="text-muted-foreground mb-8">
-              Để lại thông tin, chúng tôi sẽ liên hệ tư vấn miễn phí qua Zalo
+              Điền thông tin và chúng tôi sẽ liên hệ lại sớm nhất
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-4">
-                <Input
-                  placeholder="Họ và tên *"
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
-                  className="bg-transparent border-0 border-b border-border rounded-none px-0 focus-visible:ring-0 focus-visible:border-primary"
-                  required
-                />
-                <Input
-                  placeholder="Số điện thoại *"
-                  type="tel"
-                  value={formData.phone}
-                  onChange={(e) =>
-                    setFormData({ ...formData, phone: e.target.value })
-                  }
-                  className="bg-transparent border-0 border-b border-border rounded-none px-0 focus-visible:ring-0 focus-visible:border-primary"
-                  required
-                />
-                <Textarea
-                  placeholder="Mô tả ngắn về dự án (không bắt buộc)"
-                  value={formData.message}
-                  onChange={(e) =>
-                    setFormData({ ...formData, message: e.target.value })
-                  }
-                  className="bg-transparent border-0 border-b border-border rounded-none px-0 focus-visible:ring-0 focus-visible:border-primary resize-none min-h-[80px]"
-                  rows={3}
-                />
-              </div>
+              <Input
+                placeholder="Tên của bạn"
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
+                className="bg-transparent border-0 border-b border-border/50 rounded-none px-0 focus-visible:ring-0 focus-visible:border-primary h-12 text-lg"
+                required
+              />
+              <Input
+                placeholder="Số điện thoại"
+                type="tel"
+                value={formData.phone}
+                onChange={(e) =>
+                  setFormData({ ...formData, phone: e.target.value })
+                }
+                className="bg-transparent border-0 border-b border-border/50 rounded-none px-0 focus-visible:ring-0 focus-visible:border-primary h-12 text-lg"
+                required
+              />
 
               <Button
                 type="submit"
-                variant="hero"
-                size="xl"
-                className="w-full"
+                size="lg"
+                className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8"
                 disabled={isSubmitting}
               >
-                <MessageCircle className="w-5 h-5" />
-                Gửi & Mở Zalo Chat
-                <Send className="w-5 h-5" />
+                <Send className="w-5 h-5 mr-2" />
+                GỬI
               </Button>
-            </form>
 
-            <p className="text-xs text-muted-foreground mt-6 text-center">
-              Thông tin của bạn được bảo mật và chỉ dùng để liên hệ tư vấn
-            </p>
+              <p className="text-xs text-muted-foreground">
+                Bằng việc gửi thông tin, bạn đồng ý với{" "}
+                <a href="#" className="text-primary hover:underline">chính sách bảo mật</a>
+              </p>
+            </form>
           </motion.div>
         </div>
       </div>

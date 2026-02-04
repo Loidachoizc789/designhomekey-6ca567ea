@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -15,7 +15,6 @@ const categories = [
 const CategoryNavbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -54,53 +53,22 @@ const CategoryNavbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-1">
-            {/* Categories Dropdown */}
-            <div className="relative">
-              <button
-                onMouseEnter={() => setIsCategoryOpen(true)}
-                onMouseLeave={() => setIsCategoryOpen(false)}
-                className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
-              >
-                Danh mục
-                <ChevronDown className={`w-4 h-4 transition-transform ${isCategoryOpen ? "rotate-180" : ""}`} />
-              </button>
+            {/* Home Link */}
+            <Link
+              to="/"
+              className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
+            >
+              Trang chủ
+            </Link>
 
-              <AnimatePresence>
-                {isCategoryOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 10 }}
-                    onMouseEnter={() => setIsCategoryOpen(true)}
-                    onMouseLeave={() => setIsCategoryOpen(false)}
-                    className="absolute top-full left-0 w-56 py-2 mt-1 glass-card shadow-xl"
-                  >
-                    {categories.map((category) => (
-                      <Link
-                        key={category.href}
-                        to={category.href}
-                        className={`block px-4 py-2 text-sm transition-colors ${
-                          isActive(category.href)
-                            ? "text-primary bg-primary/10"
-                            : "text-muted-foreground hover:text-foreground hover:bg-primary/5"
-                        }`}
-                      >
-                        {category.name}
-                      </Link>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            {/* Direct links */}
+            {/* Direct category links */}
             {categories.map((category) => (
               <Link
                 key={category.href}
                 to={category.href}
-                className={`px-3 py-2 text-sm font-medium transition-colors ${
+                className={`px-3 py-2 text-sm font-medium transition-colors rounded-full ${
                   isActive(category.href)
-                    ? "text-primary"
+                    ? "text-primary-foreground bg-primary"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
@@ -115,7 +83,7 @@ const CategoryNavbar = () => {
               className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full"
               asChild
             >
-              <a href="tel:0862098408">Liên hệ</a>
+              <a href="tel:0862098408">Liên hệ ngay</a>
             </Button>
           </div>
 
