@@ -92,7 +92,7 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors animated-underline">
+                <a href="#" className="text-muted-foreground hover:text-primary transition-colors animated-underline text-sm">
                   Hướng dẫn sử dụng phim trường 3D
                 </a>
               </li>
@@ -111,7 +111,7 @@ const Footer = () => {
             © {currentYear} DesignHomeKey. All rights reserved.
           </p>
           <p className="text-sm text-muted-foreground">
-            Powered by <span className="text-primary">Unreal Engine 5</span> & <span className="text-primary">Blender</span>
+          <span className="text-primary">Unreal Engine 5</span> & <span className="text-primary">Blender</span>
           </p>
         </div>
       </div>
