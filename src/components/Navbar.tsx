@@ -36,34 +36,34 @@ const Navbar = () => {
             : "bg-background/50 border-border/50"
         }`}
       >
-        <div className="section-container">
-          <div className="flex items-center justify-between h-16 md:h-20">
-            {/* Logo - Larger and left aligned */}
-            <a href="#" className="flex items-center">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-20 md:h-24">
+            {/* Logo - Much larger and pushed to left edge */}
+            <a href="#" className="flex items-center flex-shrink-0">
               <img
                 alt="DesignHomeKey"
-                className="h-8 md:h-10 w-auto"
+                className="h-12 sm:h-14 md:h-16 lg:h-20 w-auto"
                 src="/lovable-uploads/1052d8d6-1118-4206-be15-c73ee5a0188e.png"
               />
             </a>
 
-            {/* Desktop Navigation - Centered */}
-            <div className="hidden lg:flex items-center gap-10">
+            {/* Desktop Navigation - Centered with more spacing */}
+            <div className="hidden lg:flex items-center gap-12">
               {navLinks.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
-                  className="text-base font-medium text-muted-foreground hover:text-foreground transition-colors animated-underline"
+                  className="text-base lg:text-lg font-medium text-muted-foreground hover:text-foreground transition-colors animated-underline whitespace-nowrap"
                 >
                   {link.label}
                 </a>
               ))}
             </div>
 
-            {/* Desktop CTA - Right aligned */}
-            <div className="hidden lg:flex items-center">
+            {/* Desktop CTA - Pushed to right edge */}
+            <div className="hidden lg:flex items-center flex-shrink-0">
               <Button 
-                className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 py-5 text-base font-medium"
+                className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-10 py-6 text-lg font-medium"
                 asChild
               >
                 <a href="#contact">Liên hệ</a>
