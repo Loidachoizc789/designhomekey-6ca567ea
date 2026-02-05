@@ -8,32 +8,35 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { supabase } from "@/integrations/supabase/client";
 
 // Color configurations for each menu item
-const iconColors = {
+const iconColors: Record<string, { bg: string; text: string; glow: string }> = {
   "thiet-ke-2d": { bg: "bg-pink-500/20", text: "text-pink-400", glow: "shadow-pink-500/20" },
-  "phim-truong-3d": { bg: "bg-cyan-500/20", text: "text-cyan-400", glow: "shadow-cyan-500/20" },
+  "3d-virtual": { bg: "bg-cyan-500/20", text: "text-cyan-400", glow: "shadow-cyan-500/20" },
   "3d-event": { bg: "bg-orange-500/20", text: "text-orange-400", glow: "shadow-orange-500/20" },
-  "motion-graphics": { bg: "bg-red-500/20", text: "text-red-400", glow: "shadow-red-500/20" },
-  "noi-ngoai-that": { bg: "bg-green-500/20", text: "text-green-400", glow: "shadow-green-500/20" },
+  "after-effects": { bg: "bg-red-500/20", text: "text-red-400", glow: "shadow-red-500/20" },
+  "noi-that": { bg: "bg-green-500/20", text: "text-green-400", glow: "shadow-green-500/20" },
+  "ngoai-that": { bg: "bg-emerald-500/20", text: "text-emerald-400", glow: "shadow-emerald-500/20" },
   "model-3d": { bg: "bg-purple-500/20", text: "text-purple-400", glow: "shadow-purple-500/20" },
 };
 
-const titleColors = {
+const titleColors: Record<string, string> = {
   "thiet-ke-2d": "bg-gradient-to-r from-pink-400 to-orange-400 bg-clip-text text-transparent",
-  "phim-truong-3d": "text-foreground",
-  "3d-event": "text-foreground",
-  "motion-graphics": "bg-gradient-to-r from-cyan-400 to-primary bg-clip-text text-transparent",
-  "noi-ngoai-that": "text-foreground",
-  "model-3d": "text-foreground",
+  "3d-virtual": "bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent",
+  "3d-event": "bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent",
+  "after-effects": "bg-gradient-to-r from-cyan-400 to-primary bg-clip-text text-transparent",
+  "noi-that": "bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent",
+  "ngoai-that": "bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent",
+  "model-3d": "bg-gradient-to-r from-purple-400 to-violet-400 bg-clip-text text-transparent",
 };
 
 // Mapping from category slug to display info
 const categoryConfig = [
   { slug: "thiet-ke-2d", icon: Palette, title: "I. Thiết Kế 2D – Nhận Diện Thương Hiệu" },
-  { slug: "3d-virtual", icon: Video, title: "II. Phim Trường 3D / Virtual Production", displaySlug: "phim-truong-3d" },
+  { slug: "3d-virtual", icon: Video, title: "II. Phim Trường 3D / Virtual Production" },
   { slug: "3d-event", icon: Layers, title: "III. 3D Event – Sân Khấu – POSM" },
-  { slug: "after-effects", icon: Film, title: "IV. After Effects / Motion Graphics", displaySlug: "motion-graphics" },
-  { slug: "noi-that", icon: Home, title: "V. Thiết Kế Nội – Ngoại Thất (3D)", displaySlug: "noi-ngoai-that" },
-  { slug: "model-3d", icon: Box, title: "VI. Model 3D / Asset" },
+  { slug: "after-effects", icon: Film, title: "IV. After Effects / Motion Graphics" },
+  { slug: "noi-that", icon: Home, title: "V. Thiết Kế Nội Thất (3D)" },
+  { slug: "ngoai-that", icon: Home, title: "VI. Thiết Kế Ngoại Thất (3D)" },
+  { slug: "model-3d", icon: Box, title: "VII. Model 3D / Asset" },
 ];
 
 const generalRules = [
@@ -116,7 +119,7 @@ const PricingSection = () => {
 
           return {
             slug: config.slug,
-            displaySlug: config.displaySlug || config.slug,
+            displaySlug: config.slug,
             icon: config.icon,
             title: config.title,
             services: categoryPricing,
