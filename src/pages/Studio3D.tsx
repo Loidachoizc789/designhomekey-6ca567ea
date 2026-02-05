@@ -18,6 +18,7 @@ import CategoryNavbar from "@/components/CategoryNavbar";
 import Footer from "@/components/sections/Footer";
 import FloatingShapes from "@/components/FloatingShapes";
 import GalaxyBackground from "@/components/GalaxyBackground";
+import SEOHead from "@/components/SEOHead";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCategoryImages } from "@/hooks/useCategoryImages";
 import { useCategoryPricing } from "@/hooks/useCategoryPricing";
@@ -135,6 +136,12 @@ const Studio3D = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SEOHead
+        title="Phim Trường 3D - Virtual Production Sets | DesignHomeKey"
+        description="Dịch vụ thiết kế phim trường 3D, virtual production sets cho livestream, talkshow, TV show và sự kiện. Realtime render với Unreal Engine 5, hỗ trợ LED wall."
+        keywords="phim trường 3D, virtual production, set 3D, Unreal Engine, livestream set, talkshow studio, sân khấu ảo, DesignHomeKey"
+        url="https://designhomekey.lovable.app/phim-truong-3d"
+      />
       <CategoryNavbar />
 
       <main>

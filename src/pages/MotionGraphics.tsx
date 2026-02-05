@@ -6,6 +6,7 @@ import CategoryNavbar from "@/components/CategoryNavbar";
 import Footer from "@/components/sections/Footer";
 import FloatingShapes from "@/components/FloatingShapes";
 import GalaxyBackground from "@/components/GalaxyBackground";
+import SEOHead from "@/components/SEOHead";
 import { useCategoryImages } from "@/hooks/useCategoryImages";
 import { useCategoryPricing } from "@/hooks/useCategoryPricing";
 import { useCategoryPageImage } from "@/hooks/useCategoryPageImage";
@@ -109,6 +110,12 @@ const MotionGraphics = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title="After Effects & Motion Graphics - Logo Animation, Video | DesignHomeKey"
+        description="Dịch vụ motion graphics chuyên nghiệp: logo animation, video quảng cáo, template After Effects, lower third livestream. Render nhanh, đa định dạng."
+        keywords="motion graphics, After Effects, logo animation, video quảng cáo, lower third, template AE, video livestream, DesignHomeKey"
+        url="https://designhomekey.lovable.app/after-effects"
+      />
       <CategoryNavbar />
 
       {/* Hero Section */}
