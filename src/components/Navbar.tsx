@@ -47,17 +47,20 @@ const Navbar = () => {
               />
             </a>
 
-            {/* Desktop Navigation - Centered with larger text */}
-            <div className="hidden lg:flex items-center gap-10 xl:gap-14">
-              {navLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="text-base xl:text-lg font-medium text-muted-foreground hover:text-foreground transition-colors animated-underline whitespace-nowrap"
-                >
-                  {link.label}
-                </a>
-              ))}
+            {/* Desktop Navigation - Enhanced with glassmorphism pill */}
+            <div className="hidden lg:flex items-center">
+              <div className="flex items-center gap-1 xl:gap-2 px-3 py-2 rounded-full bg-card/60 backdrop-blur-md border border-border/50 shadow-lg shadow-primary/5">
+                {navLinks.map((link) => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    className="relative px-4 xl:px-5 py-2.5 text-sm xl:text-base font-medium text-muted-foreground hover:text-foreground transition-all duration-300 rounded-full hover:bg-primary/10 whitespace-nowrap group"
+                  >
+                    <span className="relative z-10">{link.label}</span>
+                    <span className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  </a>
+                ))}
+              </div>
             </div>
 
             {/* Desktop CTA - Pushed to right edge */}
