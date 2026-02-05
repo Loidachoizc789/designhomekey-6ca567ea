@@ -26,123 +26,14 @@ const titleColors = {
   "model-3d": "text-foreground",
 };
 
-const pricingGroups = [
-  {
-    id: "thiet-ke-2d",
-    icon: Palette,
-    title: "I. Thiết Kế 2D – Nhận Diện Thương Hiệu",
-    subtitle: "4 nhóm dịch vụ",
-    items: [
-      { name: "Logo", price: "2.000.000 – 4.000.000đ" },
-      { name: "Poster / Banner", price: "500.000 – 1.500.000đ" },
-      { name: "Standee", price: "600.000 – 2.000.000đ" },
-      { name: "Brochure / Flyer", price: "1.000.000 – 3.000.000đ" },
-      { name: "Catalogue", price: "4.000.000 – 10.000.000đ" },
-    ],
-    combos: [
-      { name: "COMBO 2D START", desc: "Logo + Namecard + Avatar + Cover Facebook", price: "6.000.000 – 8.000.000đ" },
-      { name: "COMBO 2D BRAND BASIC", desc: "Logo + Bộ nhận diện + Poster + 3 post social", price: "10.000.000 – 12.000.000đ" },
-      { name: "COMBO 2D BRAND PRO", desc: "Logo + Brand guideline + POSM + Template + Hồ sơ NL", price: "15.000.000 – 20.000.000đ" },
-    ],
-    includes: ["File AI, PDF, JPG, PNG", "2 lần chỉnh sửa"],
-    excludes: ["Chi phí in ấn"],
-  },
-  {
-    id: "phim-truong-3d",
-    icon: Video,
-    title: "II. Phim Trường 3D / Virtual Production",
-    subtitle: "4 nhóm dịch vụ",
-    items: [
-      { name: "Phim trường 3D đơn", price: "6.000.000 – 10.000.000đ" },
-      { name: "Phim trường theo concept", price: "12.000.000 – 18.000.000đ" },
-      { name: "Virtual Production nâng cao", price: "25.000.000 – 40.000.000đ" },
-    ],
-    combos: [
-      { name: "COMBO VP BASIC", desc: "1 phim trường + Backdrop + Camera cố định", price: "8.000.000 – 12.000.000đ" },
-      { name: "COMBO VP STANDARD", desc: "1–2 không gian + Concept + Camera cinematic", price: "15.000.000 – 20.000.000đ" },
-      { name: "COMBO VP PRO", desc: "2–3 không gian + Virtual Production + Test kỹ thuật", price: "28.000.000 – 40.000.000đ" },
-    ],
-    includes: ["Render realtime Unreal / Aximmetry", "File scene + ảnh preview", "Dùng cho livestream, talkshow, quảng cáo"],
-    excludes: ["Vận hành quay thực tế", "Thiết bị ánh sáng", "Sửa thêm: 200k–400k/lần"],
-  },
-  {
-    id: "3d-event",
-    icon: Layers,
-    title: "III. 3D Event – Sân Khấu – POSM",
-    subtitle: "4 nhóm dịch vụ",
-    items: [
-      { name: "Sân khấu 3D", price: "5.000.000 – 15.000.000đ" },
-      { name: "POSM 3D", price: "800.000 – 2.000.000đ / món" },
-      { name: "Photobooth 3D", price: "2.000.000 – 5.000.000đ" },
-      { name: "Gate / Cổng chào 3D", price: "3.000.000 – 8.000.000đ" },
-      { name: "Booth triển lãm", price: "5.000.000 – 15.000.000đ" },
-    ],
-    combos: [
-      { name: "COMBO EVENT MINI", desc: "Sân khấu + Backdrop LED + 2–3 POSM", price: "10.000.000 – 15.000.000đ" },
-      { name: "COMBO EVENT STANDARD", desc: "Sân khấu + Layout + POSM + Photobooth", price: "18.000.000 – 30.000.000đ" },
-      { name: "COMBO EVENT PRO", desc: "Concept tổng thể + Sân khấu + Gate + Booth + Render", price: "35.000.000 – 60.000.000đ" },
-    ],
-    includes: ["Dùng để pitching, duyệt phương án", "Render ảnh/video"],
-    excludes: ["Thi công thực tế"],
-  },
-  {
-    id: "motion-graphics",
-    icon: Film,
-    title: "IV. After Effects / Motion Graphics",
-    subtitle: "4 nhóm dịch vụ",
-    items: [
-      { name: "Logo animation", price: "1.500.000 – 3.000.000đ" },
-      { name: "Video motion social", price: "3.000.000 – 6.000.000đ" },
-      { name: "Video trình chiếu LED", price: "8.000.000 – 15.000.000đ" },
-    ],
-    combos: [
-      { name: "COMBO MOTION BASIC", desc: "Logo animation + Motion text", price: "3.000.000 – 5.000.000đ" },
-      { name: "COMBO MOTION EVENT", desc: "Video intro LED + Motion sân khấu", price: "6.000.000 – 10.000.000đ" },
-      { name: "COMBO MOTION PRO", desc: "Motion phức tạp + Video trình chiếu lớn", price: "12.000.000 – 20.000.000đ" },
-    ],
-    includes: ["Thời lượng 5–30s", "2 lần chỉnh sửa"],
-    excludes: ["Nhạc bản quyền"],
-  },
-  {
-    id: "noi-ngoai-that",
-    icon: Home,
-    title: "V. Thiết Kế Nội – Ngoại Thất (3D)",
-    subtitle: "3 nhóm dịch vụ",
-    items: [
-      { name: "1 view nội thất", price: "700.000 – 1.200.000đ" },
-      { name: "4 view nội thất", price: "3.000.000 – 5.000.000đ" },
-      { name: "6 view nội thất", price: "5.000.000 – 8.000.000đ" },
-    ],
-    exteriorItems: [
-      { name: "Nhà phố ngoại thất", price: "3.000.000 – 6.000.000đ" },
-      { name: "Biệt thự ngoại thất", price: "6.000.000 – 12.000.000đ" },
-      { name: "Phối cảnh dự án nhỏ", price: "12.000.000 – 25.000.000đ" },
-    ],
-    animationItems: [
-      { name: "Flythrough 10–15s", price: "3.000.000 – 6.000.000đ" },
-      { name: "Flythrough 20–30s", price: "6.000.000 – 12.000.000đ" },
-    ],
-    includes: ["Render 4K", "File PSD layer"],
-    excludes: ["VR Tour"],
-  },
-  {
-    id: "model-3d",
-    icon: Box,
-    title: "VI. Model 3D / Asset",
-    subtitle: "2 nhóm dịch vụ",
-    items: [
-      { name: "Props đơn giản", price: "300.000 – 700.000đ" },
-      { name: "Props chi tiết", price: "800.000 – 2.000.000đ" },
-      { name: "Asset clean (dùng animation)", price: "2.000.000 – 4.000.000đ" },
-    ],
-    studioItems: [
-      { name: "Không gian 3D nhỏ", price: "2.000.000 – 4.000.000đ" },
-      { name: "Booth / studio 3D", price: "4.000.000 – 8.000.000đ" },
-      { name: "Background modular", price: "6.000.000 – 10.000.000đ" },
-    ],
-    includes: ["File Blender / FBX / UE", "Texture maps"],
-    excludes: ["Rigging", "Animation"],
-  },
+// Mapping from category slug to display info
+const categoryConfig = [
+  { slug: "thiet-ke-2d", icon: Palette, title: "I. Thiết Kế 2D – Nhận Diện Thương Hiệu" },
+  { slug: "3d-virtual", icon: Video, title: "II. Phim Trường 3D / Virtual Production", displaySlug: "phim-truong-3d" },
+  { slug: "3d-event", icon: Layers, title: "III. 3D Event – Sân Khấu – POSM" },
+  { slug: "after-effects", icon: Film, title: "IV. After Effects / Motion Graphics", displaySlug: "motion-graphics" },
+  { slug: "noi-that", icon: Home, title: "V. Thiết Kế Nội – Ngoại Thất (3D)", displaySlug: "noi-ngoai-that" },
+  { slug: "model-3d", icon: Box, title: "VI. Model 3D / Asset" },
 ];
 
 const generalRules = [
@@ -151,6 +42,24 @@ const generalRules = [
   { label: "Sửa thêm", value: "200k – 400k / lần" },
   { label: "Deadline gấp", value: "+20–30%" },
 ];
+
+interface PricingItem {
+  label: string;
+  price: string;
+}
+
+interface CategoryPricing {
+  id: string;
+  service_name: string;
+  items: PricingItem[];
+  display_order: number;
+  category_slug: string;
+}
+
+interface PricingNotes {
+  includes: string[];
+  excludes: string[];
+}
 
 interface ComboPackage {
   id: string;
@@ -163,13 +72,69 @@ interface ComboPackage {
   display_order: number;
 }
 
+interface GroupedPricing {
+  slug: string;
+  displaySlug: string;
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  services: CategoryPricing[];
+  notes: PricingNotes;
+}
+
 const PricingSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [openGroups, setOpenGroups] = useState<string[]>(["thiet-ke-2d"]);
   const [combos, setCombos] = useState<ComboPackage[]>([]);
+  const [groupedPricing, setGroupedPricing] = useState<GroupedPricing[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const fetchAllPricing = async () => {
+      try {
+        // Fetch all category pricing
+        const { data: pricingData } = await supabase
+          .from("category_pricing")
+          .select("*")
+          .order("display_order", { ascending: true });
+
+        // Fetch all pricing notes
+        const { data: notesData } = await supabase
+          .from("category_pricing_notes")
+          .select("*");
+
+        // Group pricing by category
+        const grouped: GroupedPricing[] = categoryConfig.map(config => {
+          const categoryPricing = (pricingData || [])
+            .filter(p => p.category_slug === config.slug)
+            .map(p => ({
+              ...p,
+              items: Array.isArray(p.items) ? (p.items as unknown as PricingItem[]) : []
+            }));
+
+          const categoryNotes = notesData?.find(n => n.category_slug === config.slug);
+
+          return {
+            slug: config.slug,
+            displaySlug: config.displaySlug || config.slug,
+            icon: config.icon,
+            title: config.title,
+            services: categoryPricing,
+            notes: {
+              includes: categoryNotes?.includes || [],
+              excludes: categoryNotes?.excludes || [],
+            }
+          };
+        });
+
+        setGroupedPricing(grouped.filter(g => g.services.length > 0));
+      } catch (err) {
+        console.error("Error fetching pricing:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     const fetchCombos = async () => {
       const { data } = await supabase
         .from("combo_packages")
@@ -178,9 +143,26 @@ const PricingSection = () => {
         .order("display_order", { ascending: true });
       if (data) setCombos(data);
     };
+
+    fetchAllPricing();
     fetchCombos();
 
-    const channel = supabase
+    // Realtime subscriptions
+    const pricingChannel = supabase
+      .channel("homepage-pricing-realtime")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "category_pricing" },
+        () => fetchAllPricing()
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "category_pricing_notes" },
+        () => fetchAllPricing()
+      )
+      .subscribe();
+
+    const comboChannel = supabase
       .channel("combo-packages-realtime")
       .on(
         "postgres_changes",
@@ -190,7 +172,8 @@ const PricingSection = () => {
       .subscribe();
 
     return () => {
-      supabase.removeChannel(channel);
+      supabase.removeChannel(pricingChannel);
+      supabase.removeChannel(comboChannel);
     };
   }, []);
 
@@ -262,139 +245,94 @@ const PricingSection = () => {
           </TabsList>
 
           <TabsContent value="single" className="space-y-4">
-            {pricingGroups.map((group, index) => {
-              const colors = iconColors[group.id as keyof typeof iconColors] || iconColors["thiet-ke-2d"];
-              const titleColor = titleColors[group.id as keyof typeof titleColors] || "";
-              
-              return (
-                <motion.div
-                  key={group.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                >
-                  <Collapsible 
-                    open={openGroups.includes(group.id)}
-                    onOpenChange={() => toggleGroup(group.id)}
+            {loading ? (
+              <div className="text-center py-12">
+                <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+                <p className="text-muted-foreground">Đang tải bảng giá...</p>
+              </div>
+            ) : groupedPricing.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground">Chưa có dữ liệu bảng giá</p>
+              </div>
+            ) : (
+              groupedPricing.map((group, index) => {
+                const colors = iconColors[group.displaySlug as keyof typeof iconColors] || iconColors["thiet-ke-2d"];
+                const titleColor = titleColors[group.displaySlug as keyof typeof titleColors] || "";
+                const IconComponent = group.icon;
+                
+                return (
+                  <motion.div
+                    key={group.slug}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={isInView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
                   >
-                    <div className="glass-card overflow-hidden">
-                      <CollapsibleTrigger className="w-full p-6 flex items-center justify-between hover:bg-primary/5 transition-colors">
-                        <div className="flex items-center gap-5">
-                          <div className={`w-14 h-14 rounded-2xl ${colors.bg} flex items-center justify-center shadow-lg ${colors.glow}`}>
-                            <group.icon className={`w-7 h-7 ${colors.text}`} />
+                    <Collapsible 
+                      open={openGroups.includes(group.slug)}
+                      onOpenChange={() => toggleGroup(group.slug)}
+                    >
+                      <div className="glass-card overflow-hidden">
+                        <CollapsibleTrigger className="w-full p-6 flex items-center justify-between hover:bg-primary/5 transition-colors">
+                          <div className="flex items-center gap-5">
+                            <div className={`w-14 h-14 rounded-2xl ${colors.bg} flex items-center justify-center shadow-lg ${colors.glow}`}>
+                              <IconComponent className={`w-7 h-7 ${colors.text}`} />
+                            </div>
+                            <div className="text-left">
+                              <h3 className={`font-display text-xl md:text-2xl font-bold ${titleColor}`}>
+                                {group.title}
+                              </h3>
+                              <p className="text-sm text-muted-foreground">{group.services.length} nhóm dịch vụ</p>
+                            </div>
                           </div>
-                          <div className="text-left">
-                            <h3 className={`font-display text-xl md:text-2xl font-bold ${titleColor}`}>
-                              {group.title}
-                            </h3>
-                            <p className="text-sm text-muted-foreground">{group.subtitle}</p>
-                          </div>
-                        </div>
-                        <ChevronUp className={`w-6 h-6 text-muted-foreground transition-transform ${openGroups.includes(group.id) ? "" : "rotate-180"}`} />
-                      </CollapsibleTrigger>
+                          <ChevronUp className={`w-6 h-6 text-muted-foreground transition-transform ${openGroups.includes(group.slug) ? "" : "rotate-180"}`} />
+                        </CollapsibleTrigger>
 
-                      <CollapsibleContent>
-                        <div className="px-6 pb-6 border-t border-border pt-6">
-                          {/* Main pricing grid */}
-                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                            {/* Giá lẻ column */}
-                            <div>
-                              <h4 className="text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
-                                Giá Lẻ
-                              </h4>
-                              <div className="space-y-3">
-                                {group.items.map((item) => (
-                                  <div key={item.name} className="flex justify-between items-start gap-2">
-                                    <span className="text-sm text-muted-foreground">{item.name}</span>
-                                    <span className="text-sm font-medium text-foreground whitespace-nowrap">{item.price}</span>
+                        <CollapsibleContent>
+                          <div className="px-6 pb-6 border-t border-border pt-6">
+                            {/* Services grid */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                              {group.services.map((service) => (
+                                <div key={service.id} className="glass-card p-4 border border-border/50">
+                                  <h4 className="text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
+                                    {service.service_name}
+                                  </h4>
+                                  <div className="space-y-3">
+                                    {service.items.map((item, itemIndex) => (
+                                      <div key={itemIndex} className="flex justify-between items-start gap-2">
+                                        <span className="text-sm text-muted-foreground">{item.label}</span>
+                                        <span className="text-sm font-medium text-foreground whitespace-nowrap">{item.price}</span>
+                                      </div>
+                                    ))}
                                   </div>
-                                ))}
-                              </div>
+                                </div>
+                              ))}
                             </div>
 
-                            {/* Combo columns */}
-                            {group.combos?.map((combo) => (
-                              <div key={combo.name} className="glass-card p-4 border border-border/50">
-                                <h4 className="text-primary font-semibold mb-2 text-sm uppercase tracking-wider">
-                                  {combo.name}
-                                </h4>
-                                <p className="text-sm text-muted-foreground mb-3">{combo.desc}</p>
-                                <p className="text-primary font-bold">{combo.price}</p>
-                              </div>
-                            ))}
-
-                            {/* Interior section specific columns */}
-                            {group.exteriorItems && (
-                              <div>
-                                <h4 className="text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
-                                  Ngoại thất
-                                </h4>
-                                <div className="space-y-3">
-                                  {group.exteriorItems.map((item) => (
-                                    <div key={item.name} className="flex justify-between items-start gap-2">
-                                      <span className="text-sm text-muted-foreground">{item.name}</span>
-                                      <span className="text-sm font-medium text-foreground whitespace-nowrap">{item.price}</span>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-
-                            {group.animationItems && (
-                              <div>
-                                <h4 className="text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
-                                  Animation
-                                </h4>
-                                <div className="space-y-3">
-                                  {group.animationItems.map((item) => (
-                                    <div key={item.name} className="flex justify-between items-start gap-2">
-                                      <span className="text-sm text-muted-foreground">{item.name}</span>
-                                      <span className="text-sm font-medium text-foreground whitespace-nowrap">{item.price}</span>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-
-                            {group.studioItems && (
-                              <div>
-                                <h4 className="text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
-                                  Không gian / Studio
-                                </h4>
-                                <div className="space-y-3">
-                                  {group.studioItems.map((item) => (
-                                    <div key={item.name} className="flex justify-between items-start gap-2">
-                                      <span className="text-sm text-muted-foreground">{item.name}</span>
-                                      <span className="text-sm font-medium text-foreground whitespace-nowrap">{item.price}</span>
-                                    </div>
-                                  ))}
-                                </div>
+                            {/* Includes / Excludes */}
+                            {(group.notes.includes.length > 0 || group.notes.excludes.length > 0) && (
+                              <div className="flex flex-wrap gap-3 mt-6 pt-4 border-t border-border/50">
+                                {group.notes.includes.map((item) => (
+                                  <span key={item} className="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary">
+                                    <Check className="w-3.5 h-3.5" />
+                                    {item}
+                                  </span>
+                                ))}
+                                {group.notes.excludes.map((item) => (
+                                  <span key={item} className="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-full bg-muted text-muted-foreground">
+                                    <X className="w-3.5 h-3.5" />
+                                    {item}
+                                  </span>
+                                ))}
                               </div>
                             )}
                           </div>
-
-                          {/* Includes / Excludes */}
-                          <div className="flex flex-wrap gap-3 mt-6 pt-4 border-t border-border/50">
-                            {group.includes.map((item) => (
-                              <span key={item} className="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary">
-                                <Check className="w-3.5 h-3.5" />
-                                {item}
-                              </span>
-                            ))}
-                            {group.excludes.map((item) => (
-                              <span key={item} className="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-full bg-muted text-muted-foreground">
-                                <X className="w-3.5 h-3.5" />
-                                {item}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      </CollapsibleContent>
-                    </div>
-                  </Collapsible>
-                </motion.div>
-              );
-            })}
+                        </CollapsibleContent>
+                      </div>
+                    </Collapsible>
+                  </motion.div>
+                );
+              })
+            )}
           </TabsContent>
 
           <TabsContent value="combo">
