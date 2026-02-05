@@ -8,6 +8,7 @@ import CategoryNavbar from "@/components/CategoryNavbar";
 import Footer from "@/components/sections/Footer";
 import FloatingShapes from "@/components/FloatingShapes";
 import GalaxyBackground from "@/components/GalaxyBackground";
+import SEOHead from "@/components/SEOHead";
 import { useCategoryImages } from "@/hooks/useCategoryImages";
 import { useCategoryPricing } from "@/hooks/useCategoryPricing";
 import { useCategoryPageImage } from "@/hooks/useCategoryPageImage";
@@ -179,6 +180,12 @@ const InteriorExterior = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title="Thiết Kế Nội Ngoại Thất 3D - Render Căn Hộ, Biệt Thự | DesignHomeKey"
+        description="Dịch vụ render 3D nội thất căn hộ, biệt thự, văn phòng và phối cảnh ngoại thất mặt tiền. Ánh sáng tự nhiên, vật liệu PBR chân thực, hỗ trợ VR walkthrough."
+        keywords="thiết kế nội thất 3D, render nội thất, ngoại thất 3D, phối cảnh biệt thự, căn hộ 3D, VR walkthrough, DesignHomeKey"
+        url="https://designhomekey.lovable.app/noi-ngoai-that"
+      />
       <CategoryNavbar />
 
       {/* Hero Section */}

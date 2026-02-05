@@ -6,6 +6,7 @@ import CategoryNavbar from "@/components/CategoryNavbar";
 import Footer from "@/components/sections/Footer";
 import FloatingShapes from "@/components/FloatingShapes";
 import GalaxyBackground from "@/components/GalaxyBackground";
+import SEOHead from "@/components/SEOHead";
 import { useCategoryImages } from "@/hooks/useCategoryImages";
 import { useCategoryPricing } from "@/hooks/useCategoryPricing";
 import { useCategoryPageImage } from "@/hooks/useCategoryPageImage";
@@ -95,6 +96,12 @@ const Design2D = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SEOHead
+        title="Thiết Kế 2D - Key Visual, Backdrop, POSM | DesignHomeKey"
+        description="Dịch vụ thiết kế 2D chuyên nghiệp: Key visual sự kiện, backdrop talkshow, visual livestream, layout màn LED và POSM. Đồng bộ với set 3D, triển khai nhanh."
+        keywords="thiết kế 2D, key visual, backdrop sự kiện, visual livestream, layout LED, POSM, thiết kế đồ họa, DesignHomeKey"
+        url="https://designhomekey.lovable.app/thiet-ke-2d"
+      />
       <CategoryNavbar />
 
       <main>
