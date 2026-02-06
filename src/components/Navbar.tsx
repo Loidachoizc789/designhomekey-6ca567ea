@@ -15,6 +15,7 @@ const navLinks = [
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>("");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,6 +24,38 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Track active section using Intersection Observer
+  useEffect(() => {
+    const sectionIds = navLinks.map(link => link.href.replace("#", ""));
+    
+    const observerOptions = {
+      root: null,
+      rootMargin: "-20% 0px -60% 0px", // Trigger when section is in the middle of viewport
+      threshold: 0,
+    };
+
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setActiveSection(`#${entry.target.id}`);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+    sectionIds.forEach(id => {
+      const element = document.getElementById(id);
+      if (element) {
+        observer.observe(element);
+      }
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const isActive = (href: string) => activeSection === href;
 
   return (
     <>
@@ -54,10 +87,16 @@ const Navbar = () => {
                   <a
                     key={link.href}
                     href={link.href}
-                    className="relative px-4 xl:px-5 py-2.5 text-sm xl:text-base font-medium text-muted-foreground hover:text-foreground transition-all duration-300 rounded-full hover:bg-primary/10 whitespace-nowrap group"
+                    className={`relative px-4 xl:px-5 py-2.5 text-sm xl:text-base font-medium transition-all duration-300 rounded-full whitespace-nowrap group ${
+                      isActive(link.href)
+                        ? "text-primary-foreground bg-primary shadow-md shadow-primary/30"
+                        : "text-muted-foreground hover:text-foreground hover:bg-primary/10"
+                    }`}
                   >
                     <span className="relative z-10">{link.label}</span>
-                    <span className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    {!isActive(link.href) && (
+                      <span className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    )}
                   </a>
                 ))}
               </div>
@@ -96,13 +135,17 @@ const Navbar = () => {
             className="fixed inset-x-0 top-16 z-40 bg-background/95 backdrop-blur-xl border-b border-border lg:hidden"
           >
             <div className="section-container py-6">
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-2">
                 {navLinks.map((link) => (
                   <a
                     key={link.href}
                     href={link.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="text-lg font-medium text-foreground hover:text-primary transition-colors py-2"
+                    className={`text-lg font-medium transition-colors py-3 px-4 rounded-lg ${
+                      isActive(link.href)
+                        ? "text-primary bg-primary/10"
+                        : "text-foreground hover:text-primary hover:bg-primary/5"
+                    }`}
                   >
                     {link.label}
                   </a>
