@@ -86,11 +86,12 @@ const Design2D = () => {
 
   const galleryItems = images.length > 0
     ? images.map((img, index) => ({
-        id: index + 1,
+        id: img.id,
         title: img.title,
         description: img.description || "",
         image: img.image_url,
         category: "Thiết Kế 2D",
+        productId: img.productId, // UUID for fetching product_media
       }))
     : designSamples;
 

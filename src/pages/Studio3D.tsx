@@ -112,21 +112,23 @@ const Studio3D = () => {
   const galleryItems =
     currentTab === "virtual"
       ? virtualImages.length > 0
-        ? virtualImages.map((img, index) => ({
-            id: index + 1,
+        ? virtualImages.map((img) => ({
+            id: img.id,
             title: img.title,
             description: img.description || "",
             image: img.image_url,
             category: "3D Virtual",
+            productId: img.productId,
           }))
         : defaultVirtualItems
       : eventImages.length > 0
-        ? eventImages.map((img, index) => ({
-            id: index + 1,
+        ? eventImages.map((img) => ({
+            id: img.id,
             title: img.title,
             description: img.description || "",
             image: img.image_url,
             category: "3D Event",
+            productId: img.productId,
           }))
         : defaultEventItems;
 

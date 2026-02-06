@@ -60,5 +60,11 @@ export const useCategoryImages = (categorySlug: string) => {
     };
   }, [categorySlug]);
 
-  return { images, loading, error };
+  // Transform to include productId for fetching media
+  const imagesWithProductId = images.map(img => ({
+    ...img,
+    productId: img.id, // The UUID is the product_id for product_media table
+  }));
+
+  return { images: imagesWithProductId, loading, error };
 };

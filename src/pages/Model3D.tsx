@@ -99,12 +99,13 @@ const Model3D = () => {
   const { imageUrl: deliverablesImage } = useCategoryPageImage("model-3d", "deliverables");
 
   const galleryItems = images.length > 0
-    ? images.map((img, index) => ({
-        id: index + 1,
+    ? images.map((img) => ({
+        id: img.id,
         title: img.title,
         description: img.description || "",
         image: img.image_url,
         category: "Model 3D",
+        productId: img.productId,
       }))
     : defaultGalleryItems;
 
