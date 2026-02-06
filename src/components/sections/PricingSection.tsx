@@ -292,18 +292,18 @@ const PricingSection = () => {
 
                         <CollapsibleContent>
                           <div className="px-6 pb-6 border-t border-border pt-6">
-                            {/* Services grid */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                            {/* Services grid - Better responsive */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                               {group.services.map((service) => (
-                                <div key={service.id} className="glass-card p-4 border border-border/50">
-                                  <h4 className="text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
+                                <div key={service.id} className="glass-card p-4 border border-border/50 flex flex-col h-full">
+                                  <h4 className="text-primary font-semibold mb-4 text-sm uppercase tracking-wider line-clamp-2 min-h-[2.5rem]">
                                     {service.service_name}
                                   </h4>
-                                  <div className="space-y-3">
+                                  <div className="space-y-3 flex-1">
                                     {service.items.map((item, itemIndex) => (
-                                      <div key={itemIndex} className="flex justify-between items-start gap-2">
-                                        <span className="text-sm text-muted-foreground">{item.label}</span>
-                                        <span className="text-sm font-medium text-foreground whitespace-nowrap">{item.price}</span>
+                                      <div key={itemIndex} className="flex flex-col gap-1">
+                                        <span className="text-sm text-muted-foreground line-clamp-2">{item.label}</span>
+                                        <span className="text-sm font-medium text-foreground">{item.price}</span>
                                       </div>
                                     ))}
                                   </div>
@@ -353,8 +353,8 @@ const PricingSection = () => {
               </p>
             </motion.div>
 
-            {/* Combo Cards */}
-            <div className="grid md:grid-cols-3 gap-6">
+            {/* Combo Cards - Equal height */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {combos.length > 0 ? (
                 combos.map((combo, index) => {
                   const price = parsePrice(combo.price);
@@ -364,7 +364,7 @@ const PricingSection = () => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={isInView ? { opacity: 1, y: 0 } : {}}
                       transition={{ duration: 0.5, delay: index * 0.1 }}
-                      className="glass-card p-6 card-hover relative overflow-hidden"
+                      className="glass-card p-6 card-hover relative overflow-hidden flex flex-col h-full"
                     >
                       {index === 1 && (
                         <div className="absolute top-3 right-3 px-3 py-1 rounded-full bg-primary text-primary-foreground text-xs font-medium">
@@ -373,31 +373,33 @@ const PricingSection = () => {
                       )}
                       
                       <div 
-                        className={`w-16 h-16 rounded-2xl mb-4 flex items-center justify-center bg-gradient-to-r ${combo.color || "from-cyan-500 to-blue-500"}`}
+                        className={`w-14 h-14 rounded-2xl mb-4 flex items-center justify-center flex-shrink-0 bg-gradient-to-r ${combo.color || "from-cyan-500 to-blue-500"}`}
                       >
-                        <Gift className="w-8 h-8 text-white" />
+                        <Gift className="w-7 h-7 text-white" />
                       </div>
                       
-                      <h4 className="font-display text-xl font-bold mb-2">{combo.name}</h4>
-                      <p className="text-muted-foreground text-sm mb-4">{combo.description}</p>
+                      <h4 className="font-display text-lg font-bold mb-2 line-clamp-2">{combo.name}</h4>
+                      <p className="text-muted-foreground text-sm mb-4 line-clamp-2">{combo.description}</p>
                       
-                      <div className="mb-4">
-                        <span className="font-display text-2xl font-bold gradient-text">{price.min}</span>
-                        <span className="text-muted-foreground mx-2">–</span>
-                        <span className="font-display text-2xl font-bold gradient-text">{price.max}</span>
-                        <span className="text-muted-foreground text-sm">đ</span>
+                      <div className="mb-4 flex-shrink-0">
+                        <div className="flex flex-wrap items-baseline gap-1">
+                          <span className="font-display text-xl font-bold gradient-text">{price.min}</span>
+                          <span className="text-muted-foreground">–</span>
+                          <span className="font-display text-xl font-bold gradient-text">{price.max}</span>
+                          <span className="text-muted-foreground text-sm">đ</span>
+                        </div>
                       </div>
 
-                      <ul className="space-y-2 mb-6">
+                      <ul className="space-y-2 mb-6 flex-1">
                         {combo.includes.map((item, i) => (
                           <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
                             <Check className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                            {item}
+                            <span className="line-clamp-2">{item}</span>
                           </li>
                         ))}
                       </ul>
 
-                      <Button variant="outline" className="w-full rounded-full" asChild>
+                      <Button variant="outline" className="w-full rounded-full mt-auto" asChild>
                         <a href="#contact">
                           Liên hệ báo giá
                           <ArrowRight className="w-4 h-4 ml-2" />

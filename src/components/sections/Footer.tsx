@@ -1,8 +1,11 @@
+import { forwardRef } from "react";
 import { Facebook, Youtube, Instagram, Mail, Phone } from "lucide-react";
-import ZaloIcon from "@/assets/zalo-icon.png";
-const Footer = () => {
+
+const Footer = forwardRef<HTMLElement>((_, ref) => {
   const currentYear = new Date().getFullYear();
-  return <footer id="contact" className="bg-card border-t border-border">
+  
+  return (
+    <footer ref={ref} id="contact" className="bg-card border-t border-border">
       <div className="section-container py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}
@@ -59,20 +62,22 @@ const Footer = () => {
             <h4 className="font-display font-semibold text-lg mb-4">Liên hệ</h4>
             <ul className="space-y-3">
               <li className="flex items-center gap-3 text-muted-foreground">
-                <Mail className="w-5 h-5 text-primary" />
-                <a href="mailto:designhomekey@gmail.com" className="hover:text-primary transition-colors">
+                <Mail className="w-5 h-5 text-primary flex-shrink-0" />
+                <a href="mailto:designhomekey@gmail.com" className="hover:text-primary transition-colors break-all">
                   designhomekey@gmail.com
                 </a>
               </li>
               <li className="flex items-center gap-3 text-muted-foreground">
-                <Phone className="w-5 h-5 text-primary" />
+                <Phone className="w-5 h-5 text-primary flex-shrink-0" />
                 <a href="tel:0862098408" className="hover:text-primary transition-colors">
                   0862 098 408
                 </a>
               </li>
               <li className="flex items-center gap-3 text-muted-foreground">
-                <img alt="Zalo" className="w-5 h-5 border-primary" src="/lovable-uploads/c679bd4a-400c-4d8f-b57c-369c379226b0.png" />
-                <a href="https://zalo.me/0862098408" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">0862 098 408</a>
+                <img alt="Zalo" className="w-5 h-5 flex-shrink-0" src="/lovable-uploads/c679bd4a-400c-4d8f-b57c-369c379226b0.png" />
+                <a href="https://zalo.me/0862098408" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+                  0862 098 408
+                </a>
               </li>
             </ul>
           </div>
@@ -92,7 +97,7 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors animated-underline text-sm">
+                <a href="#" className="text-muted-foreground hover:text-primary transition-colors animated-underline">
                   Hướng dẫn sử dụng phim trường 3D
                 </a>
               </li>
@@ -111,10 +116,14 @@ const Footer = () => {
             © {currentYear} DesignHomeKey. All rights reserved.
           </p>
           <p className="text-sm text-muted-foreground">
-          <span className="text-primary">Unreal Engine 5</span> & <span className="text-primary">Blender</span>
+            <span className="text-primary">Unreal Engine 5</span> & <span className="text-primary">Blender</span>
           </p>
         </div>
       </div>
-    </footer>;
-};
+    </footer>
+  );
+});
+
+Footer.displayName = "Footer";
+
 export default Footer;
