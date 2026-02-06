@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Images, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { useProductMedia } from "@/hooks/useProductMedia";
+import OptimizedImage from "@/components/OptimizedImage";
 
 interface GalleryItem {
   id: number | string;
@@ -17,12 +18,102 @@ interface GalleryItem {
   description: string;
   image: string;
   category: string;
-  productId?: string; // UUID from category_images
+  productId?: string;
 }
 
 interface ProductGalleryProps {
   items: GalleryItem[];
 }
+
+function isVideoUrl(url: string) {
+  const clean = url.split("?")[0].toLowerCase();
+  return (
+    clean.endsWith(".mp4") ||
+    clean.endsWith(".webm") ||
+    clean.endsWith(".mov") ||
+    clean.endsWith(".m4v")
+  );
+}
+
+// Memoized gallery card for better performance
+const GalleryCard = memo(({ 
+  item, 
+  index, 
+  onClick 
+}: { 
+  item: GalleryItem; 
+  index: number; 
+  onClick: () => void;
+}) => {
+  const isVideo = isVideoUrl(item.image);
+  
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.5, delay: Math.min(index * 0.1, 0.5) }}
+      className="group cursor-pointer"
+      onClick={onClick}
+    >
+      <div className="glass-card overflow-hidden card-hover">
+        <div className="relative aspect-video overflow-hidden bg-muted">
+          {isVideo ? (
+            <video
+              src={item.image}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              muted
+              playsInline
+              preload="metadata"
+            />
+          ) : (
+            <OptimizedImage
+              src={item.image}
+              alt={item.title}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              containerClassName="w-full h-full"
+            />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          
+          {/* Category Badge */}
+          <div className="absolute top-3 left-3">
+            <span className="px-3 py-1 text-xs font-medium bg-primary/90 backdrop-blur-sm rounded-full text-primary-foreground">
+              {item.category}
+            </span>
+          </div>
+
+          {/* Video indicator */}
+          {isVideo && (
+            <div className="absolute top-3 right-3">
+              <div className="w-8 h-8 rounded-full bg-destructive/90 backdrop-blur-sm flex items-center justify-center">
+                <Play className="w-4 h-4 text-destructive-foreground fill-current" />
+              </div>
+            </div>
+          )}
+
+          {/* View Overlay */}
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <div className="w-14 h-14 rounded-full bg-primary/90 flex items-center justify-center">
+              <Images className="w-6 h-6 text-primary-foreground" />
+            </div>
+          </div>
+        </div>
+
+        <div className="p-4">
+          <h3 className="font-semibold text-lg mb-2 line-clamp-1 group-hover:text-primary transition-colors">
+            {item.title}
+          </h3>
+          <p className="text-sm text-muted-foreground line-clamp-2">
+            {item.description}
+          </p>
+        </div>
+      </div>
+    </motion.div>
+  );
+});
+
+GalleryCard.displayName = "GalleryCard";
 
 const ProductGallery = ({ items }: ProductGalleryProps) => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -41,16 +132,6 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
   const uniqueMedia = allMedia.filter((item, index, self) => 
     index === self.findIndex(m => m.media_url === item.media_url)
   );
-
-  function isVideoUrl(url: string) {
-    const clean = url.split("?")[0].toLowerCase();
-    return (
-      clean.endsWith(".mp4") ||
-      clean.endsWith(".webm") ||
-      clean.endsWith(".mov") ||
-      clean.endsWith(".m4v")
-    );
-  }
 
   const handlePrevious = () => {
     if (selectedIndex !== null) {
@@ -93,69 +174,12 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
       {/* Gallery Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {items.map((item, index) => (
-          <motion.div
+          <GalleryCard
             key={item.id}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            className="group cursor-pointer"
+            item={item}
+            index={index}
             onClick={() => handleOpenProduct(index)}
-          >
-            <div className="glass-card overflow-hidden card-hover">
-              <div className="relative aspect-video overflow-hidden">
-                {isVideoUrl(item.image) ? (
-                  <video
-                    src={item.image}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    muted
-                    playsInline
-                    preload="metadata"
-                  />
-                ) : (
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    loading="lazy"
-                  />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                
-                {/* Category Badge */}
-                <div className="absolute top-3 left-3">
-                  <span className="px-3 py-1 text-xs font-medium bg-primary/90 backdrop-blur-sm rounded-full text-primary-foreground">
-                    {item.category}
-                  </span>
-                </div>
-
-                {/* Video indicator */}
-                {isVideoUrl(item.image) && (
-                  <div className="absolute top-3 right-3">
-                    <div className="w-8 h-8 rounded-full bg-red-500/90 backdrop-blur-sm flex items-center justify-center">
-                      <Play className="w-4 h-4 text-white fill-white" />
-                    </div>
-                  </div>
-                )}
-
-                {/* View Overlay */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="w-14 h-14 rounded-full bg-primary/90 flex items-center justify-center">
-                    <Images className="w-6 h-6 text-primary-foreground" />
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-4">
-                <h3 className="font-semibold text-lg mb-2 line-clamp-1 group-hover:text-primary transition-colors">
-                  {item.title}
-                </h3>
-                <p className="text-sm text-muted-foreground line-clamp-2">
-                  {item.description}
-                </p>
-              </div>
-            </div>
-          </motion.div>
+          />
         ))}
       </div>
 
@@ -175,7 +199,7 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
                 transition={{ duration: 0.2 }}
               >
                 {/* Main Media Display */}
-                <div className="relative aspect-video w-full overflow-hidden rounded-t-lg bg-black">
+                <div className="relative aspect-video w-full overflow-hidden rounded-t-lg bg-background">
                   {mediaLoading ? (
                     <div className="w-full h-full flex items-center justify-center">
                       <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full" />
@@ -264,6 +288,7 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
                               src={m.media_url} 
                               alt="" 
                               className="w-full h-full object-cover"
+                              loading="lazy"
                             />
                           )}
                         </button>
