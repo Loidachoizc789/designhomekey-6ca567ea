@@ -155,22 +155,24 @@ const InteriorExterior = () => {
   } = useCategoryPricing("ngoai-that");
 
   const interiorGalleryItems = interiorDbImages.length > 0
-    ? interiorDbImages.map((img, index) => ({
-        id: index + 1,
+    ? interiorDbImages.map((img) => ({
+        id: img.id,
         title: img.title,
         description: img.description || "",
         image: img.image_url,
         category: "Nội Thất",
+        productId: img.productId,
       }))
     : interiorItems;
 
   const exteriorGalleryItems = exteriorDbImages.length > 0
-    ? exteriorDbImages.map((img, index) => ({
-        id: index + 1,
+    ? exteriorDbImages.map((img) => ({
+        id: img.id,
         title: img.title,
         description: img.description || "",
         image: img.image_url,
         category: "Ngoại Thất",
+        productId: img.productId,
       }))
     : exteriorItems;
 

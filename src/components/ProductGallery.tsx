@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Images, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,13 +9,15 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { useProductMedia } from "@/hooks/useProductMedia";
 
 interface GalleryItem {
-  id: number;
+  id: number | string;
   title: string;
   description: string;
   image: string;
   category: string;
+  productId?: string; // UUID from category_images
 }
 
 interface ProductGalleryProps {
@@ -24,8 +26,23 @@ interface ProductGalleryProps {
 
 const ProductGallery = ({ items }: ProductGalleryProps) => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [mediaIndex, setMediaIndex] = useState(0);
 
-  const isVideoUrl = (url: string) => {
+  const selectedItem = selectedIndex !== null ? items[selectedIndex] : null;
+  const { media, loading: mediaLoading } = useProductMedia(selectedItem?.productId || null);
+
+  // Combine main image with additional media
+  const allMedia = selectedItem ? [
+    { id: 'main', media_url: selectedItem.image, media_type: isVideoUrl(selectedItem.image) ? 'video' : 'image' },
+    ...media
+  ] : [];
+
+  // Remove duplicates (if main image is also in product_media)
+  const uniqueMedia = allMedia.filter((item, index, self) => 
+    index === self.findIndex(m => m.media_url === item.media_url)
+  );
+
+  function isVideoUrl(url: string) {
     const clean = url.split("?")[0].toLowerCase();
     return (
       clean.endsWith(".mp4") ||
@@ -33,26 +50,43 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
       clean.endsWith(".mov") ||
       clean.endsWith(".m4v")
     );
-  };
-
-  const selectedItem = selectedIndex !== null ? items[selectedIndex] : null;
+  }
 
   const handlePrevious = () => {
     if (selectedIndex !== null) {
       setSelectedIndex(selectedIndex === 0 ? items.length - 1 : selectedIndex - 1);
+      setMediaIndex(0);
     }
   };
 
   const handleNext = () => {
     if (selectedIndex !== null) {
       setSelectedIndex(selectedIndex === items.length - 1 ? 0 : selectedIndex + 1);
+      setMediaIndex(0);
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "ArrowLeft") handlePrevious();
-    if (e.key === "ArrowRight") handleNext();
+  const handleMediaPrevious = () => {
+    setMediaIndex(prev => prev === 0 ? uniqueMedia.length - 1 : prev - 1);
   };
+
+  const handleMediaNext = () => {
+    setMediaIndex(prev => prev === uniqueMedia.length - 1 ? 0 : prev + 1);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowLeft") handleMediaPrevious();
+    if (e.key === "ArrowRight") handleMediaNext();
+    if (e.key === "ArrowUp") handlePrevious();
+    if (e.key === "ArrowDown") handleNext();
+  };
+
+  const handleOpenProduct = (index: number) => {
+    setSelectedIndex(index);
+    setMediaIndex(0);
+  };
+
+  const currentMedia = uniqueMedia[mediaIndex];
 
   return (
     <>
@@ -66,7 +100,7 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
             className="group cursor-pointer"
-            onClick={() => setSelectedIndex(index)}
+            onClick={() => handleOpenProduct(index)}
           >
             <div className="glass-card overflow-hidden card-hover">
               <div className="relative aspect-video overflow-hidden">
@@ -95,10 +129,19 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
                   </span>
                 </div>
 
+                {/* Video indicator */}
+                {isVideoUrl(item.image) && (
+                  <div className="absolute top-3 right-3">
+                    <div className="w-8 h-8 rounded-full bg-red-500/90 backdrop-blur-sm flex items-center justify-center">
+                      <Play className="w-4 h-4 text-white fill-white" />
+                    </div>
+                  </div>
+                )}
+
                 {/* View Overlay */}
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="w-12 h-12 rounded-full bg-primary/90 flex items-center justify-center">
-                    <span className="text-primary-foreground font-medium text-sm">Xem</span>
+                  <div className="w-14 h-14 rounded-full bg-primary/90 flex items-center justify-center">
+                    <Images className="w-6 h-6 text-primary-foreground" />
                   </div>
                 </div>
               </div>
@@ -125,54 +168,63 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
           <AnimatePresence mode="wait">
             {selectedItem && (
               <motion.div
-                key={selectedItem.id}
+                key={`${selectedItem.id}-${mediaIndex}`}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
               >
-                {/* Image */}
-                <div className="relative aspect-video w-full overflow-hidden rounded-t-lg">
-                  {isVideoUrl(selectedItem.image) ? (
+                {/* Main Media Display */}
+                <div className="relative aspect-video w-full overflow-hidden rounded-t-lg bg-black">
+                  {mediaLoading ? (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full" />
+                    </div>
+                  ) : currentMedia?.media_type === 'video' || isVideoUrl(currentMedia?.media_url || '') ? (
                     <video
-                      src={selectedItem.image}
-                      className="w-full h-full object-cover"
+                      key={currentMedia?.media_url}
+                      src={currentMedia?.media_url}
+                      className="w-full h-full object-contain"
                       controls
                       autoPlay
                       playsInline
                     />
                   ) : (
                     <img
-                      src={selectedItem.image}
+                      src={currentMedia?.media_url}
                       alt={selectedItem.title}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-contain"
                     />
                   )}
                   
-                  {/* Navigation Arrows */}
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handlePrevious();
-                    }}
-                  >
-                    <ChevronLeft className="w-6 h-6" />
-                  </Button>
-                  
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleNext();
-                    }}
-                  >
-                    <ChevronRight className="w-6 h-6" />
-                  </Button>
+                  {/* Media Navigation Arrows */}
+                  {uniqueMedia.length > 1 && (
+                    <>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleMediaPrevious();
+                        }}
+                      >
+                        <ChevronLeft className="w-6 h-6" />
+                      </Button>
+                      
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleMediaNext();
+                        }}
+                      >
+                        <ChevronRight className="w-6 h-6" />
+                      </Button>
+                    </>
+                  )}
 
                   {/* Category Badge */}
                   <div className="absolute top-4 left-4">
@@ -181,13 +233,44 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
                     </span>
                   </div>
 
-                  {/* Counter */}
+                  {/* Media Counter */}
                   <div className="absolute bottom-4 right-4">
                     <span className="px-3 py-1 text-sm bg-background/80 backdrop-blur-sm rounded-full">
-                      {selectedIndex !== null ? selectedIndex + 1 : 0} / {items.length}
+                      {mediaIndex + 1} / {uniqueMedia.length}
                     </span>
                   </div>
                 </div>
+
+                {/* Thumbnail Strip */}
+                {uniqueMedia.length > 1 && (
+                  <div className="px-4 py-3 border-b border-border overflow-x-auto">
+                    <div className="flex gap-2">
+                      {uniqueMedia.map((m, idx) => (
+                        <button
+                          key={m.id || idx}
+                          onClick={() => setMediaIndex(idx)}
+                          className={`relative flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
+                            idx === mediaIndex 
+                              ? 'border-primary ring-2 ring-primary/30' 
+                              : 'border-border hover:border-primary/50'
+                          }`}
+                        >
+                          {m.media_type === 'video' || isVideoUrl(m.media_url) ? (
+                            <div className="w-full h-full bg-card flex items-center justify-center">
+                              <Play className="w-5 h-5 text-muted-foreground" />
+                            </div>
+                          ) : (
+                            <img 
+                              src={m.media_url} 
+                              alt="" 
+                              className="w-full h-full object-cover"
+                            />
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {/* Content */}
                 <div className="p-6">

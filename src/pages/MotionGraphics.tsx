@@ -99,12 +99,13 @@ const MotionGraphics = () => {
   const { imageUrl: deliverablesImage } = useCategoryPageImage("after-effects", "deliverables");
 
   const galleryItems = images.length > 0 
-    ? images.map((img, index) => ({
-        id: index + 1,
+    ? images.map((img) => ({
+        id: img.id,
         title: img.title,
         description: img.description || "",
         image: img.image_url,
         category: "Motion Graphics",
+        productId: img.productId,
       }))
     : defaultGalleryItems;
 
