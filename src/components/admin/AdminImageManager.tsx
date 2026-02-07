@@ -73,10 +73,10 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 10 * 1024 * 1024) {
+    if (file.size > 50 * 1024 * 1024) {
       toast({
         title: "Lỗi",
-        description: "File quá lớn. Tối đa 10MB.",
+        description: "File quá lớn. Tối đa 50MB.",
         variant: "destructive",
       });
       return;
@@ -309,7 +309,7 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
                         <>
                           <Upload className="w-8 h-8 text-muted-foreground" />
                           <span className="text-sm text-muted-foreground">
-                            Click để upload (max 10MB)
+                            Click để upload (max 50MB)
                           </span>
                         </>
                       )}
