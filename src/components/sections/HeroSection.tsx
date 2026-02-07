@@ -71,6 +71,11 @@ const HeroSection = () => {
               src="/lovable-uploads/1052d8d6-1118-4206-be15-c73ee5a0188e.png"
               alt="DesignHomeKey"
               className="h-48 sm:h-56 md:h-64 lg:h-80 xl:h-96 w-auto mx-auto border-0 object-contain"
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+              width={384}
+              height={384}
             />
           </motion.div>
 
