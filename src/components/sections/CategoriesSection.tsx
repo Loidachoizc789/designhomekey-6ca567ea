@@ -208,6 +208,8 @@ const CategoriesSection = () => {
                         src={currentCategory.image}
                         alt={currentCategory.title}
                         className="w-full h-full object-cover rounded-2xl shadow-2xl"
+                        loading="eager"
+                        decoding="async"
                       />
                       {/* Icon overlay with glow effect */}
                       <div className="absolute top-4 left-4 w-12 h-12 rounded-xl bg-background/80 backdrop-blur-sm flex items-center justify-center shadow-lg">
