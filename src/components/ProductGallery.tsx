@@ -1,4 +1,4 @@
-import { useState, memo } from "react";
+import { useState, memo, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Images, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -147,13 +147,13 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
     }
   };
 
-  const handleMediaPrevious = () => {
+  const handleMediaPrevious = useCallback(() => {
     setMediaIndex(prev => prev === 0 ? uniqueMedia.length - 1 : prev - 1);
-  };
+  }, [uniqueMedia.length]);
 
-  const handleMediaNext = () => {
+  const handleMediaNext = useCallback(() => {
     setMediaIndex(prev => prev === uniqueMedia.length - 1 ? 0 : prev + 1);
-  };
+  }, [uniqueMedia.length]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowLeft") handleMediaPrevious();
@@ -166,6 +166,28 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
     setSelectedIndex(index);
     setMediaIndex(0);
   };
+
+  // Touch swipe support
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  }, []);
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    if (touchStartX.current === null || touchStartY.current === null) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
+    const deltaY = e.changedTouches[0].clientY - touchStartY.current;
+    // Only swipe if horizontal movement is dominant
+    if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > Math.abs(deltaY)) {
+      if (deltaX < 0) handleMediaNext();
+      else handleMediaPrevious();
+    }
+    touchStartX.current = null;
+    touchStartY.current = null;
+  }, [handleMediaNext, handleMediaPrevious]);
 
   const currentMedia = uniqueMedia[mediaIndex];
 
@@ -186,7 +208,7 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
       {/* Lightbox Dialog */}
       <Dialog open={selectedIndex !== null} onOpenChange={() => setSelectedIndex(null)}>
         <DialogContent 
-          className="max-w-5xl w-[95vw] max-h-[90vh] overflow-y-auto p-0 gap-0 bg-card/95 backdrop-blur-xl border-border/50"
+          className="max-w-5xl w-[95vw] max-h-[90vh] overflow-y-auto p-0 gap-0 bg-card/95 backdrop-blur-xl border-border/50 top-[2vh] translate-y-0 sm:top-[50%] sm:translate-y-[-50%]"
           onKeyDown={handleKeyDown}
         >
           <AnimatePresence mode="wait">
@@ -199,16 +221,20 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
                 transition={{ duration: 0.2 }}
               >
                 {/* Main Media Display */}
-                <div className="relative w-full overflow-hidden rounded-t-lg bg-background aspect-auto sm:aspect-video">
+                <div 
+                  className="relative w-full overflow-hidden rounded-t-lg bg-background"
+                  onTouchStart={handleTouchStart}
+                  onTouchEnd={handleTouchEnd}
+                >
                   {mediaLoading ? (
-                    <div className="w-full h-full flex items-center justify-center">
+                    <div className="w-full min-h-[200px] flex items-center justify-center">
                       <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full" />
                     </div>
                   ) : currentMedia?.media_type === 'video' || isVideoUrl(currentMedia?.media_url || '') ? (
                     <video
                       key={currentMedia?.media_url}
                       src={currentMedia?.media_url}
-                      className="w-full h-full object-contain"
+                      className="w-full max-h-[60vh] sm:max-h-[70vh] object-contain"
                       controls
                       autoPlay
                       playsInline
@@ -217,7 +243,7 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
                     <img
                       src={currentMedia?.media_url}
                       alt={selectedItem.title}
-                      className="w-full h-full object-contain"
+                      className="w-full max-h-[60vh] sm:max-h-[70vh] object-contain"
                     />
                   )}
                   
