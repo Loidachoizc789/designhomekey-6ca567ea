@@ -187,6 +187,10 @@ const CategoriesSection = () => {
                     src={categories[prevIndex].image}
                     alt={categories[prevIndex].title}
                     className="w-full h-full object-cover"
+                    width={288}
+                    height={384}
+                    loading="lazy"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-background via-background/50 to-transparent" />
                 </div>
@@ -210,6 +214,8 @@ const CategoriesSection = () => {
                         className="w-full h-full object-cover rounded-2xl shadow-2xl"
                         loading="eager"
                         decoding="async"
+                        width={448}
+                        height={448}
                       />
                       {/* Icon overlay with glow effect */}
                       <div className="absolute top-4 left-4 w-12 h-12 rounded-xl bg-background/80 backdrop-blur-sm flex items-center justify-center shadow-lg">
@@ -271,6 +277,10 @@ const CategoriesSection = () => {
                     src={categories[nextIndex].image}
                     alt={categories[nextIndex].title}
                     className="w-full h-full object-cover"
+                    width={288}
+                    height={384}
+                    loading="lazy"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-l from-background via-background/50 to-transparent" />
                 </div>
@@ -347,6 +357,10 @@ const CategoriesSection = () => {
                     src={category.image}
                     alt={category.title}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    width={400}
+                    height={192}
+                    loading="lazy"
+                    decoding="async"
                   />
                   <div className="absolute top-4 left-4 w-10 h-10 rounded-lg bg-background/80 backdrop-blur-sm flex items-center justify-center">
                     <category.icon className="w-5 h-5 text-primary" />
