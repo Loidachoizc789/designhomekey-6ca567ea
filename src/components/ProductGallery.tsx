@@ -186,7 +186,7 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
       {/* Lightbox Dialog */}
       <Dialog open={selectedIndex !== null} onOpenChange={() => setSelectedIndex(null)}>
         <DialogContent 
-          className="max-w-5xl w-[95vw] p-0 gap-0 bg-card/95 backdrop-blur-xl border-border/50"
+          className="max-w-5xl w-[95vw] max-h-[90vh] overflow-y-auto p-0 gap-0 bg-card/95 backdrop-blur-xl border-border/50"
           onKeyDown={handleKeyDown}
         >
           <AnimatePresence mode="wait">
@@ -199,7 +199,7 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
                 transition={{ duration: 0.2 }}
               >
                 {/* Main Media Display */}
-                <div className="relative aspect-video w-full overflow-hidden rounded-t-lg bg-background">
+                <div className="relative aspect-video w-full overflow-hidden rounded-t-lg bg-background max-h-[40vh] sm:max-h-[50vh] md:max-h-none">
                   {mediaLoading ? (
                     <div className="w-full h-full flex items-center justify-center">
                       <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full" />
