@@ -199,7 +199,7 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
                 transition={{ duration: 0.2 }}
               >
                 {/* Main Media Display */}
-                <div className="relative aspect-video w-full overflow-hidden rounded-t-lg bg-background max-h-[40vh] sm:max-h-[50vh] md:max-h-none">
+                <div className="relative w-full overflow-hidden rounded-t-lg bg-background aspect-auto sm:aspect-video">
                   {mediaLoading ? (
                     <div className="w-full h-full flex items-center justify-center">
                       <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full" />
