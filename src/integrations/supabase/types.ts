@@ -167,6 +167,7 @@ export type Database = {
       combo_packages: {
         Row: {
           color: string
+          combo_type: string
           created_at: string
           description: string
           display_order: number
@@ -179,6 +180,7 @@ export type Database = {
         }
         Insert: {
           color?: string
+          combo_type?: string
           created_at?: string
           description: string
           display_order?: number
@@ -191,6 +193,7 @@ export type Database = {
         }
         Update: {
           color?: string
+          combo_type?: string
           created_at?: string
           description?: string
           display_order?: number
