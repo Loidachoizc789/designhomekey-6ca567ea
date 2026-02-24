@@ -24,6 +24,7 @@ interface ComboPackage {
   color: string;
   is_active: boolean;
   display_order: number;
+  combo_type: string;
 }
 
 const GRADIENT_PRESETS = [
@@ -32,6 +33,14 @@ const GRADIENT_PRESETS = [
   { label: "Green → Cyan", value: "from-green-500 to-cyan-500" },
   { label: "Orange → Red", value: "from-orange-500 to-red-500" },
   { label: "Blue → Violet", value: "from-blue-500 to-violet-500" },
+  { label: "Rose → Pink", value: "from-rose-500 to-pink-500" },
+  { label: "Fuchsia → Purple", value: "from-fuchsia-500 to-purple-500" },
+  { label: "Violet → Indigo", value: "from-violet-500 to-indigo-500" },
+];
+
+const COMBO_TYPES = [
+  { label: "🎪 Event", value: "event" },
+  { label: "🎨 2D", value: "2d" },
 ];
 
 const AdminComboManager = () => {
@@ -39,6 +48,7 @@ const AdminComboManager = () => {
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingCombo, setEditingCombo] = useState<ComboPackage | null>(null);
+  const [filterType, setFilterType] = useState<string>("all");
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -46,6 +56,7 @@ const AdminComboManager = () => {
     includes: [""],
     color: GRADIENT_PRESETS[0].value,
     is_active: true,
+    combo_type: "event",
   });
 
   useEffect(() => {
@@ -119,7 +130,8 @@ const AdminComboManager = () => {
             includes: validIncludes,
             color: formData.color,
             is_active: formData.is_active,
-          })
+            combo_type: formData.combo_type,
+          } as any)
           .eq("id", editingCombo.id);
 
         if (error) throw error;
@@ -133,7 +145,8 @@ const AdminComboManager = () => {
           color: formData.color,
           is_active: formData.is_active,
           display_order: combos.length,
-        });
+          combo_type: formData.combo_type,
+        } as any);
 
         if (error) throw error;
         toast({ title: "Đã thêm combo mới" });
@@ -162,6 +175,7 @@ const AdminComboManager = () => {
       includes: combo.includes.length > 0 ? combo.includes : [""],
       color: combo.color,
       is_active: combo.is_active,
+      combo_type: (combo as any).combo_type || "event",
     });
     setDialogOpen(true);
   };
@@ -196,6 +210,7 @@ const AdminComboManager = () => {
       includes: [""],
       color: GRADIENT_PRESETS[0].value,
       is_active: true,
+      combo_type: "event",
     });
   };
 
@@ -204,6 +219,10 @@ const AdminComboManager = () => {
     resetForm();
     setDialogOpen(true);
   };
+
+  const filteredCombos = filterType === "all" 
+    ? combos 
+    : combos.filter(c => (c as any).combo_type === filterType);
 
   if (loading) {
     return (
@@ -234,6 +253,27 @@ const AdminComboManager = () => {
               </DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Combo Type */}
+              <div className="space-y-2">
+                <Label>Loại combo *</Label>
+                <div className="flex gap-2">
+                  {COMBO_TYPES.map((type) => (
+                    <button
+                      key={type.value}
+                      type="button"
+                      onClick={() => setFormData({ ...formData, combo_type: type.value })}
+                      className={`px-4 py-2 rounded-lg text-sm border transition-all ${
+                        formData.combo_type === type.value
+                          ? "border-primary bg-primary/20 text-primary"
+                          : "border-border hover:border-primary/50"
+                      }`}
+                    >
+                      {type.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Tên combo *</Label>
@@ -348,8 +388,32 @@ const AdminComboManager = () => {
         </Dialog>
       </div>
 
+      {/* Filter by type */}
+      <div className="flex gap-2">
+        <Button
+          variant={filterType === "all" ? "default" : "outline"}
+          size="sm"
+          onClick={() => setFilterType("all")}
+        >
+          Tất cả ({combos.length})
+        </Button>
+        {COMBO_TYPES.map((type) => {
+          const count = combos.filter(c => (c as any).combo_type === type.value).length;
+          return (
+            <Button
+              key={type.value}
+              variant={filterType === type.value ? "default" : "outline"}
+              size="sm"
+              onClick={() => setFilterType(type.value)}
+            >
+              {type.label} ({count})
+            </Button>
+          );
+        })}
+      </div>
+
       {/* Combo List */}
-      {combos.length === 0 ? (
+      {filteredCombos.length === 0 ? (
         <div className="glass-card p-12 text-center">
           <Gift className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
           <p className="text-muted-foreground">Chưa có combo nào</p>
@@ -360,7 +424,7 @@ const AdminComboManager = () => {
         </div>
       ) : (
         <div className="grid gap-4">
-          {combos.map((combo) => (
+          {filteredCombos.map((combo) => (
             <div
               key={combo.id}
               className={`glass-card p-6 ${!combo.is_active ? "opacity-50" : ""}`}
@@ -376,7 +440,12 @@ const AdminComboManager = () => {
                     <Gift className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-primary">{combo.name}</h3>
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="font-semibold text-primary">{combo.name}</h3>
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
+                        {(combo as any).combo_type === "2d" ? "🎨 2D" : "🎪 Event"}
+                      </span>
+                    </div>
                     <p className="text-sm text-muted-foreground mb-2">
                       {combo.description}
                     </p>

@@ -339,100 +339,106 @@ const PricingSection = () => {
           </TabsContent>
 
           <TabsContent value="combo">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6 }}
-              className="text-center mb-10"
-            >
-              <h3 className="font-display text-2xl md:text-3xl font-bold mb-2">
-                Combo Event <span className="gradient-text">Trọn Gói</span>
-              </h3>
-              <p className="text-muted-foreground">
-                Gói tổng thể cho sự kiện từ nhỏ đến lớn
-              </p>
-            </motion.div>
+            <Tabs defaultValue="event" className="w-full">
+              <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-10 bg-card border border-border rounded-full p-1 h-12">
+                <TabsTrigger 
+                  value="event" 
+                  className="rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-sm"
+                >
+                  🎪 Combo Event
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="2d"
+                  className="rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-sm"
+                >
+                  🎨 Combo 2D
+                </TabsTrigger>
+              </TabsList>
 
-            {/* Combo Cards - Equal height */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {combos.length > 0 ? (
-                combos.map((combo, index) => {
-                  const price = parsePrice(combo.price);
-                  return (
+              {["event", "2d"].map((comboType) => {
+                const filtered = combos.filter(c => (c as any).combo_type === comboType);
+                const title = comboType === "event" 
+                  ? { main: "Combo Event", sub: "Trọn Gói", desc: "Gói tổng thể cho sự kiện từ nhỏ đến lớn" }
+                  : { main: "Combo 2D", sub: "Trọn Gói", desc: "Gói thiết kế 2D từ cơ bản đến cao cấp" };
+
+                return (
+                  <TabsContent key={comboType} value={comboType}>
                     <motion.div
-                      key={combo.id}
                       initial={{ opacity: 0, y: 20 }}
                       animate={isInView ? { opacity: 1, y: 0 } : {}}
-                      transition={{ duration: 0.5, delay: index * 0.1 }}
-                      className="glass-card p-6 card-hover relative overflow-hidden flex flex-col h-full"
+                      transition={{ duration: 0.6 }}
+                      className="text-center mb-10"
                     >
-                      {index === 1 && (
-                        <div className="absolute top-3 right-3 px-3 py-1 rounded-full bg-primary text-primary-foreground text-xs font-medium">
-                          Phổ biến nhất
+                      <h3 className="font-display text-2xl md:text-3xl font-bold mb-2">
+                        {title.main} <span className="gradient-text">{title.sub}</span>
+                      </h3>
+                      <p className="text-muted-foreground">{title.desc}</p>
+                    </motion.div>
+
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {filtered.length > 0 ? (
+                        filtered.map((combo, index) => {
+                          const price = parsePrice(combo.price);
+                          return (
+                            <motion.div
+                              key={combo.id}
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={isInView ? { opacity: 1, y: 0 } : {}}
+                              transition={{ duration: 0.5, delay: index * 0.1 }}
+                              className="glass-card p-6 card-hover relative overflow-hidden flex flex-col h-full"
+                            >
+                              {index === 1 && (
+                                <div className="absolute top-3 right-3 px-3 py-1 rounded-full bg-primary text-primary-foreground text-xs font-medium">
+                                  Phổ biến nhất
+                                </div>
+                              )}
+                              
+                              <div 
+                                className={`w-14 h-14 rounded-2xl mb-4 flex items-center justify-center flex-shrink-0 bg-gradient-to-r ${combo.color || "from-cyan-500 to-blue-500"}`}
+                              >
+                                <Gift className="w-7 h-7 text-white" />
+                              </div>
+                              
+                              <h4 className="font-display text-lg font-bold mb-2 line-clamp-2">{combo.name}</h4>
+                              <p className="text-muted-foreground text-sm mb-4 line-clamp-2">{combo.description}</p>
+                              
+                              <div className="mb-4 flex-shrink-0">
+                                <div className="flex flex-wrap items-baseline gap-1">
+                                  <span className="font-display text-xl font-bold gradient-text">{price.min}</span>
+                                  <span className="text-muted-foreground">–</span>
+                                  <span className="font-display text-xl font-bold gradient-text">{price.max}</span>
+                                  <span className="text-muted-foreground text-sm">đ</span>
+                                </div>
+                              </div>
+
+                              <ul className="space-y-2 mb-6 flex-1">
+                                {combo.includes.map((item, i) => (
+                                  <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                                    <Check className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                                    <span className="line-clamp-2">{item}</span>
+                                  </li>
+                                ))}
+                              </ul>
+
+                              <Button variant="outline" className="w-full rounded-full mt-auto" asChild>
+                                <a href="#contact">
+                                  Liên hệ báo giá
+                                  <ArrowRight className="w-4 h-4 ml-2" />
+                                </a>
+                              </Button>
+                            </motion.div>
+                          );
+                        })
+                      ) : (
+                        <div className="col-span-full text-center py-8 text-muted-foreground">
+                          Chưa có combo nào
                         </div>
                       )}
-                      
-                      <div 
-                        className={`w-14 h-14 rounded-2xl mb-4 flex items-center justify-center flex-shrink-0 bg-gradient-to-r ${combo.color || "from-cyan-500 to-blue-500"}`}
-                      >
-                        <Gift className="w-7 h-7 text-white" />
-                      </div>
-                      
-                      <h4 className="font-display text-lg font-bold mb-2 line-clamp-2">{combo.name}</h4>
-                      <p className="text-muted-foreground text-sm mb-4 line-clamp-2">{combo.description}</p>
-                      
-                      <div className="mb-4 flex-shrink-0">
-                        <div className="flex flex-wrap items-baseline gap-1">
-                          <span className="font-display text-xl font-bold gradient-text">{price.min}</span>
-                          <span className="text-muted-foreground">–</span>
-                          <span className="font-display text-xl font-bold gradient-text">{price.max}</span>
-                          <span className="text-muted-foreground text-sm">đ</span>
-                        </div>
-                      </div>
-
-                      <ul className="space-y-2 mb-6 flex-1">
-                        {combo.includes.map((item, i) => (
-                          <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
-                            <Check className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                            <span className="line-clamp-2">{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-
-                      <Button variant="outline" className="w-full rounded-full mt-auto" asChild>
-                        <a href="#contact">
-                          Liên hệ báo giá
-                          <ArrowRight className="w-4 h-4 ml-2" />
-                        </a>
-                      </Button>
-                    </motion.div>
-                  );
-                })
-              ) : (
-                // Default combo cards if no data
-                [
-                  { name: "Combo A", price: "18.000.000đ", desc: "Sân khấu + POSM + Motion intro" },
-                  { name: "Combo B", price: "35.000.000đ", desc: "Sân khấu + Photobooth + Video LED" },
-                  { name: "Combo C", price: "60.000.000đ", desc: "Fullpack event: Concept + 3D + Motion" },
-                  { name: "Combo D", price: "90.000.000đ", desc: "Enterprise: All-in-one solution" },
-                ].map((combo, index) => (
-                  <motion.div
-                    key={combo.name}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="glass-card p-6 card-hover"
-                  >
-                    <h4 className="font-display text-xl font-bold mb-2 gradient-text">{combo.name}</h4>
-                    <p className="text-muted-foreground text-sm mb-4">{combo.desc}</p>
-                    <p className="font-display text-2xl font-bold gradient-text mb-4">{combo.price}</p>
-                    <Button variant="outline" className="w-full rounded-full" asChild>
-                      <a href="#contact">Liên hệ</a>
-                    </Button>
-                  </motion.div>
-                ))
-              )}
-            </div>
+                    </div>
+                  </TabsContent>
+                );
+              })}
+            </Tabs>
           </TabsContent>
         </Tabs>
 
