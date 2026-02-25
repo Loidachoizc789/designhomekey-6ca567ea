@@ -337,16 +337,14 @@ const AdminComboManager = () => {
               </div>
 
               <div className="space-y-2">
-                <Label>Bao gồm (mỗi ô là 1 hạng mục, có thể xuống hàng)</Label>
+                <Label>Bao gồm</Label>
                 <div className="space-y-2">
                   {formData.includes.map((item, index) => (
                     <div key={index} className="flex gap-2">
-                      <Textarea
+                      <Input
                         value={item}
                         onChange={(e) => handleIncludeChange(index, e.target.value)}
-                        placeholder={"VD: Concept 2D\nKey Visual chính\n03–05 banner"}
-                        rows={2}
-                        className="min-h-[60px]"
+                        placeholder="VD: Concept 2D"
                       />
                       {formData.includes.length > 1 && (
                         <Button

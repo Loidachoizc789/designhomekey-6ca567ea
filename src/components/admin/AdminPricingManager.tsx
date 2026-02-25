@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
-import { Loader2, Plus, Trash2, Edit2, Save, Eye, EyeOff } from "lucide-react";
+import { Loader2, Plus, Trash2, Edit2, Save } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -30,7 +30,6 @@ interface CategoryPricing {
   items: PricingItem[];
   display_order: number;
   category_slug: string;
-  is_active: boolean;
 }
 
 interface PricingNotes {
@@ -193,21 +192,6 @@ const AdminPricingManager = () => {
     setDialogOpen(true);
   };
 
-  const handleToggleActive = async (id: string, currentState: boolean) => {
-    try {
-      const { error } = await supabase
-        .from("category_pricing")
-        .update({ is_active: !currentState })
-        .eq("id", id);
-      if (error) throw error;
-      toast({ title: currentState ? "Đã ẩn bảng giá" : "Đã hiện bảng giá" });
-      fetchPricing();
-    } catch (err) {
-      console.error("Toggle error:", err);
-      toast({ title: "Lỗi", description: "Không thể cập nhật", variant: "destructive" });
-    }
-  };
-
   const handleDelete = async (id: string) => {
     if (!confirm("Bạn có chắc muốn xóa bảng giá này?")) return;
 
@@ -358,11 +342,8 @@ const AdminPricingManager = () => {
             <AccordionItem key={p.id} value={p.id} className="glass-card border-none">
               <AccordionTrigger className="px-6 py-4 hover:no-underline">
                 <div className="flex items-center justify-between w-full pr-4">
-                  <span className={`font-semibold ${p.is_active ? 'text-primary' : 'text-muted-foreground line-through'}`}>{p.service_name}</span>
-                  <div className="flex items-center gap-2">
-                    {!p.is_active && <span className="text-xs bg-muted px-2 py-0.5 rounded">Ẩn</span>}
-                    <span className="text-sm text-muted-foreground">{p.items.length} mục</span>
-                  </div>
+                  <span className="font-semibold text-primary">{p.service_name}</span>
+                  <span className="text-sm text-muted-foreground">{p.items.length} mục</span>
                 </div>
               </AccordionTrigger>
               <AccordionContent className="px-6 pb-4">
@@ -375,10 +356,6 @@ const AdminPricingManager = () => {
                   ))}
                 </div>
                 <div className="flex gap-2">
-                  <Button size="sm" variant="outline" onClick={() => handleToggleActive(p.id, p.is_active)}>
-                    {p.is_active ? <Eye className="w-4 h-4 mr-2" /> : <EyeOff className="w-4 h-4 mr-2" />}
-                    {p.is_active ? "Đang hiện" : "Đang ẩn"}
-                  </Button>
                   <Button size="sm" variant="outline" onClick={() => handleEdit(p)}>
                     <Edit2 className="w-4 h-4 mr-2" />
                     Sửa

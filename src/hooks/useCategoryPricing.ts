@@ -35,7 +35,6 @@ export const useCategoryPricing = (categorySlug: string) => {
           .from("category_pricing")
           .select("*")
           .eq("category_slug", categorySlug)
-          .eq("is_active", true)
           .order("display_order", { ascending: true });
 
         if (pricingError) throw pricingError;

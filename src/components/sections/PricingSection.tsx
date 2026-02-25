@@ -393,26 +393,34 @@ const PricingSection = () => {
                                 </div>
                               )}
                               
-                              <h4 className="font-display text-lg font-bold mb-2 line-clamp-2 uppercase tracking-wide text-primary">{combo.name}</h4>
-                              <p className="text-muted-foreground text-sm mb-4">{combo.description}</p>
-                              <div className="space-y-3 flex-1 mb-6">
-                                {combo.includes.map((item, i) => (
-                                  <p key={i} className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
-                                    {item}
-                                  </p>
-                                ))}
+                              <div 
+                                className={`w-14 h-14 rounded-2xl mb-4 flex items-center justify-center flex-shrink-0 bg-gradient-to-r ${combo.color || "from-cyan-500 to-blue-500"}`}
+                              >
+                                <Gift className="w-7 h-7 text-white" />
                               </div>
-
-                              <div className="pt-4 border-t border-border/50 mt-auto">
-                                <div className="flex flex-wrap items-baseline gap-1 mb-4">
-                                  <span className="font-display text-2xl font-bold gradient-text">{price.min}</span>
+                              
+                              <h4 className="font-display text-lg font-bold mb-2 line-clamp-2">{combo.name}</h4>
+                              <p className="text-muted-foreground text-sm mb-4 line-clamp-2">{combo.description}</p>
+                              
+                              <div className="mb-4 flex-shrink-0">
+                                <div className="flex flex-wrap items-baseline gap-1">
+                                  <span className="font-display text-xl font-bold gradient-text">{price.min}</span>
                                   <span className="text-muted-foreground">–</span>
-                                  <span className="font-display text-2xl font-bold gradient-text">{price.max}</span>
+                                  <span className="font-display text-xl font-bold gradient-text">{price.max}</span>
                                   <span className="text-muted-foreground text-sm">đ</span>
                                 </div>
                               </div>
 
-                              <Button variant="outline" className="w-full rounded-full" asChild>
+                              <ul className="space-y-2 mb-6 flex-1">
+                                {combo.includes.map((item, i) => (
+                                  <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                                    <Check className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                                    <span className="line-clamp-2">{item}</span>
+                                  </li>
+                                ))}
+                              </ul>
+
+                              <Button variant="outline" className="w-full rounded-full mt-auto" asChild>
                                 <a href="#contact">
                                   Liên hệ báo giá
                                   <ArrowRight className="w-4 h-4 ml-2" />
