@@ -393,11 +393,11 @@ const PricingSection = () => {
                                 </div>
                               )}
                               
-                              <h4 className="font-display text-lg font-bold mb-4 line-clamp-2 uppercase tracking-wide text-primary">{combo.name}</h4>
-                              
+                              <h4 className="font-display text-lg font-bold mb-2 line-clamp-2 uppercase tracking-wide text-primary">{combo.name}</h4>
+                              <p className="text-muted-foreground text-sm mb-4">{combo.description}</p>
                               <div className="space-y-3 flex-1 mb-6">
                                 {combo.includes.map((item, i) => (
-                                  <p key={i} className="text-sm text-muted-foreground leading-relaxed">
+                                  <p key={i} className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
                                     {item}
                                   </p>
                                 ))}
