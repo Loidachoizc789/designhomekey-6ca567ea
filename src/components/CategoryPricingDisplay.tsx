@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Check, X, Phone, Sparkles, Tag } from "lucide-react";
+import { useSiteSetting } from "@/hooks/useSiteSettings";
 import { Button } from "@/components/ui/button";
 
 interface PricingItem {
@@ -39,6 +40,13 @@ const CategoryPricingDisplay = ({
   loading,
   categoryTitle,
 }: CategoryPricingDisplayProps) => {
+  const { value: pricingVisible, loading: settingLoading } = useSiteSetting("pricing_visible");
+
+  // Hide if admin disabled pricing
+  if (!settingLoading && pricingVisible && pricingVisible.enabled === false) {
+    return null;
+  }
+
   if (loading) {
     return (
       <section className="py-20 relative overflow-hidden">

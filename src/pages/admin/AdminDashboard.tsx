@@ -4,13 +4,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
-import { Loader2, LogOut, Image, DollarSign, Home, Gift, BarChart3, Package } from "lucide-react";
+import { Loader2, LogOut, Image, DollarSign, Home, Gift, BarChart3, Package, Settings } from "lucide-react";
 import AdminImageManager from "@/components/admin/AdminImageManager";
 import AdminPricingManager from "@/components/admin/AdminPricingManager";
 import AdminHomepageManager from "@/components/admin/AdminHomepageManager";
 import AdminComboManager from "@/components/admin/AdminComboManager";
 import AdminStatsManager from "@/components/admin/AdminStatsManager";
 import AdminDeliverableImageManager from "@/components/admin/AdminDeliverableImageManager";
+import AdminSettingsManager from "@/components/admin/AdminSettingsManager";
 
 const CATEGORY_SLUGS = [
   { slug: "thiet-ke-2d", name: "Thiết Kế 2D" },
@@ -123,7 +124,7 @@ const AdminDashboard = () => {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Tabs defaultValue="images" className="space-y-6">
-          <TabsList className="grid w-full max-w-3xl grid-cols-5">
+          <TabsList className="grid w-full max-w-4xl grid-cols-6">
             <TabsTrigger value="images" className="flex items-center gap-2">
               <Image className="w-4 h-4" />
               Ảnh
@@ -143,6 +144,10 @@ const AdminDashboard = () => {
             <TabsTrigger value="homepage" className="flex items-center gap-2">
               <Home className="w-4 h-4" />
               Trang chủ
+            </TabsTrigger>
+            <TabsTrigger value="settings" className="flex items-center gap-2">
+              <Settings className="w-4 h-4" />
+              Cài đặt
             </TabsTrigger>
           </TabsList>
 
@@ -183,6 +188,10 @@ const AdminDashboard = () => {
           <TabsContent value="homepage" className="space-y-6">
             <AdminHomepageManager />
             <AdminDeliverableImageManager />
+          </TabsContent>
+
+          <TabsContent value="settings">
+            <AdminSettingsManager />
           </TabsContent>
         </Tabs>
       </main>

@@ -113,6 +113,7 @@ export type Database = {
           created_at: string
           display_order: number
           id: string
+          is_active: boolean
           items: Json
           service_name: string
           updated_at: string
@@ -122,6 +123,7 @@ export type Database = {
           created_at?: string
           display_order?: number
           id?: string
+          is_active?: boolean
           items?: Json
           service_name: string
           updated_at?: string
@@ -131,6 +133,7 @@ export type Database = {
           created_at?: string
           display_order?: number
           id?: string
+          is_active?: boolean
           items?: Json
           service_name?: string
           updated_at?: string
@@ -273,6 +276,27 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      site_settings: {
+        Row: {
+          created_at: string
+          id: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          updated_at?: string
+          value?: Json
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          updated_at?: string
+          value?: Json
+        }
+        Relationships: []
       }
       user_roles: {
         Row: {
