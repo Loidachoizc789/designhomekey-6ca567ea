@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { supabase } from "@/integrations/supabase/client";
+import { useSiteSetting } from "@/hooks/useSiteSettings";
 
 // Color configurations for each menu item
 const iconColors: Record<string, { bg: string; text: string; glow: string }> = {
@@ -91,6 +92,7 @@ const PricingSection = () => {
   const [combos, setCombos] = useState<ComboPackage[]>([]);
   const [groupedPricing, setGroupedPricing] = useState<GroupedPricing[]>([]);
   const [loading, setLoading] = useState(true);
+  const { value: pricingVisible, loading: settingLoading } = useSiteSetting("pricing_visible");
 
   useEffect(() => {
     const fetchAllPricing = async () => {
@@ -198,6 +200,11 @@ const PricingSection = () => {
     }
     return { min: "0", max: "0" };
   };
+
+  // Hide section if setting is disabled
+  if (!settingLoading && pricingVisible && pricingVisible.enabled === false) {
+    return null;
+  }
 
   return (
     <section id="pricing" className="py-24 relative overflow-hidden" ref={ref}>
