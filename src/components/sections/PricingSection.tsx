@@ -309,7 +309,7 @@ const PricingSection = () => {
                                   <div className="space-y-3 flex-1">
                                     {service.items.map((item, itemIndex) => (
                                       <div key={itemIndex} className="flex flex-col gap-1">
-                                        <span className="text-sm text-muted-foreground line-clamp-2">{item.label}</span>
+                                        <span className="text-sm text-muted-foreground whitespace-pre-line">{item.label}</span>
                                         <span className="text-sm font-medium text-foreground">{item.price}</span>
                                       </div>
                                     ))}
