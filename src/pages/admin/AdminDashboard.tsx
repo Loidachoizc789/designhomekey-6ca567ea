@@ -12,6 +12,7 @@ import AdminComboManager from "@/components/admin/AdminComboManager";
 import AdminStatsManager from "@/components/admin/AdminStatsManager";
 import AdminDeliverableImageManager from "@/components/admin/AdminDeliverableImageManager";
 import AdminSettingsManager from "@/components/admin/AdminSettingsManager";
+import AdminBannerManager from "@/components/admin/AdminBannerManager";
 
 const CATEGORY_SLUGS = [
   { slug: "thiet-ke-2d", name: "Thiết Kế 2D" },
@@ -186,6 +187,7 @@ const AdminDashboard = () => {
           </TabsContent>
 
           <TabsContent value="homepage" className="space-y-6">
+            <AdminBannerManager />
             <AdminHomepageManager />
             <AdminDeliverableImageManager />
           </TabsContent>
