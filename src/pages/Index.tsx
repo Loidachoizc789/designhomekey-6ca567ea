@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import SEOHead from "@/components/SEOHead";
 import HeroSection from "@/components/sections/HeroSection";
+import BannerSlider from "@/components/sections/BannerSlider";
 import ScrollToTop from "@/components/ScrollToTop";
 import Footer from "@/components/sections/Footer";
 
@@ -25,6 +26,7 @@ const Index = () => {
       <SEOHead />
       <main className="min-h-screen bg-background text-foreground overflow-x-hidden">
         <Navbar />
+        <BannerSlider />
         <HeroSection />
         <Suspense fallback={<SectionFallback />}>
           <AboutSection />
