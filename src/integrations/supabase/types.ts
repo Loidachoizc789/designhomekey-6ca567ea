@@ -113,6 +113,7 @@ export type Database = {
           created_at: string
           display_order: number
           id: string
+          includes: string[]
           is_active: boolean
           items: Json
           service_name: string
@@ -123,6 +124,7 @@ export type Database = {
           created_at?: string
           display_order?: number
           id?: string
+          includes?: string[]
           is_active?: boolean
           items?: Json
           service_name: string
@@ -133,6 +135,7 @@ export type Database = {
           created_at?: string
           display_order?: number
           id?: string
+          includes?: string[]
           is_active?: boolean
           items?: Json
           service_name?: string

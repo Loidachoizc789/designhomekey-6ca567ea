@@ -1,0 +1,1 @@
+ALTER TABLE public.category_pricing ADD COLUMN includes text[] NOT NULL DEFAULT '{}'::text[];

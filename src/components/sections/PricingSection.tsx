@@ -58,6 +58,7 @@ interface CategoryPricing {
   items: PricingItem[];
   display_order: number;
   category_slug: string;
+  includes: string[];
 }
 
 interface PricingNotes {
@@ -114,7 +115,8 @@ const PricingSection = () => {
             .filter(p => p.category_slug === config.slug)
             .map(p => ({
               ...p,
-              items: Array.isArray(p.items) ? (p.items as unknown as PricingItem[]) : []
+              items: Array.isArray(p.items) ? (p.items as unknown as PricingItem[]) : [],
+              includes: Array.isArray(p.includes) ? p.includes : [],
             }));
 
           const categoryNotes = notesData?.find(n => n.category_slug === config.slug);
@@ -314,6 +316,19 @@ const PricingSection = () => {
                                       </div>
                                     ))}
                                   </div>
+                                  {service.includes && service.includes.length > 0 && (
+                                    <div className="mt-4 pt-3 border-t border-border/50">
+                                      <p className="text-xs font-semibold text-primary mb-2 uppercase tracking-wider">Bao gồm</p>
+                                      <ul className="space-y-1.5">
+                                        {service.includes.map((inc, i) => (
+                                          <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                                            <Check className="w-3.5 h-3.5 text-primary flex-shrink-0 mt-0.5" />
+                                            <span className="whitespace-pre-line">{inc}</span>
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    </div>
+                                  )}
                                 </div>
                               ))}
                             </div>

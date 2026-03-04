@@ -30,6 +30,7 @@ interface CategoryPricing {
   items: PricingItem[];
   display_order: number;
   category_slug: string;
+  includes: string[];
 }
 
 interface PricingNotes {
@@ -59,6 +60,7 @@ const AdminPricingManager = () => {
   const [formData, setFormData] = useState({
     service_name: "",
     items: [{ label: "", price: "" }],
+    includes_text: "",
   });
 
   useEffect(() => {
@@ -79,7 +81,8 @@ const AdminPricingManager = () => {
       
       const transformedPricing = (pricingData || []).map(item => ({
         ...item,
-        items: Array.isArray(item.items) ? (item.items as unknown as PricingItem[]) : []
+        items: Array.isArray(item.items) ? (item.items as unknown as PricingItem[]) : [],
+        includes: Array.isArray(item.includes) ? item.includes : [],
       }));
       
       setPricing(transformedPricing);
@@ -144,6 +147,10 @@ const AdminPricingManager = () => {
 
     // Filter out empty items
     const validItems = formData.items.filter(item => item.label && item.price);
+    const includesArray = formData.includes_text
+      .split("\n")
+      .map(s => s.trim())
+      .filter(Boolean);
 
     try {
       if (editingPricing) {
@@ -152,6 +159,7 @@ const AdminPricingManager = () => {
           .update({
             service_name: formData.service_name,
             items: validItems,
+            includes: includesArray,
           })
           .eq("id", editingPricing.id);
 
@@ -161,6 +169,7 @@ const AdminPricingManager = () => {
         const { error } = await supabase.from("category_pricing").insert({
           service_name: formData.service_name,
           items: validItems,
+          includes: includesArray,
           category_slug: selectedCategory,
           display_order: pricing.length,
         });
@@ -171,7 +180,7 @@ const AdminPricingManager = () => {
 
       setDialogOpen(false);
       setEditingPricing(null);
-      setFormData({ service_name: "", items: [{ label: "", price: "" }] });
+      setFormData({ service_name: "", items: [{ label: "", price: "" }], includes_text: "" });
       fetchPricing();
     } catch (err) {
       console.error("Save error:", err);
@@ -188,6 +197,7 @@ const AdminPricingManager = () => {
     setFormData({
       service_name: pricingItem.service_name,
       items: pricingItem.items.length > 0 ? pricingItem.items : [{ label: "", price: "" }],
+      includes_text: (pricingItem.includes || []).join("\n"),
     });
     setDialogOpen(true);
   };
@@ -216,7 +226,7 @@ const AdminPricingManager = () => {
 
   const openAddDialog = () => {
     setEditingPricing(null);
-    setFormData({ service_name: "", items: [{ label: "", price: "" }] });
+    setFormData({ service_name: "", items: [{ label: "", price: "" }], includes_text: "" });
     setDialogOpen(true);
   };
 
@@ -312,6 +322,16 @@ const AdminPricingManager = () => {
                   <Plus className="w-4 h-4 mr-2" />
                   Thêm mục
                 </Button>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Bao gồm (mỗi dòng 1 hạng mục)</Label>
+                <textarea
+                  className="w-full min-h-[80px] rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  value={formData.includes_text}
+                  onChange={(e) => setFormData({ ...formData, includes_text: e.target.value })}
+                  placeholder={"File nguồn gốc\nChỉnh sửa 2 lần\nGiao file trong 3 ngày"}
+                />
               </div>
 
               <div className="flex justify-end gap-2">
