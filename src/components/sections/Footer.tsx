@@ -1,5 +1,6 @@
 import { forwardRef } from "react";
-import { Facebook, Youtube, Instagram, Mail, Phone } from "lucide-react";
+import { Facebook, Youtube, Instagram, Mail, Phone, ArrowRight, MessageCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const Footer = forwardRef<HTMLElement>((_, ref) => {
   const currentYear = new Date().getFullYear();
