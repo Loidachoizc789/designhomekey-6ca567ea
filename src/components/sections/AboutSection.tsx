@@ -1,6 +1,3 @@
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
-import { useRef } from "react";
 import { Box, Palette, Layers, Repeat, Settings, Cpu } from "lucide-react";
 const features = [{
   icon: Box,

@@ -1,6 +1,3 @@
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
-import { useRef } from "react";
 import { Users, Palette, Box, Video, Handshake, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
