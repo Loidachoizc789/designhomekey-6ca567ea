@@ -59,10 +59,10 @@ const BannerSlider = () => {
           >
             {banner.link_url ? (
               <a href={banner.link_url} target="_blank" rel="noopener noreferrer" className="block w-full h-full">
-                <img src={banner.image_url} alt={banner.title || "Banner"} className="w-full h-full object-cover" loading="eager" />
+                <img src={banner.image_url} alt={banner.title || "Banner DesignHomeKey"} className="w-full h-full object-cover" loading="eager" decoding="async" width="1600" height="610" style={{ maxWidth: '1600px', margin: '0 auto' }} />
               </a>
             ) : (
-              <img src={banner.image_url} alt={banner.title || "Banner"} className="w-full h-full object-cover" loading="eager" />
+              <img src={banner.image_url} alt={banner.title || "Banner DesignHomeKey"} className="w-full h-full object-cover" loading="eager" decoding="async" width="1600" height="610" style={{ maxWidth: '1600px', margin: '0 auto' }} />
             )}
           </motion.div>
         </AnimatePresence>

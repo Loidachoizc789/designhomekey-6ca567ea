@@ -102,9 +102,8 @@ const HeroSection = () => {
               size="lg"
               className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 text-base font-medium rounded-full"
               asChild>
-              
-              <a href="#categories">
-                Khám phá thư viện asset
+              <a href="#contact">
+                Nhận tư vấn miễn phí
                 <ArrowRight className="w-5 h-5 ml-2" />
               </a>
             </Button>
@@ -113,10 +112,9 @@ const HeroSection = () => {
               size="lg"
               className="border-border hover:bg-secondary px-8 py-6 text-base font-medium rounded-full"
               asChild>
-              
-              <a href="#demo">
+              <a href="#categories">
                 <Play className="w-5 h-5 mr-2" />
-                Xem demo realtime
+                Bắt đầu dự án thiết kế
               </a>
             </Button>
           </motion.div>
