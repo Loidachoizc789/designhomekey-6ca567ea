@@ -47,7 +47,7 @@ const BannerSlider = () => {
 
   return (
     <section className="w-full px-4 sm:px-8 lg:px-16 pt-24 md:pt-28 pb-0">
-      <div className="relative w-full max-w-7xl mx-auto rounded-2xl overflow-hidden aspect-[3.5/1] sm:aspect-[4/1] bg-card/30">
+      <div className="relative w-full max-w-7xl mx-auto rounded-2xl overflow-hidden aspect-[2.5/1] sm:aspect-[3/1] bg-card/30">
         <AnimatePresence mode="wait">
           <motion.div
             key={banner.id}
