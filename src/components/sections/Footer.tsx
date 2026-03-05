@@ -1,11 +1,35 @@
 import { forwardRef } from "react";
-import { Facebook, Youtube, Instagram, Mail, Phone } from "lucide-react";
+import { Facebook, Youtube, Instagram, Mail, Phone, ArrowRight, MessageCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const Footer = forwardRef<HTMLElement>((_, ref) => {
   const currentYear = new Date().getFullYear();
   
   return (
     <footer ref={ref} id="contact" className="bg-card border-t border-border">
+      {/* Footer CTA */}
+      <div className="section-container py-12 text-center border-b border-border">
+        <h2 className="font-display text-2xl sm:text-3xl font-bold mb-4">
+          Sẵn sàng bắt đầu? <span className="gradient-text">Liên hệ ngay</span>
+        </h2>
+        <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
+          Nhận tư vấn miễn phí và báo giá chi tiết cho dự án của bạn.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <Button variant="hero" size="lg" asChild>
+            <a href="https://zalo.me/0862098408" target="_blank" rel="noopener noreferrer">
+              <MessageCircle className="w-5 h-5" />
+              Nhận tư vấn miễn phí
+            </a>
+          </Button>
+          <Button variant="hero-outline" size="lg" asChild>
+            <a href="#categories">
+              Bắt đầu dự án thiết kế
+              <ArrowRight className="w-5 h-5" />
+            </a>
+          </Button>
+        </div>
+      </div>
       <div className="section-container py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}

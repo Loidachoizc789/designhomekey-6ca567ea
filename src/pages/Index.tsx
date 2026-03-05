@@ -11,6 +11,7 @@ const AboutSection = lazy(() => import("@/components/sections/AboutSection"));
 const CategoriesSection = lazy(() => import("@/components/sections/CategoriesSection"));
 const PricingSection = lazy(() => import("@/components/sections/PricingSection"));
 const BenefitsSection = lazy(() => import("@/components/sections/BenefitsSection"));
+const MidPageCTA = lazy(() => import("@/components/sections/MidPageCTA"));
 const UseCasesSection = lazy(() => import("@/components/sections/UseCasesSection"));
 const CollaborationSection = lazy(() => import("@/components/sections/CollaborationSection"));
 const ContactSection = lazy(() => import("@/components/sections/ContactSection"));
@@ -39,6 +40,9 @@ const Index = () => {
         </Suspense>
         <Suspense fallback={<SectionFallback />}>
           <BenefitsSection />
+        </Suspense>
+        <Suspense fallback={<SectionFallback />}>
+          <MidPageCTA />
         </Suspense>
         <Suspense fallback={<SectionFallback />}>
           <UseCasesSection />

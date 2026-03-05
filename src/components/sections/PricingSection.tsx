@@ -209,33 +209,23 @@ const PricingSection = () => {
   }
 
   return (
-    <section id="pricing" className="py-24 relative overflow-hidden" ref={ref}>
+    <section id="pricing" className="py-28 relative overflow-hidden" ref={ref}>
       {/* Background */}
       <div className="absolute inset-0 grid-pattern opacity-5" />
 
       <div className="section-container relative z-10">
-        {/* Header - Simplified */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="text-center max-w-3xl mx-auto mb-16"
-        >
-          <motion.span
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-6"
-          >
+        {/* Header */}
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-6">
             <Sparkles className="w-4 h-4" />
             BẢNG GIÁ DỊCH VỤ
-          </motion.span>
+          </span>
           <h2 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold mb-4 italic">
             Menu Giá
             <br />
             <span className="gradient-text">& Combo Trọn Gói</span>
           </h2>
-        </motion.div>
+        </div>
 
         {/* Tabs */}
         <Tabs defaultValue="single" className="max-w-6xl mx-auto">
