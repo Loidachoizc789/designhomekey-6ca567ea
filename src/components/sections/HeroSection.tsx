@@ -39,7 +39,7 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section className="relative min-h-[68vh] md:min-h-[78vh] flex items-start justify-center overflow-hidden bg-background">
+    <section className="relative flex items-start justify-center overflow-hidden bg-background">
       {/* Galaxy Background Effect */}
       <GalaxyBackground />
       
@@ -53,7 +53,7 @@ const HeroSection = () => {
       <div className="absolute inset-0 grid-pattern opacity-10" />
 
       {/* Content */}
-      <div className="relative z-10 section-container text-center pt-8 md:pt-12 pb-16 md:pb-20">
+      <div className="relative z-10 section-container text-center pt-6 pb-12">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
