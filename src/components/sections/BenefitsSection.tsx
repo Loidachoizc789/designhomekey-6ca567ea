@@ -48,22 +48,13 @@ const benefits = [
 ];
 
 const BenefitsSection = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
-    <section id="benefits" className="py-24 relative overflow-hidden" ref={ref}>
-      {/* Background */}
+    <section id="benefits" className="py-28 relative overflow-hidden">
       <div className="absolute inset-0 grid-pattern opacity-5" />
 
       <div className="section-container relative z-10">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="text-center max-w-3xl mx-auto mb-12"
-        >
+        <div className="text-center max-w-3xl mx-auto mb-12">
           <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold mb-6">
             Vì sao nên dùng{" "}
             <span className="gradient-text">Hệ sinh thái 3D</span>
@@ -73,16 +64,11 @@ const BenefitsSection = () => {
           <p className="text-muted-foreground">
             Tối ưu quy trình sản xuất, nâng cao chất lượng nội dung với giải pháp virtual production toàn diện.
           </p>
-        </motion.div>
+        </div>
 
         {/* Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex flex-wrap justify-center gap-8 sm:gap-16 mb-16"
-        >
-          {stats.map((stat, index) => (
+        <div className="flex flex-wrap justify-center gap-8 sm:gap-16 mb-16">
+          {stats.map((stat) => (
             <div key={stat.label} className="text-center">
               <div className="font-display text-4xl sm:text-5xl font-bold gradient-text mb-2">
                 {stat.value}
@@ -90,16 +76,13 @@ const BenefitsSection = () => {
               <div className="text-sm text-muted-foreground">{stat.label}</div>
             </div>
           ))}
-        </motion.div>
+        </div>
 
         {/* Benefits Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto">
-          {benefits.map((benefit, index) => (
-            <motion.div
+          {benefits.map((benefit) => (
+            <div
               key={benefit.title}
-              initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
-              animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
               className="glass-card p-6 card-hover group flex gap-4"
             >
               <div className="flex-shrink-0">
@@ -114,7 +97,7 @@ const BenefitsSection = () => {
                 </h3>
                 <p className="text-sm text-muted-foreground">{benefit.description}</p>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
