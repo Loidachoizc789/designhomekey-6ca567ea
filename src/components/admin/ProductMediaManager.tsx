@@ -77,10 +77,10 @@ const ProductMediaManager = ({ productId }: ProductMediaManagerProps) => {
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         
-        if (file.size > 50 * 1024 * 1024) {
+        if (file.size > 500 * 1024 * 1024) {
           toast({
             title: "Lỗi",
-            description: `${file.name} quá lớn. Tối đa 50MB.`,
+            description: `${file.name} quá lớn. Tối đa 500MB.`,
             variant: "destructive",
           });
           continue;
