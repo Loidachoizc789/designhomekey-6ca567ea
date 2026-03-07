@@ -54,10 +54,10 @@ const AdminDeliverableImageManager = () => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 50 * 1024 * 1024) {
+    if (file.size > 500 * 1024 * 1024) {
       toast({
         title: "Lỗi",
-        description: "File quá lớn. Tối đa 50MB.",
+        description: "File quá lớn. Tối đa 500MB.",
         variant: "destructive",
       });
       return;
