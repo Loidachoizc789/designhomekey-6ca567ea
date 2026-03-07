@@ -227,7 +227,7 @@ const ProductMediaManager = ({ productId }: ProductMediaManagerProps) => {
               <>
                 <Upload className="w-8 h-8 text-muted-foreground" />
                 <span className="text-sm text-muted-foreground">
-                  Click để upload nhiều ảnh/video (max 50MB mỗi file)
+                  Click để upload nhiều ảnh/video (max 500MB mỗi file)
                 </span>
               </>
             )}
