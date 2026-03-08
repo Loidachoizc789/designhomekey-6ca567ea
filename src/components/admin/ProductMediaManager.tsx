@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import { Loader2, Plus, Trash2, Upload, X, Video, Image as ImageIcon, GripVertical } from "lucide-react";
 import { compressImage, formatBytes } from "@/lib/imageCompression";
+import { isYouTubeUrl, getYouTubeThumbnail } from "@/lib/youtube";
 
 interface ProductMedia {
   id: string;
@@ -152,7 +153,9 @@ const ProductMediaManager = ({ productId }: ProductMediaManagerProps) => {
   const handleUrlAdd = async (url: string) => {
     if (!url) return;
 
+    const isYT = isYouTubeUrl(url);
     const isVideo = url.match(/\.(mp4|webm|mov)$/i);
+    const mediaType = isYT ? "youtube" : isVideo ? "video" : "image";
 
     try {
       const { error } = await supabase
@@ -160,7 +163,7 @@ const ProductMediaManager = ({ productId }: ProductMediaManagerProps) => {
         .insert({
           product_id: productId,
           media_url: url,
-          media_type: isVideo ? "video" : "image",
+          media_type: mediaType,
           display_order: media.length,
         });
 
@@ -251,7 +254,7 @@ const ProductMediaManager = ({ productId }: ProductMediaManagerProps) => {
           <Input
             value={urlInput}
             onChange={(e) => setUrlInput(e.target.value)}
-            placeholder="Hoặc dán URL ảnh/video..."
+            placeholder="Dán URL ảnh/video hoặc link YouTube..."
             className="flex-1"
           />
           <Button 
@@ -285,7 +288,13 @@ const ProductMediaManager = ({ productId }: ProductMediaManagerProps) => {
                 key={item.id}
                 className="relative group aspect-square rounded-lg overflow-hidden border border-border bg-card"
               >
-                {item.media_type === "video" ? (
+                {item.media_type === "youtube" ? (
+                  <img
+                    src={getYouTubeThumbnail(item.media_url) || ""}
+                    alt={`YouTube ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                ) : item.media_type === "video" ? (
                   <video
                     src={item.media_url}
                     className="w-full h-full object-cover"
@@ -306,13 +315,17 @@ const ProductMediaManager = ({ productId }: ProductMediaManagerProps) => {
                 
                 {/* Type indicator */}
                 <div className="absolute top-1 left-1">
-                  {item.media_type === "video" ? (
-                    <div className="w-6 h-6 rounded bg-red-500/80 flex items-center justify-center">
-                      <Video className="w-3 h-3 text-white" />
+                  {item.media_type === "youtube" ? (
+                    <div className="w-6 h-6 rounded bg-destructive/80 flex items-center justify-center">
+                      <Video className="w-3 h-3 text-destructive-foreground" />
+                    </div>
+                  ) : item.media_type === "video" ? (
+                    <div className="w-6 h-6 rounded bg-destructive/80 flex items-center justify-center">
+                      <Video className="w-3 h-3 text-destructive-foreground" />
                     </div>
                   ) : (
-                    <div className="w-6 h-6 rounded bg-blue-500/80 flex items-center justify-center">
-                      <ImageIcon className="w-3 h-3 text-white" />
+                    <div className="w-6 h-6 rounded bg-primary/80 flex items-center justify-center">
+                      <ImageIcon className="w-3 h-3 text-primary-foreground" />
                     </div>
                   )}
                 </div>

@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { useProductMedia } from "@/hooks/useProductMedia";
 import OptimizedImage from "@/components/OptimizedImage";
+import { isYouTubeUrl, getYouTubeEmbedUrl, getYouTubeThumbnail } from "@/lib/youtube";
 
 interface GalleryItem {
   id: number | string;
@@ -35,6 +36,12 @@ function isVideoUrl(url: string) {
   );
 }
 
+function getMediaType(url: string, type?: string): 'youtube' | 'video' | 'image' {
+  if (type === 'youtube' || isYouTubeUrl(url)) return 'youtube';
+  if (type === 'video' || isVideoUrl(url)) return 'video';
+  return 'image';
+}
+
 // Memoized gallery card for better performance
 const GalleryCard = memo(({ 
   item, 
@@ -46,6 +53,7 @@ const GalleryCard = memo(({
   onClick: () => void;
 }) => {
   const isVideo = isVideoUrl(item.image);
+  const isYT = isYouTubeUrl(item.image);
   
   return (
     <motion.div
@@ -58,7 +66,14 @@ const GalleryCard = memo(({
     >
       <div className="glass-card overflow-hidden card-hover">
         <div className="relative aspect-video overflow-hidden bg-muted">
-          {isVideo ? (
+          {isYT ? (
+            <OptimizedImage
+              src={getYouTubeThumbnail(item.image) || ''}
+              alt={item.title}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              containerClassName="w-full h-full"
+            />
+          ) : isVideo ? (
             <video
               src={item.image}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
@@ -84,7 +99,7 @@ const GalleryCard = memo(({
           </div>
 
           {/* Video indicator */}
-          {isVideo && (
+          {(isVideo || isYT) && (
             <div className="absolute top-3 right-3">
               <div className="w-8 h-8 rounded-full bg-destructive/90 backdrop-blur-sm flex items-center justify-center">
                 <Play className="w-4 h-4 text-destructive-foreground fill-current" />
@@ -95,7 +110,7 @@ const GalleryCard = memo(({
           {/* View Overlay */}
           <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <div className="w-14 h-14 rounded-full bg-primary/90 flex items-center justify-center">
-              <Images className="w-6 h-6 text-primary-foreground" />
+              {isYT ? <Play className="w-6 h-6 text-primary-foreground fill-current" /> : <Images className="w-6 h-6 text-primary-foreground" />}
             </div>
           </div>
         </div>
@@ -125,7 +140,7 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
 
   // Combine main image with additional media
   const allMedia = selectedItem ? [
-    { id: 'main', media_url: selectedItem.image, media_type: isVideoUrl(selectedItem.image) ? 'video' : 'image' },
+    { id: 'main', media_url: selectedItem.image, media_type: getMediaType(selectedItem.image) },
     ...media
   ] : [];
 
@@ -279,7 +294,16 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
                   <div className="w-full h-[40vh] sm:h-[50vh] flex items-center justify-center">
                     <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full" />
                   </div>
-                ) : currentMedia?.media_type === 'video' || isVideoUrl(currentMedia?.media_url || '') ? (
+                ) : getMediaType(currentMedia?.media_url || '', currentMedia?.media_type) === 'youtube' ? (
+                  <iframe
+                    key={currentMedia?.media_url}
+                    src={getYouTubeEmbedUrl(currentMedia?.media_url || '') || ''}
+                    className="w-full h-[50vh] sm:h-[65vh]"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    title="YouTube video"
+                  />
+                ) : getMediaType(currentMedia?.media_url || '', currentMedia?.media_type) === 'video' ? (
                   <video
                     key={currentMedia?.media_url}
                     src={currentMedia?.media_url}
@@ -367,7 +391,14 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
                             : 'border-border/50 hover:border-primary/50'
                         }`}
                       >
-                        {m.media_type === 'video' || isVideoUrl(m.media_url) ? (
+                        {getMediaType(m.media_url, m.media_type) === 'youtube' ? (
+                          <img 
+                            src={getYouTubeThumbnail(m.media_url, 'default') || ''} 
+                            alt="" 
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                          />
+                        ) : getMediaType(m.media_url, m.media_type) === 'video' ? (
                           <div className="w-full h-full bg-card flex items-center justify-center">
                             <Play className="w-3.5 h-3.5 text-muted-foreground" />
                           </div>
@@ -437,7 +468,16 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
           </button>
 
           {/* Media */}
-          {currentMedia.media_type === 'video' || isVideoUrl(currentMedia.media_url) ? (
+          {getMediaType(currentMedia.media_url, currentMedia.media_type) === 'youtube' ? (
+            <iframe
+              src={getYouTubeEmbedUrl(currentMedia.media_url) || ''}
+              className="w-[90vw] h-[80vh]"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              title="YouTube video"
+              onClick={(e: any) => e.stopPropagation()}
+            />
+          ) : getMediaType(currentMedia.media_url, currentMedia.media_type) === 'video' ? (
             <video
               src={currentMedia.media_url}
               className="max-w-full max-h-full object-contain"
@@ -500,7 +540,13 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
                         : 'border-white/20 opacity-60 hover:opacity-100'
                     }`}
                   >
-                    {m.media_type === 'video' || isVideoUrl(m.media_url) ? (
+                    {getMediaType(m.media_url, m.media_type) === 'youtube' ? (
+                      <img 
+                        src={getYouTubeThumbnail(m.media_url, 'default') || ''} 
+                        alt="" 
+                        className="w-full h-full object-cover" 
+                      />
+                    ) : getMediaType(m.media_url, m.media_type) === 'video' ? (
                       <div className="w-full h-full bg-white/10 flex items-center justify-center">
                         <Play className="w-4 h-4 text-white" />
                       </div>
