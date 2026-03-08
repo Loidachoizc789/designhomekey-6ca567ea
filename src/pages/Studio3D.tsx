@@ -137,7 +137,8 @@ const Studio3D = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="relative min-h-screen bg-background text-foreground">
+      <FloatingShapes />
       <SEOHead
         title="Phim Trường 3D - Virtual Production Sets | DesignHomeKey"
         description="Dịch vụ thiết kế phim trường 3D, virtual production sets cho livestream, talkshow, TV show và sự kiện. Realtime render với Unreal Engine 5, hỗ trợ LED wall."
@@ -152,7 +153,6 @@ const Studio3D = () => {
           <GalaxyBackground />
           <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-background to-background" />
           <div className="absolute inset-0 grid-pattern opacity-5" />
-          <FloatingShapes />
           
           <div className="section-container relative z-10">
             <motion.div

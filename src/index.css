@@ -308,6 +308,18 @@
   .shape-17 { left: 4%;  top: 4050px; width: 46px; height: 46px; font-size: 14px; opacity: 0.5;                       --shape-rotate: 5deg;   --float-speed: 5s;   --float-distance: -20px; animation-delay: 0.9s; }
   .shape-18 { right: 3%; top: 4150px; width: 26px; height: 26px; font-size: 8px;  opacity: 0.2;  filter: blur(2.5px); --shape-rotate: -10deg; --float-speed: 11s;  --float-distance: -6px;  animation-delay: 3.2s; }
 
+  /* Row 10: ~4600px */
+  .shape-19 { left: 6%;  top: 4550px; width: 40px; height: 40px; font-size: 12px; opacity: 0.4;  filter: blur(0.8px); --shape-rotate: 7deg;   --float-speed: 7s;   --float-distance: -15px; animation-delay: 0.5s; }
+  .shape-20 { right: 4%; top: 4650px; width: 44px; height: 44px; font-size: 13px; opacity: 0.5;                       --shape-rotate: -8deg;  --float-speed: 6s;   --float-distance: -16px; animation-delay: 2s; }
+
+  /* Row 11: ~5100px */
+  .shape-21 { left: 3%;  top: 5050px; width: 28px; height: 28px; font-size: 9px;  opacity: 0.22; filter: blur(2px);   --shape-rotate: 12deg;  --float-speed: 9s;   --float-distance: -8px;  animation-delay: 1.4s; }
+  .shape-22 { right: 5%; top: 5150px; width: 38px; height: 38px; font-size: 12px; opacity: 0.4;  filter: blur(1px);   --shape-rotate: -5deg;  --float-speed: 7.5s; --float-distance: -14px; animation-delay: 3s; }
+
+  /* Row 12: ~5600px */
+  .shape-23 { left: 5%;  top: 5550px; width: 46px; height: 46px; font-size: 14px; opacity: 0.5;                       --shape-rotate: -4deg;  --float-speed: 5.5s; --float-distance: -18px; animation-delay: 0.7s; }
+  .shape-24 { right: 6%; top: 5650px; width: 30px; height: 30px; font-size: 10px; opacity: 0.25; filter: blur(2px);   --shape-rotate: 9deg;   --float-speed: 10s;  --float-distance: -7px;  animation-delay: 2.5s; }
+
   @media (max-width: 768px) {
     .floating-shape { display: none; }
     .galaxy-stars { opacity: 0.5; }

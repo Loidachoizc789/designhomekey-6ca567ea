@@ -181,7 +181,8 @@ const InteriorExterior = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="relative min-h-screen bg-background">
+      <FloatingShapes />
       <SEOHead
         title="Thiết Kế Nội Ngoại Thất 3D - Render Căn Hộ, Biệt Thự | DesignHomeKey"
         description="Dịch vụ render 3D nội thất căn hộ, biệt thự, văn phòng và phối cảnh ngoại thất mặt tiền. Ánh sáng tự nhiên, vật liệu PBR chân thực, hỗ trợ VR walkthrough."
@@ -195,7 +196,6 @@ const InteriorExterior = () => {
         <GalaxyBackground />
         <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-background to-background" />
         <div className="absolute inset-0 grid-pattern opacity-5" />
-        <FloatingShapes />
 
         <div className="section-container relative z-10">
           <motion.div
