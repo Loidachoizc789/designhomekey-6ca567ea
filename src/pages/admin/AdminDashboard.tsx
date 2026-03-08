@@ -127,6 +127,7 @@ const AdminDashboard = () => {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <AdminStorageStats />
+        <AdminBulkCompressor />
         <Tabs defaultValue="images" className="space-y-6">
           <TabsList className="grid w-full max-w-4xl grid-cols-6">
             <TabsTrigger value="images" className="flex items-center gap-2">
