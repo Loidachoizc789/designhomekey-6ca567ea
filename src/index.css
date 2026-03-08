@@ -342,32 +342,32 @@
   .glow-dot {
     @apply absolute rounded-full;
     animation: dot-pulse var(--dot-speed, 4s) ease-in-out infinite;
-    filter: blur(var(--dot-blur, 0px));
+    box-shadow: 0 0 var(--dot-glow, 12px) var(--dot-color, #31A8FF);
   }
-  .dot-1  { left: 8%;  top: 200px;  width: 8px;  height: 8px;  background: #31A8FF; --dot-opacity: 0.5;  --dot-speed: 3.5s; --dot-blur: 1px;  animation-delay: 0s; }
-  .dot-2  { right: 12%; top: 400px;  width: 6px;  height: 6px;  background: #31A8FF; --dot-opacity: 0.35; --dot-speed: 5s;   --dot-blur: 2px;  animation-delay: 1s; }
-  .dot-3  { left: 25%; top: 900px;  width: 10px; height: 10px; background: #4DB8FF; --dot-opacity: 0.4;  --dot-speed: 4s;   --dot-blur: 1px;  animation-delay: 0.5s; }
-  .dot-4  { right: 20%; top: 1200px; width: 7px;  height: 7px;  background: #31A8FF; --dot-opacity: 0.45; --dot-speed: 4.5s; --dot-blur: 1.5px; animation-delay: 2s; }
-  .dot-5  { left: 15%; top: 700px;  width: 7px;  height: 7px;  background: #FF9A00; --dot-opacity: 0.45; --dot-speed: 3.8s; --dot-blur: 1px;  animation-delay: 0.8s; }
-  .dot-6  { right: 8%;  top: 1500px; width: 9px;  height: 9px;  background: #EA7600; --dot-opacity: 0.4;  --dot-speed: 5.5s; --dot-blur: 1.5px; animation-delay: 1.5s; }
-  .dot-7  { left: 50%; top: 1800px; width: 6px;  height: 6px;  background: #FF9A00; --dot-opacity: 0.35; --dot-speed: 4.2s; --dot-blur: 2px;  animation-delay: 3s; }
-  .dot-8  { left: 30%; top: 350px;  width: 8px;  height: 8px;  background: #9999FF; --dot-opacity: 0.4;  --dot-speed: 4s;   --dot-blur: 1px;  animation-delay: 0.3s; }
-  .dot-9  { right: 25%; top: 1000px; width: 6px;  height: 6px;  background: #9999FF; --dot-opacity: 0.35; --dot-speed: 5s;   --dot-blur: 2px;  animation-delay: 1.8s; }
-  .dot-10 { left: 70%; top: 2200px; width: 9px;  height: 9px;  background: #9999FF; --dot-opacity: 0.45; --dot-speed: 3.5s; --dot-blur: 1px;  animation-delay: 0.6s; }
-  .dot-11 { right: 15%; top: 600px;  width: 7px;  height: 7px;  background: #FF3366; --dot-opacity: 0.4;  --dot-speed: 4.5s; --dot-blur: 1px;  animation-delay: 2.2s; }
-  .dot-12 { left: 45%; top: 1600px; width: 5px;  height: 5px;  background: #FF3366; --dot-opacity: 0.3;  --dot-speed: 5.5s; --dot-blur: 2.5px; animation-delay: 0.4s; }
-  .dot-13 { left: 60%; top: 500px;  width: 6px;  height: 6px;  background: #00C8A0; --dot-opacity: 0.4;  --dot-speed: 4s;   --dot-blur: 1px;  animation-delay: 1.2s; }
-  .dot-14 { right: 30%; top: 1400px; width: 8px;  height: 8px;  background: #00C8A0; --dot-opacity: 0.45; --dot-speed: 3.8s; --dot-blur: 1.5px; animation-delay: 2.5s; }
-  .dot-15 { left: 18%; top: 2500px; width: 7px;  height: 7px;  background: #31A8FF; --dot-opacity: 0.4;  --dot-speed: 4.5s; --dot-blur: 1px;  animation-delay: 0.7s; }
-  .dot-16 { right: 22%; top: 2800px; width: 9px;  height: 9px;  background: #FF9A00; --dot-opacity: 0.45; --dot-speed: 3.5s; --dot-blur: 1px;  animation-delay: 1.3s; }
-  .dot-17 { left: 55%; top: 3200px; width: 6px;  height: 6px;  background: #9999FF; --dot-opacity: 0.35; --dot-speed: 5s;   --dot-blur: 2px;  animation-delay: 2.8s; }
-  .dot-18 { right: 10%; top: 3500px; width: 8px;  height: 8px;  background: #00C8A0; --dot-opacity: 0.4;  --dot-speed: 4s;   --dot-blur: 1px;  animation-delay: 0.2s; }
-  .dot-19 { left: 35%; top: 3800px; width: 7px;  height: 7px;  background: #FF3366; --dot-opacity: 0.35; --dot-speed: 4.8s; --dot-blur: 1.5px; animation-delay: 1.6s; }
-  .dot-20 { right: 40%; top: 4200px; width: 10px; height: 10px; background: #31A8FF; --dot-opacity: 0.4;  --dot-speed: 3.5s; --dot-blur: 1px;  animation-delay: 3.2s; }
-  .dot-21 { left: 12%; top: 4600px; width: 6px;  height: 6px;  background: #EA7600; --dot-opacity: 0.35; --dot-speed: 5.2s; --dot-blur: 2px;  animation-delay: 0.9s; }
-  .dot-22 { right: 18%; top: 5000px; width: 8px;  height: 8px;  background: #9999FF; --dot-opacity: 0.45; --dot-speed: 4s;   --dot-blur: 1px;  animation-delay: 2.1s; }
-  .dot-23 { left: 65%; top: 5300px; width: 7px;  height: 7px;  background: #00C8A0; --dot-opacity: 0.4;  --dot-speed: 4.5s; --dot-blur: 1.5px; animation-delay: 1.4s; }
-  .dot-24 { right: 35%; top: 5600px; width: 9px;  height: 9px;  background: #FF3366; --dot-opacity: 0.38; --dot-speed: 3.8s; --dot-blur: 1px;  animation-delay: 0.5s; }
+  .dot-1  { left: 8%;  top: 200px;  width: 14px; height: 14px; background: #31A8FF; --dot-color: #31A8FF; --dot-opacity: 0.7;  --dot-speed: 3.5s; --dot-glow: 16px; animation-delay: 0s; }
+  .dot-2  { right: 12%; top: 400px;  width: 10px; height: 10px; background: #31A8FF; --dot-color: #31A8FF; --dot-opacity: 0.55; --dot-speed: 5s;   --dot-glow: 14px; animation-delay: 1s; }
+  .dot-3  { left: 25%; top: 900px;  width: 16px; height: 16px; background: #4DB8FF; --dot-color: #4DB8FF; --dot-opacity: 0.65; --dot-speed: 4s;   --dot-glow: 20px; animation-delay: 0.5s; }
+  .dot-4  { right: 20%; top: 1200px; width: 12px; height: 12px; background: #31A8FF; --dot-color: #31A8FF; --dot-opacity: 0.6;  --dot-speed: 4.5s; --dot-glow: 16px; animation-delay: 2s; }
+  .dot-5  { left: 15%; top: 700px;  width: 12px; height: 12px; background: #FF9A00; --dot-color: #FF9A00; --dot-opacity: 0.65; --dot-speed: 3.8s; --dot-glow: 18px; animation-delay: 0.8s; }
+  .dot-6  { right: 8%;  top: 1500px; width: 14px; height: 14px; background: #EA7600; --dot-color: #EA7600; --dot-opacity: 0.6;  --dot-speed: 5.5s; --dot-glow: 20px; animation-delay: 1.5s; }
+  .dot-7  { left: 50%; top: 1800px; width: 10px; height: 10px; background: #FF9A00; --dot-color: #FF9A00; --dot-opacity: 0.55; --dot-speed: 4.2s; --dot-glow: 14px; animation-delay: 3s; }
+  .dot-8  { left: 30%; top: 350px;  width: 14px; height: 14px; background: #9999FF; --dot-color: #9999FF; --dot-opacity: 0.65; --dot-speed: 4s;   --dot-glow: 18px; animation-delay: 0.3s; }
+  .dot-9  { right: 25%; top: 1000px; width: 10px; height: 10px; background: #9999FF; --dot-color: #9999FF; --dot-opacity: 0.55; --dot-speed: 5s;   --dot-glow: 14px; animation-delay: 1.8s; }
+  .dot-10 { left: 70%; top: 2200px; width: 16px; height: 16px; background: #9999FF; --dot-color: #9999FF; --dot-opacity: 0.7;  --dot-speed: 3.5s; --dot-glow: 22px; animation-delay: 0.6s; }
+  .dot-11 { right: 15%; top: 600px;  width: 12px; height: 12px; background: #FF3366; --dot-color: #FF3366; --dot-opacity: 0.65; --dot-speed: 4.5s; --dot-glow: 18px; animation-delay: 2.2s; }
+  .dot-12 { left: 45%; top: 1600px; width: 10px; height: 10px; background: #FF3366; --dot-color: #FF3366; --dot-opacity: 0.5;  --dot-speed: 5.5s; --dot-glow: 16px; animation-delay: 0.4s; }
+  .dot-13 { left: 60%; top: 500px;  width: 12px; height: 12px; background: #00C8A0; --dot-color: #00C8A0; --dot-opacity: 0.65; --dot-speed: 4s;   --dot-glow: 18px; animation-delay: 1.2s; }
+  .dot-14 { right: 30%; top: 1400px; width: 14px; height: 14px; background: #00C8A0; --dot-color: #00C8A0; --dot-opacity: 0.7;  --dot-speed: 3.8s; --dot-glow: 20px; animation-delay: 2.5s; }
+  .dot-15 { left: 18%; top: 2500px; width: 12px; height: 12px; background: #31A8FF; --dot-color: #31A8FF; --dot-opacity: 0.6;  --dot-speed: 4.5s; --dot-glow: 16px; animation-delay: 0.7s; }
+  .dot-16 { right: 22%; top: 2800px; width: 16px; height: 16px; background: #FF9A00; --dot-color: #FF9A00; --dot-opacity: 0.7;  --dot-speed: 3.5s; --dot-glow: 22px; animation-delay: 1.3s; }
+  .dot-17 { left: 55%; top: 3200px; width: 10px; height: 10px; background: #9999FF; --dot-color: #9999FF; --dot-opacity: 0.55; --dot-speed: 5s;   --dot-glow: 14px; animation-delay: 2.8s; }
+  .dot-18 { right: 10%; top: 3500px; width: 14px; height: 14px; background: #00C8A0; --dot-color: #00C8A0; --dot-opacity: 0.65; --dot-speed: 4s;   --dot-glow: 18px; animation-delay: 0.2s; }
+  .dot-19 { left: 35%; top: 3800px; width: 12px; height: 12px; background: #FF3366; --dot-color: #FF3366; --dot-opacity: 0.6;  --dot-speed: 4.8s; --dot-glow: 16px; animation-delay: 1.6s; }
+  .dot-20 { right: 40%; top: 4200px; width: 16px; height: 16px; background: #31A8FF; --dot-color: #31A8FF; --dot-opacity: 0.65; --dot-speed: 3.5s; --dot-glow: 20px; animation-delay: 3.2s; }
+  .dot-21 { left: 12%; top: 4600px; width: 10px; height: 10px; background: #EA7600; --dot-color: #EA7600; --dot-opacity: 0.55; --dot-speed: 5.2s; --dot-glow: 14px; animation-delay: 0.9s; }
+  .dot-22 { right: 18%; top: 5000px; width: 14px; height: 14px; background: #9999FF; --dot-color: #9999FF; --dot-opacity: 0.7;  --dot-speed: 4s;   --dot-glow: 20px; animation-delay: 2.1s; }
+  .dot-23 { left: 65%; top: 5300px; width: 12px; height: 12px; background: #00C8A0; --dot-color: #00C8A0; --dot-opacity: 0.65; --dot-speed: 4.5s; --dot-glow: 18px; animation-delay: 1.4s; }
+  .dot-24 { right: 35%; top: 5600px; width: 16px; height: 16px; background: #FF3366; --dot-color: #FF3366; --dot-opacity: 0.6;  --dot-speed: 3.8s; --dot-glow: 22px; animation-delay: 0.5s; }
 
   @media (max-width: 768px) {
     .floating-shape, .glow-dot { display: none; }
