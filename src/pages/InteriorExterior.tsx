@@ -454,6 +454,7 @@ const InteriorExterior = () => {
         </div>
       </section>
 
+      <FloatingShapes />
       <Footer />
     </div>
   );

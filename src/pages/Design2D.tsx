@@ -310,6 +310,7 @@ const Design2D = () => {
         </section>
       </main>
 
+      <FloatingShapes />
       <Footer />
     </div>
   );

@@ -287,6 +287,7 @@ const MotionGraphics = () => {
         </div>
       </section>
 
+      <FloatingShapes />
       <Footer />
     </div>
   );
