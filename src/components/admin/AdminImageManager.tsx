@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
 import { Loader2, Plus, Trash2, Edit2, Upload, X, Video, Image as ImageIcon, Images } from "lucide-react";
+import { compressImage, formatBytes } from "@/lib/imageCompression";
 import {
   Dialog,
   DialogContent,
