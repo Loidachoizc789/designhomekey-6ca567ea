@@ -140,7 +140,7 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
 
   // Combine main image with additional media
   const allMedia = selectedItem ? [
-    { id: 'main', media_url: selectedItem.image, media_type: isVideoUrl(selectedItem.image) ? 'video' : 'image' },
+    { id: 'main', media_url: selectedItem.image, media_type: getMediaType(selectedItem.image) },
     ...media
   ] : [];
 
