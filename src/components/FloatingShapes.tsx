@@ -39,10 +39,14 @@ const softwareIcons = [
   { abbr: "Ai", bg: "#330000", color: "#FF9A00", className: "shape-24" },
 ];
 
+interface FloatingShapesProps {
+  className?: string;
+}
+
 // Software icons scattered across the full page with depth layers
-const FloatingShapes = memo(() => {
+const FloatingShapes = memo(({ className = "z-[1]" }: FloatingShapesProps) => {
   return (
-    <div className="absolute inset-0 w-full h-full overflow-visible pointer-events-none z-[1]" aria-hidden="true">
+    <div className={`absolute inset-0 w-full h-full overflow-visible pointer-events-none ${className}`} aria-hidden="true">
       {softwareIcons.map((app, i) => (
         <div
           key={`${app.abbr}-${i}`}

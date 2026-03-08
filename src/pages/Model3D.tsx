@@ -329,8 +329,8 @@ const Model3D = () => {
         </div>
       </section>
 
-      <FloatingShapes />
       <Footer />
+      </div>
     </div>
   );
 };
