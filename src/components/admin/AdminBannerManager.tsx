@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "@/hooks/use-toast";
 import { Loader2, Trash2, Upload, Plus } from "lucide-react";
+import { compressImage, formatBytes } from "@/lib/imageCompression";
 
 interface Banner {
   id: string;
