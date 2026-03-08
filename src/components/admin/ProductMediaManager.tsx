@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import { Loader2, Plus, Trash2, Upload, X, Video, Image as ImageIcon, GripVertical } from "lucide-react";
+import { compressImage, formatBytes } from "@/lib/imageCompression";
 
 interface ProductMedia {
   id: string;
