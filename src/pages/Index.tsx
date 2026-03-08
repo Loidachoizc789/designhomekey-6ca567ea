@@ -58,6 +58,7 @@ const Index = () => {
         </Suspense>
         <Footer />
         <ScrollToTop />
+        </div>
       </main>
     </>
   );
