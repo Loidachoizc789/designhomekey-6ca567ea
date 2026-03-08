@@ -107,12 +107,21 @@ const AdminHomepageManager = () => {
 
     setUploading(categoryId);
     try {
-      const fileExt = file.name.split(".").pop();
+      const compressed = await compressImage(file);
+      const uploadFile = compressed.file;
+      const fileExt = uploadFile.name.split(".").pop();
       const fileName = `homepage/${categoryId}-${Date.now()}.${fileExt}`;
+
+      if (compressed.wasCompressed) {
+        toast({
+          title: "Đã nén ảnh",
+          description: `${formatBytes(compressed.originalSize)} → ${formatBytes(compressed.compressedSize)} (giảm ${Math.round((1 - compressed.compressedSize / compressed.originalSize) * 100)}%)`,
+        });
+      }
 
       const { error: uploadError } = await supabase.storage
         .from("category-images")
-        .upload(fileName, file);
+        .upload(fileName, uploadFile);
 
       if (uploadError) throw uploadError;
 
