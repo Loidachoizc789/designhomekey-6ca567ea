@@ -288,7 +288,13 @@ const ProductMediaManager = ({ productId }: ProductMediaManagerProps) => {
                 key={item.id}
                 className="relative group aspect-square rounded-lg overflow-hidden border border-border bg-card"
               >
-                {item.media_type === "video" ? (
+                {item.media_type === "youtube" ? (
+                  <img
+                    src={getYouTubeThumbnail(item.media_url) || ""}
+                    alt={`YouTube ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                ) : item.media_type === "video" ? (
                   <video
                     src={item.media_url}
                     className="w-full h-full object-cover"
