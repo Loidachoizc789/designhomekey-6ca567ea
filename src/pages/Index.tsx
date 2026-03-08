@@ -5,6 +5,7 @@ import HeroSection from "@/components/sections/HeroSection";
 import BannerSlider from "@/components/sections/BannerSlider";
 import ScrollToTop from "@/components/ScrollToTop";
 import Footer from "@/components/sections/Footer";
+import FloatingShapes from "@/components/FloatingShapes";
 
 // Lazy load below-the-fold sections to reduce initial bundle & TBT
 const AboutSection = lazy(() => import("@/components/sections/AboutSection"));

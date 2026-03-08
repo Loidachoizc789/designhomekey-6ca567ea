@@ -42,9 +42,6 @@ const HeroSection = () => {
       {/* Galaxy Background Effect */}
       <GalaxyBackground />
       
-      {/* Floating Glass Shapes - distributed on sides */}
-      <FloatingShapes />
-      
       {/* Particle Field */}
       <ParticleField />
 
