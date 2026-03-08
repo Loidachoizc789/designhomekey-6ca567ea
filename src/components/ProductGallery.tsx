@@ -267,7 +267,7 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
           }}
         >
           {selectedItem && (
-            <div>
+            <div className="w-full min-w-0">
               {/* Main Media Display - fixed height container to prevent layout shift */}
               <div 
                 className="relative w-full overflow-hidden rounded-t-lg bg-background flex items-center justify-center"
