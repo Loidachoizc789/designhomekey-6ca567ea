@@ -129,9 +129,25 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
   ] : [];
 
   // Remove duplicates (if main image is also in product_media)
-  const uniqueMedia = allMedia.filter((item, index, self) => 
+  const uniqueMedia = useMemo(() => allMedia.filter((item, index, self) => 
     index === self.findIndex(m => m.media_url === item.media_url)
-  );
+  ), [allMedia]);
+
+  // Preload adjacent images for smoother navigation
+  useEffect(() => {
+    if (uniqueMedia.length <= 1) return;
+    const preloadIndexes = [
+      (mediaIndex + 1) % uniqueMedia.length,
+      (mediaIndex - 1 + uniqueMedia.length) % uniqueMedia.length,
+    ];
+    preloadIndexes.forEach(idx => {
+      const m = uniqueMedia[idx];
+      if (m && m.media_type !== 'video' && !isVideoUrl(m.media_url)) {
+        const img = new Image();
+        img.src = m.media_url;
+      }
+    });
+  }, [mediaIndex, uniqueMedia]);
 
   const handlePrevious = () => {
     if (selectedIndex !== null) {
