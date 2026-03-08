@@ -316,8 +316,8 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="absolute top-4 right-4 w-9 h-9 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
-                  onClick={() => setIsFullscreen(true)}
+                  className="absolute top-4 right-14 z-10 w-9 h-9 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
+                  onClick={(e) => { e.stopPropagation(); setIsFullscreen(true); }}
                 >
                   <Maximize2 className="w-4 h-4" />
                 </Button>
