@@ -110,7 +110,8 @@ const Model3D = () => {
     : defaultGalleryItems;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="relative min-h-screen bg-background">
+      <FloatingShapes />
       <SEOHead
         title="Model 3D & Assets - Props, Furniture, Background | DesignHomeKey"
         description="Dịch vụ tạo model 3D chuyên nghiệp: props sân khấu, nội thất, background modular. Tối ưu cho UE5 và Blender với PBR material và LOD system."
@@ -124,7 +125,6 @@ const Model3D = () => {
         <GalaxyBackground />
         <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-background to-background" />
         <div className="absolute inset-0 grid-pattern opacity-5" />
-        <FloatingShapes />
 
         <div className="section-container relative z-10">
           <motion.div

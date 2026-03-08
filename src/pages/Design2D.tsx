@@ -96,7 +96,8 @@ const Design2D = () => {
     : designSamples;
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="relative min-h-screen bg-background text-foreground">
+      <FloatingShapes />
       <SEOHead
         title="Thiết Kế 2D - Key Visual, Backdrop, POSM | DesignHomeKey"
         description="Dịch vụ thiết kế 2D chuyên nghiệp: Key visual sự kiện, backdrop talkshow, visual livestream, layout màn LED và POSM. Đồng bộ với set 3D, triển khai nhanh."
@@ -111,7 +112,6 @@ const Design2D = () => {
           <GalaxyBackground />
           <div className="absolute inset-0 bg-gradient-to-b from-primary/10 via-background to-background" />
           <div className="absolute inset-0 grid-pattern opacity-5" />
-          <FloatingShapes />
           
           <div className="section-container relative z-10">
             <motion.div
