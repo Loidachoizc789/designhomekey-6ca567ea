@@ -1,14 +1,34 @@
 import { memo } from "react";
 
-// Pure CSS floating shapes - eliminates framer-motion for zero TBT impact
+const adobeApps = [
+  { abbr: "Ps", color: "#31A8FF", className: "shape-1" },
+  { abbr: "Ai", color: "#FF9A00", className: "shape-2" },
+  { abbr: "Ae", color: "#9999FF", className: "shape-3" },
+  { abbr: "Pr", color: "#9999FF", className: "shape-4" },
+];
+
+// Pure CSS floating shapes with Adobe app icons
 const FloatingShapes = memo(() => {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-      {/* CSS-only floating glass shapes */}
-      <div className="floating-shape shape-1" />
-      <div className="floating-shape shape-2" />
-      <div className="floating-shape shape-3" />
-      <div className="floating-shape shape-4" />
+      {/* Adobe app floating icons */}
+      {adobeApps.map((app) => (
+        <div
+          key={app.abbr}
+          className={`floating-shape ${app.className} flex items-center justify-center`}
+          style={{
+            background: `linear-gradient(135deg, ${app.color}22 0%, ${app.color}08 100%)`,
+            borderColor: `${app.color}40`,
+          }}
+        >
+          <span
+            className="font-bold text-lg select-none"
+            style={{ color: `${app.color}CC` }}
+          >
+            {app.abbr}
+          </span>
+        </div>
+      ))}
       
       {/* Glow orbs */}
       <div 
