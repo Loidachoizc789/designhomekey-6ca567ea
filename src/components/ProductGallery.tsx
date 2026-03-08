@@ -468,7 +468,16 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
           </button>
 
           {/* Media */}
-          {currentMedia.media_type === 'video' || isVideoUrl(currentMedia.media_url) ? (
+          {getMediaType(currentMedia.media_url, currentMedia.media_type) === 'youtube' ? (
+            <iframe
+              src={getYouTubeEmbedUrl(currentMedia.media_url) || ''}
+              className="w-[90vw] h-[80vh]"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              title="YouTube video"
+              onClick={(e: any) => e.stopPropagation()}
+            />
+          ) : getMediaType(currentMedia.media_url, currentMedia.media_type) === 'video' ? (
             <video
               src={currentMedia.media_url}
               className="max-w-full max-h-full object-contain"
