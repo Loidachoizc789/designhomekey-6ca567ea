@@ -111,7 +111,6 @@ const MotionGraphics = () => {
 
   return (
     <div className="relative min-h-screen bg-background">
-      <FloatingShapes />
       <SEOHead
         title="After Effects & Motion Graphics - Logo Animation, Video | DesignHomeKey"
         description="Dịch vụ motion graphics chuyên nghiệp: logo animation, video quảng cáo, template After Effects, lower third livestream. Render nhanh, đa định dạng."

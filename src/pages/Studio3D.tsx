@@ -413,6 +413,7 @@ const Studio3D = () => {
         />
       </main>
 
+      <FloatingShapes />
       <Footer />
     </div>
   );

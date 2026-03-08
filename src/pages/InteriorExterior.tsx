@@ -182,7 +182,6 @@ const InteriorExterior = () => {
 
   return (
     <div className="relative min-h-screen bg-background">
-      <FloatingShapes />
       <SEOHead
         title="Thiết Kế Nội Ngoại Thất 3D - Render Căn Hộ, Biệt Thự | DesignHomeKey"
         description="Dịch vụ render 3D nội thất căn hộ, biệt thự, văn phòng và phối cảnh ngoại thất mặt tiền. Ánh sáng tự nhiên, vật liệu PBR chân thực, hỗ trợ VR walkthrough."
