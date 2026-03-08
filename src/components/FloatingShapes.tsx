@@ -49,6 +49,19 @@ const softwareIcons = [
   { abbr: "Lr", bg: "#001D26", color: "#31A8FF", className: "shape-23" },
   { abbr: "Ai", bg: "#330000", color: "#FF9A00", className: "shape-24" },
   { abbr: "Id", bg: "#2E0000", color: "#FF3366", className: "shape-36" },
+  // Hero area extra icons
+  { abbr: "C4D", bg: "#1A1A2E", color: "#4DB8FF", className: "shape-37" },
+  { abbr: "Bl", bg: "#1A1A1A", color: "#EA7600", className: "shape-38" },
+  { abbr: "Ps", bg: "#001E36", color: "#31A8FF", className: "shape-39" },
+  { abbr: "UE", bg: "#1A1A1A", color: "#FFFFFF", className: "shape-40" },
+  { abbr: "Ae", bg: "#00005B", color: "#9999FF", className: "shape-41" },
+  { abbr: "3ds", bg: "#1B3A2D", color: "#00C8A0", className: "shape-42" },
+  { abbr: "Ai", bg: "#330000", color: "#FF9A00", className: "shape-43" },
+  { abbr: "Pr", bg: "#00005B", color: "#9999FF", className: "shape-44" },
+  { abbr: "Id", bg: "#2E0000", color: "#FF3366", className: "shape-45" },
+  { abbr: "Lr", bg: "#001D26", color: "#31A8FF", className: "shape-46" },
+  { abbr: "C4D", bg: "#1A1A2E", color: "#4DB8FF", className: "shape-47" },
+  { abbr: "Bl", bg: "#1A1A1A", color: "#EA7600", className: "shape-48" },
 ];
 
 // 48 colored glow dots
