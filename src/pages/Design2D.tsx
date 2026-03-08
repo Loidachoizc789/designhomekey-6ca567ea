@@ -97,6 +97,8 @@ const Design2D = () => {
 
   return (
     <div className="relative min-h-screen bg-background text-foreground">
+      <FloatingShapes className="z-0" />
+      <div className="relative z-10">
       <SEOHead
         title="Thiết Kế 2D - Key Visual, Backdrop, POSM | DesignHomeKey"
         description="Dịch vụ thiết kế 2D chuyên nghiệp: Key visual sự kiện, backdrop talkshow, visual livestream, layout màn LED và POSM. Đồng bộ với set 3D, triển khai nhanh."

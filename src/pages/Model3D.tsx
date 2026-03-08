@@ -111,6 +111,8 @@ const Model3D = () => {
 
   return (
     <div className="relative min-h-screen bg-background">
+      <FloatingShapes className="z-0" />
+      <div className="relative z-10">
       <SEOHead
         title="Model 3D & Assets - Props, Furniture, Background | DesignHomeKey"
         description="Dịch vụ tạo model 3D chuyên nghiệp: props sân khấu, nội thất, background modular. Tối ưu cho UE5 và Blender với PBR material và LOD system."

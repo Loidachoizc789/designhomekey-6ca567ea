@@ -138,6 +138,8 @@ const Studio3D = () => {
 
   return (
     <div className="relative min-h-screen bg-background text-foreground">
+      <FloatingShapes className="z-0" />
+      <div className="relative z-10">
       <SEOHead
         title="Phim Trường 3D - Virtual Production Sets | DesignHomeKey"
         description="Dịch vụ thiết kế phim trường 3D, virtual production sets cho livestream, talkshow, TV show và sự kiện. Realtime render với Unreal Engine 5, hỗ trợ LED wall."
