@@ -540,7 +540,13 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
                         : 'border-white/20 opacity-60 hover:opacity-100'
                     }`}
                   >
-                    {m.media_type === 'video' || isVideoUrl(m.media_url) ? (
+                    {getMediaType(m.media_url, m.media_type) === 'youtube' ? (
+                      <img 
+                        src={getYouTubeThumbnail(m.media_url, 'default') || ''} 
+                        alt="" 
+                        className="w-full h-full object-cover" 
+                      />
+                    ) : getMediaType(m.media_url, m.media_type) === 'video' ? (
                       <div className="w-full h-full bg-white/10 flex items-center justify-center">
                         <Play className="w-4 h-4 text-white" />
                       </div>
