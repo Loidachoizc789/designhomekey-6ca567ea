@@ -65,6 +65,7 @@ const OptimizedImage = forwardRef<HTMLImageElement, OptimizedImageProps>(
             onLoad={() => setIsLoaded(true)}
             loading={priority ? "eager" : "lazy"}
             decoding="async"
+            fetchPriority={priority ? "high" : "auto"}
             {...props}
           />
         )}

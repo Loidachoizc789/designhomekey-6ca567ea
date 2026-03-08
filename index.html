@@ -15,9 +15,10 @@
 
     <!-- Preload fonts with display=swap for better LCP -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" as="style" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" /></noscript>
 
-    <!-- Preload critical assets for faster LCP -->
+    <!-- Preload critical LCP image (logo) -->
     <link rel="preload" href="/lovable-uploads/1052d8d6-1118-4206-be15-c73ee5a0188e.png" as="image" type="image/png" fetchpriority="high" />
     <!-- Preload modulepreload for faster JS parsing -->
     <link rel="modulepreload" href="/src/main.tsx" />

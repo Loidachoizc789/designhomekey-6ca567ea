@@ -3,11 +3,11 @@ import Navbar from "@/components/Navbar";
 import SEOHead from "@/components/SEOHead";
 import HeroSection from "@/components/sections/HeroSection";
 import BannerSlider from "@/components/sections/BannerSlider";
-import ScrollToTop from "@/components/ScrollToTop";
 import Footer from "@/components/sections/Footer";
-import FloatingShapes from "@/components/FloatingShapes";
 
-// Lazy load below-the-fold sections to reduce initial bundle & TBT
+// Lazy load all non-critical components
+const FloatingShapes = lazy(() => import("@/components/FloatingShapes"));
+const ScrollToTop = lazy(() => import("@/components/ScrollToTop"));
 const AboutSection = lazy(() => import("@/components/sections/AboutSection"));
 const CategoriesSection = lazy(() => import("@/components/sections/CategoriesSection"));
 const PricingSection = lazy(() => import("@/components/sections/PricingSection"));
@@ -17,7 +17,7 @@ const UseCasesSection = lazy(() => import("@/components/sections/UseCasesSection
 const CollaborationSection = lazy(() => import("@/components/sections/CollaborationSection"));
 const ContactSection = lazy(() => import("@/components/sections/ContactSection"));
 
-// Minimal placeholder for lazy sections
+// Minimal placeholder for lazy sections - has fixed min-height for CLS
 const SectionFallback = () => (
   <div className="min-h-[200px]" />
 );
@@ -27,7 +27,9 @@ const Index = () => {
     <>
       <SEOHead />
       <main className="relative min-h-screen bg-background text-foreground overflow-x-hidden">
-        <FloatingShapes />
+        <Suspense fallback={null}>
+          <FloatingShapes />
+        </Suspense>
         <Navbar />
         <BannerSlider />
         <HeroSection />
@@ -56,7 +58,9 @@ const Index = () => {
           <ContactSection />
         </Suspense>
         <Footer />
-        <ScrollToTop />
+        <Suspense fallback={null}>
+          <ScrollToTop />
+        </Suspense>
       </main>
     </>
   );
