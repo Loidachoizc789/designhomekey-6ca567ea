@@ -295,6 +295,16 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
                   </span>
                 </div>
 
+                {/* Fullscreen Toggle */}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute top-4 right-4 w-9 h-9 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
+                  onClick={() => setIsFullscreen(true)}
+                >
+                  <Maximize2 className="w-4 h-4" />
+                </Button>
+
                 {/* Media Counter */}
                 {uniqueMedia.length > 1 && (
                   <div className="absolute bottom-4 right-4">
