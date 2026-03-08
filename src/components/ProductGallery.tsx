@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { useProductMedia } from "@/hooks/useProductMedia";
 import OptimizedImage from "@/components/OptimizedImage";
+import { isYouTubeUrl, getYouTubeEmbedUrl, getYouTubeThumbnail } from "@/lib/youtube";
 
 interface GalleryItem {
   id: number | string;
