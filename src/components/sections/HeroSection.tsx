@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import FloatingShapes from "@/components/FloatingShapes";
 import ParticleField from "@/components/ParticleField";
 import GalaxyBackground from "@/components/GalaxyBackground";
 import { useEffect, useState } from "react";
