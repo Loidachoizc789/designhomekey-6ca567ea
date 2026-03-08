@@ -355,21 +355,21 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
 
               {/* Thumbnail Strip */}
               {uniqueMedia.length > 1 && (
-                <div className="px-4 py-3 border-b border-border overflow-x-auto overscroll-x-contain max-w-full">
-                  <div className="flex gap-2 w-max min-w-full">
+                <div className="px-4 py-2 border-b border-border overflow-x-auto overscroll-x-contain max-w-full scrollbar-thin">
+                  <div className="flex gap-1.5 w-max">
                     {uniqueMedia.map((m, idx) => (
                       <button
                         key={m.id || idx}
                         onClick={() => setMediaIndex(idx)}
-                        className={`relative flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
+                        className={`relative flex-shrink-0 w-11 h-11 rounded-md overflow-hidden border-2 transition-all ${
                           idx === mediaIndex 
-                            ? 'border-primary ring-2 ring-primary/30' 
-                            : 'border-border hover:border-primary/50'
+                            ? 'border-primary ring-1 ring-primary/30' 
+                            : 'border-border/50 hover:border-primary/50'
                         }`}
                       >
                         {m.media_type === 'video' || isVideoUrl(m.media_url) ? (
                           <div className="w-full h-full bg-card flex items-center justify-center">
-                            <Play className="w-5 h-5 text-muted-foreground" />
+                            <Play className="w-3.5 h-3.5 text-muted-foreground" />
                           </div>
                         ) : (
                           <img 
