@@ -211,141 +211,137 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
           className="max-w-5xl w-[95vw] max-h-[90vh] overflow-y-auto p-0 gap-0 bg-card/95 backdrop-blur-xl border-border/50 top-[2vh] translate-y-0 sm:top-[50%] sm:translate-y-[-50%]"
           onKeyDown={handleKeyDown}
         >
-          <AnimatePresence mode="wait">
-            {selectedItem && (
-              <motion.div
-                key={`${selectedItem.id}-${mediaIndex}`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
+          {selectedItem && (
+            <div>
+              {/* Main Media Display - fixed height container to prevent layout shift */}
+              <div 
+                className="relative w-full overflow-hidden rounded-t-lg bg-background"
+                style={{ minHeight: '300px' }}
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
               >
-                {/* Main Media Display */}
-                <div 
-                  className="relative w-full overflow-hidden rounded-t-lg bg-background"
-                  onTouchStart={handleTouchStart}
-                  onTouchEnd={handleTouchEnd}
-                >
-                  {mediaLoading ? (
-                    <div className="w-full min-h-[200px] flex items-center justify-center">
-                      <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full" />
-                    </div>
-                  ) : currentMedia?.media_type === 'video' || isVideoUrl(currentMedia?.media_url || '') ? (
-                    <video
-                      key={currentMedia?.media_url}
-                      src={currentMedia?.media_url}
-                      className="w-full max-h-[60vh] sm:max-h-[70vh] object-contain"
-                      controls
-                      autoPlay
-                      playsInline
-                    />
-                  ) : (
-                    <img
-                      src={currentMedia?.media_url}
-                      alt={selectedItem.title}
-                      className="w-full max-h-[60vh] sm:max-h-[70vh] object-contain"
-                    />
-                  )}
-                  
-                  {/* Media Navigation Arrows */}
-                  {uniqueMedia.length > 1 && (
-                    <>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleMediaPrevious();
-                        }}
-                      >
-                        <ChevronLeft className="w-6 h-6" />
-                      </Button>
-                      
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleMediaNext();
-                        }}
-                      >
-                        <ChevronRight className="w-6 h-6" />
-                      </Button>
-                    </>
-                  )}
-
-                  {/* Category Badge */}
-                  <div className="absolute top-4 left-4">
-                    <span className="px-4 py-2 text-sm font-medium bg-primary rounded-full text-primary-foreground">
-                      {selectedItem.category}
-                    </span>
+                {mediaLoading ? (
+                  <div className="w-full h-[40vh] sm:h-[50vh] flex items-center justify-center">
+                    <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full" />
                   </div>
+                ) : currentMedia?.media_type === 'video' || isVideoUrl(currentMedia?.media_url || '') ? (
+                  <video
+                    key={currentMedia?.media_url}
+                    src={currentMedia?.media_url}
+                    className="w-full max-h-[60vh] sm:max-h-[70vh] object-contain transition-opacity duration-150"
+                    controls
+                    autoPlay
+                    playsInline
+                  />
+                ) : (
+                  <img
+                    key={currentMedia?.media_url}
+                    src={currentMedia?.media_url}
+                    alt={selectedItem.title}
+                    className="w-full max-h-[60vh] sm:max-h-[70vh] object-contain transition-opacity duration-150"
+                  />
+                )}
+                
+                {/* Media Navigation Arrows */}
+                {uniqueMedia.length > 1 && (
+                  <>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleMediaPrevious();
+                      }}
+                    >
+                      <ChevronLeft className="w-6 h-6" />
+                    </Button>
+                    
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleMediaNext();
+                      }}
+                    >
+                      <ChevronRight className="w-6 h-6" />
+                    </Button>
+                  </>
+                )}
 
-                  {/* Media Counter */}
+                {/* Category Badge */}
+                <div className="absolute top-4 left-4">
+                  <span className="px-4 py-2 text-sm font-medium bg-primary rounded-full text-primary-foreground">
+                    {selectedItem.category}
+                  </span>
+                </div>
+
+                {/* Media Counter */}
+                {uniqueMedia.length > 1 && (
                   <div className="absolute bottom-4 right-4">
                     <span className="px-3 py-1 text-sm bg-background/80 backdrop-blur-sm rounded-full">
                       {mediaIndex + 1} / {uniqueMedia.length}
                     </span>
                   </div>
-                </div>
-
-                {/* Thumbnail Strip */}
-                {uniqueMedia.length > 1 && (
-                  <div className="px-4 py-3 border-b border-border overflow-x-auto">
-                    <div className="flex gap-2">
-                      {uniqueMedia.map((m, idx) => (
-                        <button
-                          key={m.id || idx}
-                          onClick={() => setMediaIndex(idx)}
-                          className={`relative flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
-                            idx === mediaIndex 
-                              ? 'border-primary ring-2 ring-primary/30' 
-                              : 'border-border hover:border-primary/50'
-                          }`}
-                        >
-                          {m.media_type === 'video' || isVideoUrl(m.media_url) ? (
-                            <div className="w-full h-full bg-card flex items-center justify-center">
-                              <Play className="w-5 h-5 text-muted-foreground" />
-                            </div>
-                          ) : (
-                            <img 
-                              src={m.media_url} 
-                              alt="" 
-                              className="w-full h-full object-cover"
-                              loading="lazy"
-                            />
-                          )}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
                 )}
+              </div>
 
-                {/* Content */}
-                <div className="p-6">
-                  <DialogHeader>
-                    <DialogTitle className="text-2xl font-display">
-                      {selectedItem.title}
-                    </DialogTitle>
-                    <DialogDescription className="text-base text-muted-foreground mt-2">
-                      {selectedItem.description}
-                    </DialogDescription>
-                  </DialogHeader>
-
-                  <div className="flex gap-3 mt-6">
-                    <Button variant="hero" asChild>
-                      <a href="tel:0862098408">Liên hệ báo giá</a>
-                    </Button>
-                    <Button variant="outline" onClick={() => setSelectedIndex(null)}>
-                      Đóng
-                    </Button>
+              {/* Thumbnail Strip */}
+              {uniqueMedia.length > 1 && (
+                <div className="px-4 py-3 border-b border-border overflow-x-auto">
+                  <div className="flex gap-2">
+                    {uniqueMedia.map((m, idx) => (
+                      <button
+                        key={m.id || idx}
+                        onClick={() => setMediaIndex(idx)}
+                        className={`relative flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
+                          idx === mediaIndex 
+                            ? 'border-primary ring-2 ring-primary/30' 
+                            : 'border-border hover:border-primary/50'
+                        }`}
+                      >
+                        {m.media_type === 'video' || isVideoUrl(m.media_url) ? (
+                          <div className="w-full h-full bg-card flex items-center justify-center">
+                            <Play className="w-5 h-5 text-muted-foreground" />
+                          </div>
+                        ) : (
+                          <img 
+                            src={m.media_url} 
+                            alt="" 
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                          />
+                        )}
+                      </button>
+                    ))}
                   </div>
                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+              )}
+
+              {/* Content */}
+              <div className="p-6">
+                <DialogHeader>
+                  <DialogTitle className="text-2xl font-display">
+                    {selectedItem.title}
+                  </DialogTitle>
+                  <DialogDescription className="text-base text-muted-foreground mt-2">
+                    {selectedItem.description}
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="flex gap-3 mt-6">
+                  <Button variant="hero" asChild>
+                    <a href="tel:0862098408">Liên hệ báo giá</a>
+                  </Button>
+                  <Button variant="outline" onClick={() => setSelectedIndex(null)}>
+                    Đóng
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </>
