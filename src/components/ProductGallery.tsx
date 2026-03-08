@@ -270,7 +270,7 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
             <div>
               {/* Main Media Display - fixed height container to prevent layout shift */}
               <div 
-                className="relative w-full overflow-hidden rounded-t-lg bg-background"
+                className="relative w-full overflow-hidden rounded-t-lg bg-background flex items-center justify-center"
                 style={{ minHeight: '300px' }}
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
