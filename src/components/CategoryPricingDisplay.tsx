@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Check, X, Phone, Sparkles, Tag } from "lucide-react";
+import { Check, X, Phone, Sparkles, Tag, ChevronDown } from "lucide-react";
 import { useSiteSetting } from "@/hooks/useSiteSettings";
 import { Button } from "@/components/ui/button";
 
@@ -12,6 +13,7 @@ interface CategoryPricing {
   id: string;
   service_name: string;
   items: PricingItem[];
+  includes?: string[];
   display_order: number;
 }
 
@@ -41,6 +43,7 @@ const CategoryPricingDisplay = ({
   categoryTitle,
 }: CategoryPricingDisplayProps) => {
   const { value: pricingVisible, loading: settingLoading } = useSiteSetting("pricing_visible");
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   // Hide if admin disabled pricing
   if (!settingLoading && pricingVisible && pricingVisible.enabled === false) {
@@ -62,6 +65,10 @@ const CategoryPricingDisplay = ({
   if (pricing.length === 0) {
     return null;
   }
+
+  const toggleAccordion = (index: number) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
 
   return (
     <section className="py-20 md:py-28 relative overflow-hidden">
@@ -100,56 +107,97 @@ const CategoryPricingDisplay = ({
           </p>
         </motion.div>
 
-        <div className="max-w-7xl mx-auto">
-          {/* Pricing Grid - Enhanced Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            {pricing.map((group, index) => (
-              <motion.div
-                key={group.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1, duration: 0.5 }}
-                whileHover={{ y: -8, transition: { duration: 0.3 } }}
-                className="group relative"
-              >
-                {/* Glow effect on hover */}
-                <div className="absolute inset-0 bg-gradient-to-b from-primary/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl" />
-                
-                {/* Card */}
-                <div className="relative h-full rounded-2xl border border-border/50 bg-card/80 backdrop-blur-xl p-6 overflow-hidden group-hover:border-primary/30 transition-all duration-300">
-                  {/* Top gradient line */}
-                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  
-                  {/* Service name with icon */}
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center group-hover:bg-primary/30 transition-colors">
-                      <Sparkles className="w-5 h-5 text-primary" />
-                    </div>
-                    <h3 className="font-display text-lg font-bold text-foreground uppercase tracking-wide">
-                      {group.service_name}
-                    </h3>
-                  </div>
-                  
-                  {/* Pricing items */}
-                  <div className="space-y-4">
-                    {group.items.map((item, itemIndex) => (
-                      <div 
-                        key={itemIndex} 
-                        className="flex flex-col gap-1 pb-4 border-b border-border/30 last:border-0 last:pb-0"
-                      >
-                        <span className="text-sm text-muted-foreground leading-relaxed">
-                          {item.label}
-                        </span>
-                        <span className="text-xl font-bold gradient-text">
-                          {item.price}
-                        </span>
+        <div className="max-w-5xl mx-auto">
+          {/* Accordion Pricing */}
+          <div className="space-y-3 mb-12">
+            {pricing.map((group, index) => {
+              const isOpen = openIndex === index;
+              return (
+                <motion.div
+                  key={group.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.08 }}
+                  className="rounded-2xl border border-border/50 bg-card/80 backdrop-blur-xl overflow-hidden hover:border-primary/30 transition-colors"
+                >
+                  {/* Accordion Header */}
+                  <button
+                    onClick={() => toggleAccordion(index)}
+                    className="w-full flex items-center justify-between p-5 md:p-6 text-left group"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center group-hover:bg-primary/30 transition-colors shrink-0">
+                        <Sparkles className="w-5 h-5 text-primary" />
                       </div>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+                      <div>
+                        <h3 className="font-display text-lg font-bold text-foreground uppercase tracking-wide">
+                          {group.service_name}
+                        </h3>
+                        <p className="text-sm text-muted-foreground mt-0.5">
+                          {group.items.length} nhóm dịch vụ
+                        </p>
+                      </div>
+                    </div>
+                    <ChevronDown
+                      className={`w-5 h-5 text-muted-foreground transition-transform duration-300 ${
+                        isOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+
+                  {/* Accordion Content */}
+                  <motion.div
+                    initial={false}
+                    animate={{
+                      height: isOpen ? "auto" : 0,
+                      opacity: isOpen ? 1 : 0,
+                    }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    className="overflow-hidden"
+                  >
+                    <div className="px-5 md:px-6 pb-6">
+                      {/* Top border */}
+                      <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent mb-5" />
+
+                      {/* Items grid - responsive columns */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        {group.items.map((item, itemIndex) => (
+                          <div
+                            key={itemIndex}
+                            className="flex flex-col gap-1 p-4 rounded-xl bg-background/50 border border-border/30"
+                          >
+                            <span className="text-sm text-muted-foreground leading-relaxed">
+                              {item.label}
+                            </span>
+                            <span className="text-lg font-bold gradient-text">
+                              {item.price}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Includes list if available */}
+                      {group.includes && group.includes.length > 0 && group.includes[0] !== "" && (
+                        <div className="mt-5 pt-4 border-t border-border/30">
+                          <p className="text-sm font-semibold text-primary uppercase tracking-wider mb-3">
+                            Bao gồm
+                          </p>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                            {group.includes.map((inc, i) => (
+                              <div key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
+                                <Check className="w-4 h-4 text-primary shrink-0" />
+                                <span className="whitespace-pre-line">{inc}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </motion.div>
+                </motion.div>
+              );
+            })}
           </div>
 
           {/* Notes - Includes / Excludes */}
@@ -189,14 +237,13 @@ const CategoryPricingDisplay = ({
             </motion.div>
           )}
 
-          {/* General Rules - Enhanced */}
+          {/* General Rules */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="relative rounded-2xl border border-border/50 bg-card/50 backdrop-blur-xl p-8 mb-12 overflow-hidden"
           >
-            {/* Subtle gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-glow-secondary/5" />
             
             <h3 className="font-display text-2xl font-bold text-center mb-8 relative z-10">
@@ -219,7 +266,7 @@ const CategoryPricingDisplay = ({
             </div>
           </motion.div>
 
-          {/* CTA - Enhanced */}
+          {/* CTA */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
