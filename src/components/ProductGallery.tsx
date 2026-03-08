@@ -267,7 +267,7 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
           }}
         >
           {selectedItem && (
-            <div>
+            <div className="w-full min-w-0">
               {/* Main Media Display - fixed height container to prevent layout shift */}
               <div 
                 className="relative w-full overflow-hidden rounded-t-lg bg-background flex items-center justify-center"
@@ -283,7 +283,7 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
                   <video
                     key={currentMedia?.media_url}
                     src={currentMedia?.media_url}
-                    className="max-w-full max-h-[60vh] sm:max-h-[70vh] object-contain transition-opacity duration-150"
+                    className="max-w-full max-h-[60vh] sm:max-h-[70vh] object-contain transition-opacity duration-150 mx-auto"
                     controls
                     autoPlay
                     playsInline
@@ -293,7 +293,7 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
                     key={currentMedia?.media_url}
                     src={currentMedia?.media_url}
                     alt={selectedItem.title}
-                    className="max-w-full max-h-[60vh] sm:max-h-[70vh] object-contain transition-opacity duration-150"
+                    className="max-w-full max-h-[60vh] sm:max-h-[70vh] object-contain transition-opacity duration-150 mx-auto"
                   />
                 )}
                 
@@ -355,8 +355,8 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
 
               {/* Thumbnail Strip */}
               {uniqueMedia.length > 1 && (
-                <div className="px-4 py-3 border-b border-border overflow-x-auto">
-                  <div className="flex gap-2">
+                <div className="px-4 py-3 border-b border-border overflow-x-auto overscroll-x-contain max-w-full">
+                  <div className="flex gap-2 w-max min-w-full">
                     {uniqueMedia.map((m, idx) => (
                       <button
                         key={m.id || idx}
