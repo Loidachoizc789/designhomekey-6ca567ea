@@ -315,13 +315,17 @@ const ProductMediaManager = ({ productId }: ProductMediaManagerProps) => {
                 
                 {/* Type indicator */}
                 <div className="absolute top-1 left-1">
-                  {item.media_type === "video" ? (
-                    <div className="w-6 h-6 rounded bg-red-500/80 flex items-center justify-center">
-                      <Video className="w-3 h-3 text-white" />
+                  {item.media_type === "youtube" ? (
+                    <div className="w-6 h-6 rounded bg-destructive/80 flex items-center justify-center">
+                      <Video className="w-3 h-3 text-destructive-foreground" />
+                    </div>
+                  ) : item.media_type === "video" ? (
+                    <div className="w-6 h-6 rounded bg-destructive/80 flex items-center justify-center">
+                      <Video className="w-3 h-3 text-destructive-foreground" />
                     </div>
                   ) : (
-                    <div className="w-6 h-6 rounded bg-blue-500/80 flex items-center justify-center">
-                      <ImageIcon className="w-3 h-3 text-white" />
+                    <div className="w-6 h-6 rounded bg-primary/80 flex items-center justify-center">
+                      <ImageIcon className="w-3 h-3 text-primary-foreground" />
                     </div>
                   )}
                 </div>
