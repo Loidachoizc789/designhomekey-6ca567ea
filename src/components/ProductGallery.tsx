@@ -53,6 +53,7 @@ const GalleryCard = memo(({
   onClick: () => void;
 }) => {
   const isVideo = isVideoUrl(item.image);
+  const isYT = isYouTubeUrl(item.image);
   
   return (
     <motion.div
@@ -65,7 +66,14 @@ const GalleryCard = memo(({
     >
       <div className="glass-card overflow-hidden card-hover">
         <div className="relative aspect-video overflow-hidden bg-muted">
-          {isVideo ? (
+          {isYT ? (
+            <OptimizedImage
+              src={getYouTubeThumbnail(item.image) || ''}
+              alt={item.title}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              containerClassName="w-full h-full"
+            />
+          ) : isVideo ? (
             <video
               src={item.image}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
@@ -91,7 +99,7 @@ const GalleryCard = memo(({
           </div>
 
           {/* Video indicator */}
-          {isVideo && (
+          {(isVideo || isYT) && (
             <div className="absolute top-3 right-3">
               <div className="w-8 h-8 rounded-full bg-destructive/90 backdrop-blur-sm flex items-center justify-center">
                 <Play className="w-4 h-4 text-destructive-foreground fill-current" />
@@ -102,7 +110,7 @@ const GalleryCard = memo(({
           {/* View Overlay */}
           <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <div className="w-14 h-14 rounded-full bg-primary/90 flex items-center justify-center">
-              <Images className="w-6 h-6 text-primary-foreground" />
+              {isYT ? <Play className="w-6 h-6 text-primary-foreground fill-current" /> : <Images className="w-6 h-6 text-primary-foreground" />}
             </div>
           </div>
         </div>
