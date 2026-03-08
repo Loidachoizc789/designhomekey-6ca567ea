@@ -251,7 +251,7 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
         }}
       >
         <DialogContent 
-          className="max-w-5xl w-[95vw] max-h-[90vh] overflow-y-auto p-0 gap-0 bg-card/95 backdrop-blur-xl border-border/50 top-[2vh] translate-y-0 sm:top-[50%] sm:translate-y-[-50%]"
+          className="max-w-5xl w-[95vw] max-h-[90vh] overflow-y-auto overflow-x-hidden p-0 gap-0 bg-card/95 backdrop-blur-xl border-border/50 top-[2vh] translate-y-0 sm:top-[50%] sm:translate-y-[-50%]"
           onKeyDown={handleKeyDown}
           onEscapeKeyDown={(e) => {
             if (isFullscreen) {
