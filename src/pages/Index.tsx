@@ -25,7 +25,7 @@ const Index = () => {
   return (
     <>
       <SEOHead />
-      <main className="min-h-screen bg-background text-foreground overflow-x-hidden">
+      <main className="relative min-h-screen bg-background text-foreground overflow-x-hidden">
         <Navbar />
         <BannerSlider />
         <HeroSection />

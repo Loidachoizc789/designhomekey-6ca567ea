@@ -1,28 +1,39 @@
 import { memo } from "react";
 
 const softwareIcons = [
-  // Adobe apps
+  // Row 1 — top area (hero)
   { abbr: "Ps", bg: "#001E36", color: "#31A8FF", className: "shape-1" },
   { abbr: "Ai", bg: "#330000", color: "#FF9A00", className: "shape-2" },
+  // Row 2
   { abbr: "Ae", bg: "#00005B", color: "#9999FF", className: "shape-3" },
-  { abbr: "Pr", bg: "#00005B", color: "#9999FF", className: "shape-4" },
-  { abbr: "Id", bg: "#2E0000", color: "#FF3366", className: "shape-5" },
-  { abbr: "Lr", bg: "#001D26", color: "#31A8FF", className: "shape-6" },
-  // 3D / Motion apps
-  { abbr: "Bl", bg: "#1A1A1A", color: "#EA7600", className: "shape-7" },
-  { abbr: "C4D", bg: "#1A1A2E", color: "#4DB8FF", className: "shape-8" },
-  { abbr: "3ds", bg: "#1B3A2D", color: "#00C8A0", className: "shape-9" },
-  { abbr: "UE", bg: "#1A1A1A", color: "#FFFFFF", className: "shape-10" },
+  { abbr: "Bl", bg: "#1A1A1A", color: "#EA7600", className: "shape-4" },
+  // Row 3
+  { abbr: "Pr", bg: "#00005B", color: "#9999FF", className: "shape-5" },
+  { abbr: "C4D", bg: "#1A1A2E", color: "#4DB8FF", className: "shape-6" },
+  // Row 4
+  { abbr: "Id", bg: "#2E0000", color: "#FF3366", className: "shape-7" },
+  { abbr: "3ds", bg: "#1B3A2D", color: "#00C8A0", className: "shape-8" },
+  // Row 5
+  { abbr: "UE", bg: "#1A1A1A", color: "#FFFFFF", className: "shape-9" },
+  { abbr: "Lr", bg: "#001D26", color: "#31A8FF", className: "shape-10" },
+  // Row 6
   { abbr: "Ps", bg: "#001E36", color: "#31A8FF", className: "shape-11" },
-  { abbr: "Ai", bg: "#330000", color: "#FF9A00", className: "shape-12" },
-  { abbr: "Ae", bg: "#00005B", color: "#9999FF", className: "shape-13" },
+  { abbr: "Ae", bg: "#00005B", color: "#9999FF", className: "shape-12" },
+  // Row 7
+  { abbr: "Ai", bg: "#330000", color: "#FF9A00", className: "shape-13" },
   { abbr: "Bl", bg: "#1A1A1A", color: "#EA7600", className: "shape-14" },
+  // Row 8
+  { abbr: "Pr", bg: "#00005B", color: "#9999FF", className: "shape-15" },
+  { abbr: "C4D", bg: "#1A1A2E", color: "#4DB8FF", className: "shape-16" },
+  // Row 9
+  { abbr: "Id", bg: "#2E0000", color: "#FF3366", className: "shape-17" },
+  { abbr: "UE", bg: "#1A1A1A", color: "#FFFFFF", className: "shape-18" },
 ];
 
-// Adobe & 3D software icons floating across the page with depth layers
+// Software icons scattered across the full page with depth layers
 const FloatingShapes = memo(() => {
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none z-[1]" aria-hidden="true" style={{ height: '100%' }}>
+    <div className="absolute inset-0 w-full h-full overflow-visible pointer-events-none z-[1]" aria-hidden="true">
       {softwareIcons.map((app, i) => (
         <div
           key={`${app.abbr}-${i}`}
