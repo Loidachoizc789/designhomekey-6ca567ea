@@ -46,8 +46,8 @@ const BannerSlider = () => {
   const banner = banners[current];
 
   return (
-    <section className="w-full pt-24 md:pt-28 pb-0">
-      <div className="relative w-full overflow-hidden bg-card/30" style={{ aspectRatio: '5/1' }}>
+    <section className="w-full px-4 sm:px-6 pt-24 md:pt-28 pb-0">
+      <div className="relative w-full overflow-hidden rounded-xl bg-card/30" style={{ aspectRatio: '5/1' }}>
         <AnimatePresence mode="wait">
           <motion.div
             key={banner.id}
