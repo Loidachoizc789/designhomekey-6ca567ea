@@ -36,6 +36,12 @@ function isVideoUrl(url: string) {
   );
 }
 
+function getMediaType(url: string, type?: string): 'youtube' | 'video' | 'image' {
+  if (type === 'youtube' || isYouTubeUrl(url)) return 'youtube';
+  if (type === 'video' || isVideoUrl(url)) return 'video';
+  return 'image';
+}
+
 // Memoized gallery card for better performance
 const GalleryCard = memo(({ 
   item, 
