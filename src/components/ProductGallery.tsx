@@ -294,7 +294,16 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
                   <div className="w-full h-[40vh] sm:h-[50vh] flex items-center justify-center">
                     <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full" />
                   </div>
-                ) : currentMedia?.media_type === 'video' || isVideoUrl(currentMedia?.media_url || '') ? (
+                ) : getMediaType(currentMedia?.media_url || '', currentMedia?.media_type) === 'youtube' ? (
+                  <iframe
+                    key={currentMedia?.media_url}
+                    src={getYouTubeEmbedUrl(currentMedia?.media_url || '') || ''}
+                    className="w-full h-[50vh] sm:h-[65vh]"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    title="YouTube video"
+                  />
+                ) : getMediaType(currentMedia?.media_url || '', currentMedia?.media_type) === 'video' ? (
                   <video
                     key={currentMedia?.media_url}
                     src={currentMedia?.media_url}
