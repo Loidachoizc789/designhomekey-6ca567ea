@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import { Loader2, Upload, X, Image } from "lucide-react";
+import { compressImage, formatBytes } from "@/lib/imageCompression";
 
 interface CategoryPageImage {
   id: string;
