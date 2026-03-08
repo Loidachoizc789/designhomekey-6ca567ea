@@ -153,7 +153,9 @@ const ProductMediaManager = ({ productId }: ProductMediaManagerProps) => {
   const handleUrlAdd = async (url: string) => {
     if (!url) return;
 
+    const isYT = isYouTubeUrl(url);
     const isVideo = url.match(/\.(mp4|webm|mov)$/i);
+    const mediaType = isYT ? "youtube" : isVideo ? "video" : "image";
 
     try {
       const { error } = await supabase
@@ -161,7 +163,7 @@ const ProductMediaManager = ({ productId }: ProductMediaManagerProps) => {
         .insert({
           product_id: productId,
           media_url: url,
-          media_type: isVideo ? "video" : "image",
+          media_type: mediaType,
           display_order: media.length,
         });
 
