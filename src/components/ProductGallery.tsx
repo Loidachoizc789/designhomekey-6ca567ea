@@ -118,6 +118,7 @@ GalleryCard.displayName = "GalleryCard";
 const ProductGallery = ({ items }: ProductGalleryProps) => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [mediaIndex, setMediaIndex] = useState(0);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const selectedItem = selectedIndex !== null ? items[selectedIndex] : null;
   const { media, loading: mediaLoading } = useProductMedia(selectedItem?.productId || null);
