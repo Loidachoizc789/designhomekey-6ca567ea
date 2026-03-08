@@ -259,24 +259,37 @@
     100% { transform: translateY(-15px); opacity: 0.8; }
   }
 
-  /* Floating shapes */
+  /* Floating shapes - depth layers */
   @keyframes shape-float {
-    0%, 100% { transform: translateY(0) rotate(var(--shape-rotate)); }
-    50% { transform: translateY(-15px) rotate(var(--shape-rotate)); }
+    0%, 100% { transform: translateY(0) rotate(var(--shape-rotate, 0deg)); }
+    50% { transform: translateY(var(--float-distance, -12px)) rotate(var(--shape-rotate, 0deg)); }
   }
   .floating-shape {
     @apply absolute;
-    border-radius: 8px;
-    backdrop-filter: blur(4px);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    animation: shape-float 5s ease-in-out infinite;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    animation: shape-float var(--float-speed, 6s) ease-in-out infinite;
   }
-  .shape-1 { left: 3%; top: 12%; --shape-rotate: 12deg; animation-delay: 0s; }
-  .shape-2 { right: 6%; top: 18%; --shape-rotate: -8deg; animation-delay: 0.7s; }
-  .shape-3 { left: 8%; bottom: 22%; --shape-rotate: 15deg; animation-delay: 1.2s; }
-  .shape-4 { right: 4%; bottom: 28%; --shape-rotate: -12deg; animation-delay: 1.8s; }
-  .shape-5 { left: 15%; top: 45%; --shape-rotate: 6deg; animation-delay: 2.2s; }
-  .shape-6 { right: 12%; top: 50%; --shape-rotate: -5deg; animation-delay: 0.3s; }
+
+  /* Layer: far back — small, blurry, faint */
+  .shape-1  { left: 2%; top: 8%; width: 28px; height: 28px; font-size: 9px; opacity: 0.25; filter: blur(2px); --shape-rotate: 15deg; --float-speed: 9s; --float-distance: -8px; animation-delay: 0s; }
+  .shape-2  { right: 3%; top: 5%; width: 30px; height: 30px; font-size: 10px; opacity: 0.2; filter: blur(2.5px); --shape-rotate: -10deg; --float-speed: 10s; --float-distance: -6px; animation-delay: 1s; }
+  .shape-9  { left: 45%; top: 3%; width: 26px; height: 26px; font-size: 8px; opacity: 0.2; filter: blur(2px); --shape-rotate: 8deg; --float-speed: 11s; --float-distance: -7px; animation-delay: 2s; }
+  .shape-14 { right: 40%; top: 55%; width: 24px; height: 24px; font-size: 8px; opacity: 0.18; filter: blur(3px); --shape-rotate: -6deg; --float-speed: 12s; --float-distance: -5px; animation-delay: 3s; }
+
+  /* Layer: mid — medium size, slight blur */
+  .shape-3  { left: 6%; top: 35%; width: 38px; height: 38px; font-size: 12px; opacity: 0.4; filter: blur(1px); --shape-rotate: 10deg; --float-speed: 7s; --float-distance: -14px; animation-delay: 0.5s; }
+  .shape-4  { right: 5%; top: 40%; width: 36px; height: 36px; font-size: 11px; opacity: 0.35; filter: blur(1px); --shape-rotate: -12deg; --float-speed: 8s; --float-distance: -12px; animation-delay: 1.5s; }
+  .shape-7  { left: 10%; top: 60%; width: 40px; height: 40px; font-size: 12px; opacity: 0.4; filter: blur(0.8px); --shape-rotate: -8deg; --float-speed: 7.5s; --float-distance: -15px; animation-delay: 0.8s; }
+  .shape-8  { right: 8%; top: 65%; width: 38px; height: 38px; font-size: 10px; opacity: 0.35; filter: blur(1.2px); --shape-rotate: 6deg; --float-speed: 8.5s; --float-distance: -10px; animation-delay: 2.5s; }
+  .shape-11 { left: 20%; top: 80%; width: 34px; height: 34px; font-size: 11px; opacity: 0.3; filter: blur(1px); --shape-rotate: 14deg; --float-speed: 9s; --float-distance: -9px; animation-delay: 1.2s; }
+  .shape-12 { right: 18%; top: 78%; width: 32px; height: 32px; font-size: 10px; opacity: 0.3; filter: blur(1.5px); --shape-rotate: -9deg; --float-speed: 10s; --float-distance: -8px; animation-delay: 3.5s; }
+
+  /* Layer: foreground — larger, sharp, more visible */
+  .shape-5  { left: 4%; top: 22%; width: 46px; height: 46px; font-size: 14px; opacity: 0.55; --shape-rotate: -5deg; --float-speed: 5.5s; --float-distance: -18px; animation-delay: 0.3s; }
+  .shape-6  { right: 4%; top: 28%; width: 44px; height: 44px; font-size: 13px; opacity: 0.5; --shape-rotate: 8deg; --float-speed: 6s; --float-distance: -16px; animation-delay: 2s; }
+  .shape-10 { left: 3%; top: 50%; width: 48px; height: 48px; font-size: 13px; opacity: 0.5; --shape-rotate: 4deg; --float-speed: 5s; --float-distance: -20px; animation-delay: 1.8s; }
+  .shape-13 { right: 6%; top: 88%; width: 42px; height: 42px; font-size: 12px; opacity: 0.45; --shape-rotate: -7deg; --float-speed: 6.5s; --float-distance: -14px; animation-delay: 0.6s; }
 
   @media (max-width: 768px) {
     .floating-shape { display: none; }
