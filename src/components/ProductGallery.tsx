@@ -371,6 +371,113 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Fullscreen Overlay */}
+      {isFullscreen && currentMedia && (
+        <div 
+          className="fixed inset-0 z-[100] bg-black flex items-center justify-center"
+          onClick={() => setIsFullscreen(false)}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          {/* Close button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white"
+            onClick={() => setIsFullscreen(false)}
+          >
+            <X className="w-5 h-5" />
+          </Button>
+
+          {/* Minimize button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute top-4 right-16 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white"
+            onClick={() => setIsFullscreen(false)}
+          >
+            <Minimize2 className="w-5 h-5" />
+          </Button>
+
+          {/* Media */}
+          {currentMedia.media_type === 'video' || isVideoUrl(currentMedia.media_url) ? (
+            <video
+              src={currentMedia.media_url}
+              className="max-w-full max-h-full object-contain"
+              controls
+              autoPlay
+              playsInline
+              onClick={(e) => e.stopPropagation()}
+            />
+          ) : (
+            <img
+              src={currentMedia.media_url}
+              alt={selectedItem?.title || ''}
+              className="max-w-full max-h-full object-contain"
+              onClick={(e) => e.stopPropagation()}
+            />
+          )}
+
+          {/* Navigation arrows */}
+          {uniqueMedia.length > 1 && (
+            <>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white"
+                onClick={(e) => { e.stopPropagation(); handleMediaPrevious(); }}
+              >
+                <ChevronLeft className="w-7 h-7" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white"
+                onClick={(e) => { e.stopPropagation(); handleMediaNext(); }}
+              >
+                <ChevronRight className="w-7 h-7" />
+              </Button>
+            </>
+          )}
+
+          {/* Counter */}
+          {uniqueMedia.length > 1 && (
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2">
+              <span className="px-4 py-2 text-sm text-white bg-white/10 backdrop-blur-sm rounded-full">
+                {mediaIndex + 1} / {uniqueMedia.length}
+              </span>
+            </div>
+          )}
+
+          {/* Thumbnail strip */}
+          {uniqueMedia.length > 1 && (
+            <div className="absolute bottom-16 left-1/2 -translate-x-1/2 max-w-[90vw] overflow-x-auto">
+              <div className="flex gap-2 p-2">
+                {uniqueMedia.map((m, idx) => (
+                  <button
+                    key={m.id || idx}
+                    onClick={(e) => { e.stopPropagation(); setMediaIndex(idx); }}
+                    className={`flex-shrink-0 w-14 h-14 rounded-lg overflow-hidden border-2 transition-all ${
+                      idx === mediaIndex
+                        ? 'border-primary ring-2 ring-primary/30 opacity-100'
+                        : 'border-white/20 opacity-60 hover:opacity-100'
+                    }`}
+                  >
+                    {m.media_type === 'video' || isVideoUrl(m.media_url) ? (
+                      <div className="w-full h-full bg-white/10 flex items-center justify-center">
+                        <Play className="w-4 h-4 text-white" />
+                      </div>
+                    ) : (
+                      <img src={m.media_url} alt="" className="w-full h-full object-cover" />
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </>
   );
 };
