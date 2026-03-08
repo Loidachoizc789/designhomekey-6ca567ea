@@ -37,12 +37,21 @@ const AdminBannerManager = () => {
     if (!file) return;
     setUploading(true);
 
-    const fileExt = file.name.split(".").pop();
+    const compressed = await compressImage(file);
+    const uploadFile = compressed.file;
+    const fileExt = uploadFile.name.split(".").pop();
     const filePath = `banners/${Date.now()}.${fileExt}`;
+
+    if (compressed.wasCompressed) {
+      toast({
+        title: "Đã nén ảnh",
+        description: `${formatBytes(compressed.originalSize)} → ${formatBytes(compressed.compressedSize)} (giảm ${Math.round((1 - compressed.compressedSize / compressed.originalSize) * 100)}%)`,
+      });
+    }
 
     const { error: uploadError } = await supabase.storage
       .from("homepage-assets")
-      .upload(filePath, file);
+      .upload(filePath, uploadFile);
 
     if (uploadError) {
       toast({ title: "Lỗi upload", description: uploadError.message, variant: "destructive" });

@@ -88,12 +88,23 @@ const ProductMediaManager = ({ productId }: ProductMediaManagerProps) => {
         }
 
         const fileExt = file.name.split(".").pop()?.toLowerCase();
-        const fileName = `products/${productId}/${Date.now()}_${i}.${fileExt}`;
         const isVideo = ["mp4", "webm", "mov"].includes(fileExt || "");
+
+        const compressed = await compressImage(file);
+        const uploadFile = compressed.file;
+        const finalExt = uploadFile.name.split(".").pop()?.toLowerCase();
+        const fileName = `products/${productId}/${Date.now()}_${i}.${finalExt}`;
+
+        if (compressed.wasCompressed) {
+          toast({
+            title: "Đã nén ảnh",
+            description: `${file.name}: ${formatBytes(compressed.originalSize)} → ${formatBytes(compressed.compressedSize)}`,
+          });
+        }
 
         const { error: uploadError } = await supabase.storage
           .from("category-images")
-          .upload(fileName, file);
+          .upload(fileName, uploadFile);
 
         if (uploadError) {
           console.error("Upload error:", uploadError);
