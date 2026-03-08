@@ -1,7 +1,7 @@
 import { memo } from "react";
 
 const softwareIcons = [
-  // Row 1 — top area (hero)
+  // Row 1
   { abbr: "Ps", bg: "#001E36", color: "#31A8FF", className: "shape-1" },
   { abbr: "Ai", bg: "#330000", color: "#FF9A00", className: "shape-2" },
   // Row 2
@@ -28,6 +28,15 @@ const softwareIcons = [
   // Row 9
   { abbr: "Id", bg: "#2E0000", color: "#FF3366", className: "shape-17" },
   { abbr: "UE", bg: "#1A1A1A", color: "#FFFFFF", className: "shape-18" },
+  // Row 10
+  { abbr: "3ds", bg: "#1B3A2D", color: "#00C8A0", className: "shape-19" },
+  { abbr: "Ps", bg: "#001E36", color: "#31A8FF", className: "shape-20" },
+  // Row 11
+  { abbr: "Ae", bg: "#00005B", color: "#9999FF", className: "shape-21" },
+  { abbr: "Bl", bg: "#1A1A1A", color: "#EA7600", className: "shape-22" },
+  // Row 12
+  { abbr: "Lr", bg: "#001D26", color: "#31A8FF", className: "shape-23" },
+  { abbr: "Ai", bg: "#330000", color: "#FF9A00", className: "shape-24" },
 ];
 
 // Software icons scattered across the full page with depth layers
