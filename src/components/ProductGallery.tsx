@@ -283,7 +283,7 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
                   <video
                     key={currentMedia?.media_url}
                     src={currentMedia?.media_url}
-                    className="max-w-full max-h-[60vh] sm:max-h-[70vh] object-contain transition-opacity duration-150"
+                    className="max-w-full max-h-[60vh] sm:max-h-[70vh] object-contain transition-opacity duration-150 mx-auto"
                     controls
                     autoPlay
                     playsInline
