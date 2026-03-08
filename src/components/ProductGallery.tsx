@@ -173,11 +173,28 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
   }, [uniqueMedia.length]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Escape" && isFullscreen) {
+      e.stopPropagation();
+      setIsFullscreen(false);
+      return;
+    }
     if (e.key === "ArrowLeft") handleMediaPrevious();
     if (e.key === "ArrowRight") handleMediaNext();
     if (e.key === "ArrowUp") handlePrevious();
     if (e.key === "ArrowDown") handleNext();
   };
+
+  // Global keydown for fullscreen ESC
+  useEffect(() => {
+    if (!isFullscreen) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsFullscreen(false);
+      if (e.key === "ArrowLeft") handleMediaPrevious();
+      if (e.key === "ArrowRight") handleMediaNext();
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [isFullscreen, handleMediaPrevious, handleMediaNext]);
 
   const handleOpenProduct = (index: number) => {
     setSelectedIndex(index);
