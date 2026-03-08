@@ -414,16 +414,24 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
       {isFullscreen && currentMedia && (
         <div 
           className="fixed inset-0 z-[100] bg-black flex items-center justify-center"
-          onClick={(e) => { e.stopPropagation(); setIsFullscreen(false); }}
+          onClick={(e) => e.stopPropagation()}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
-          onMouseDown={(e) => e.stopPropagation()}
+          onPointerDown={(e) => e.stopPropagation()}
         >
           {/* Close / Minimize button */}
           <button
+            type="button"
+            aria-label="Thu nhỏ fullscreen"
             className="absolute top-4 right-4 z-[110] w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center cursor-pointer"
-            onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); }}
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsFullscreen(false); }}
+            onPointerDown={(e) => {
+              e.stopPropagation();
+              setIsFullscreen(false);
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsFullscreen(false);
+            }}
           >
             <Minimize2 className="w-5 h-5" />
           </button>
