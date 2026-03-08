@@ -27,8 +27,8 @@ const Index = () => {
     <>
       <SEOHead />
       <main className="relative min-h-screen bg-background text-foreground overflow-x-hidden">
-        <FloatingShapes className="z-0" />
-        <div className="relative z-10">
+        <FloatingShapes className="z-[5]" />
+        <div className="relative z-[2]">
         <Navbar />
         <BannerSlider />
         <HeroSection />
