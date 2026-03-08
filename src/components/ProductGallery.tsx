@@ -240,10 +240,25 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
       </div>
 
       {/* Lightbox Dialog */}
-      <Dialog open={selectedIndex !== null} onOpenChange={() => setSelectedIndex(null)}>
+      <Dialog
+        open={selectedIndex !== null}
+        onOpenChange={(open) => {
+          if (!open && isFullscreen) {
+            setIsFullscreen(false);
+            return;
+          }
+          if (!open) setSelectedIndex(null);
+        }}
+      >
         <DialogContent 
           className="max-w-5xl w-[95vw] max-h-[90vh] overflow-y-auto p-0 gap-0 bg-card/95 backdrop-blur-xl border-border/50 top-[2vh] translate-y-0 sm:top-[50%] sm:translate-y-[-50%]"
           onKeyDown={handleKeyDown}
+          onPointerDownOutside={(e) => {
+            if (isFullscreen) e.preventDefault();
+          }}
+          onInteractOutside={(e) => {
+            if (isFullscreen) e.preventDefault();
+          }}
         >
           {selectedItem && (
             <div>
