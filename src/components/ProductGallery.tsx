@@ -355,8 +355,8 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
 
               {/* Thumbnail Strip */}
               {uniqueMedia.length > 1 && (
-                <div className="px-4 py-3 border-b border-border overflow-x-auto">
-                  <div className="flex gap-2">
+                <div className="px-4 py-3 border-b border-border overflow-x-auto overscroll-x-contain max-w-full">
+                  <div className="flex gap-2 w-max min-w-full">
                     {uniqueMedia.map((m, idx) => (
                       <button
                         key={m.id || idx}
