@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
 import { Loader2, Upload, Save, X } from "lucide-react";
+import { compressImage, formatBytes } from "@/lib/imageCompression";
 
 interface Category {
   id: string;
