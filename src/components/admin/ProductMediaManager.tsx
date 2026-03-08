@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import { Loader2, Plus, Trash2, Upload, X, Video, Image as ImageIcon, GripVertical } from "lucide-react";
 import { compressImage, formatBytes } from "@/lib/imageCompression";
+import { isYouTubeUrl, getYouTubeThumbnail } from "@/lib/youtube";
 
 interface ProductMedia {
   id: string;
