@@ -393,26 +393,17 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
       {isFullscreen && currentMedia && (
         <div 
           className="fixed inset-0 z-[100] bg-black flex items-center justify-center"
-          onClick={() => setIsFullscreen(false)}
+          onClick={(e) => { e.stopPropagation(); setIsFullscreen(false); }}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
+          onMouseDown={(e) => e.stopPropagation()}
         >
-          {/* Close button */}
+          {/* Close / Minimize button */}
           <Button
             variant="ghost"
             size="icon"
             className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white"
-            onClick={() => setIsFullscreen(false)}
-          >
-            <X className="w-5 h-5" />
-          </Button>
-
-          {/* Minimize button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="absolute top-4 right-16 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white"
-            onClick={() => setIsFullscreen(false)}
+            onClick={(e) => { e.stopPropagation(); setIsFullscreen(false); }}
           >
             <Minimize2 className="w-5 h-5" />
           </Button>
