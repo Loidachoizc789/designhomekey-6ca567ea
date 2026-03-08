@@ -22,7 +22,7 @@ const softwareIcons = [
 // Adobe & 3D software icons floating across the page with depth layers
 const FloatingShapes = memo(() => {
   return (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none z-[1]" aria-hidden="true">
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-[1]" aria-hidden="true" style={{ height: '100%' }}>
       {softwareIcons.map((app, i) => (
         <div
           key={`${app.abbr}-${i}`}
