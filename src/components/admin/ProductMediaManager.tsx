@@ -254,7 +254,7 @@ const ProductMediaManager = ({ productId }: ProductMediaManagerProps) => {
           <Input
             value={urlInput}
             onChange={(e) => setUrlInput(e.target.value)}
-            placeholder="Hoặc dán URL ảnh/video..."
+            placeholder="Dán URL ảnh/video hoặc link YouTube..."
             className="flex-1"
           />
           <Button 
