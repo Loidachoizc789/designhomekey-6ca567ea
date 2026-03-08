@@ -51,8 +51,8 @@ const softwareIcons = [
   { abbr: "Id", bg: "#2E0000", color: "#FF3366", className: "shape-36" },
 ];
 
-// 24 colored glow dots
-const glowDots = Array.from({ length: 24 }, (_, i) => `dot-${i + 1}`);
+// 48 colored glow dots
+const glowDots = Array.from({ length: 48 }, (_, i) => `dot-${i + 1}`);
 
 interface FloatingShapesProps {
   className?: string;
