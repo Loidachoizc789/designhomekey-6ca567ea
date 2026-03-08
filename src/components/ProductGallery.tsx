@@ -414,14 +414,13 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
           onMouseDown={(e) => e.stopPropagation()}
         >
           {/* Close / Minimize button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white"
-            onClick={(e) => { e.stopPropagation(); setIsFullscreen(false); }}
+          <button
+            className="absolute top-4 right-4 z-[110] w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center cursor-pointer"
+            onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); }}
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsFullscreen(false); }}
           >
             <Minimize2 className="w-5 h-5" />
-          </Button>
+          </button>
 
           {/* Media */}
           {currentMedia.media_type === 'video' || isVideoUrl(currentMedia.media_url) ? (
