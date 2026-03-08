@@ -51,11 +51,14 @@ const softwareIcons = [
   { abbr: "Id", bg: "#2E0000", color: "#FF3366", className: "shape-36" },
 ];
 
+// 24 colored glow dots
+const glowDots = Array.from({ length: 24 }, (_, i) => `dot-${i + 1}`);
+
 interface FloatingShapesProps {
   className?: string;
 }
 
-// Software icons scattered across the full page with depth layers
+// Software icons + glow dots scattered across the full page with depth layers
 const FloatingShapes = memo(({ className = "z-[1]" }: FloatingShapesProps) => {
   return (
     <div className={`absolute inset-0 w-full h-full overflow-visible pointer-events-none ${className}`} aria-hidden="true">
@@ -77,6 +80,10 @@ const FloatingShapes = memo(({ className = "z-[1]" }: FloatingShapesProps) => {
             {app.abbr}
           </span>
         </div>
+      ))}
+      {/* Colored glow dots */}
+      {glowDots.map((dotClass) => (
+        <div key={dotClass} className={`glow-dot ${dotClass}`} />
       ))}
     </div>
   );
