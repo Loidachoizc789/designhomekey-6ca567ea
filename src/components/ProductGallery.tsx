@@ -37,10 +37,19 @@ function isVideoUrl(url: string) {
   );
 }
 
-function getMediaType(url: string, type?: string): 'youtube' | 'video' | 'image' {
+function getMediaType(url: string, type?: string): 'youtube' | 'video' | 'image' | 'comparison' {
+  if (type === 'comparison') return 'comparison';
   if (type === 'youtube' || isYouTubeUrl(url)) return 'youtube';
   if (type === 'video' || isVideoUrl(url)) return 'video';
   return 'image';
+}
+
+function parseComparison(url: string): { before: string; after: string } | null {
+  try {
+    const data = JSON.parse(url);
+    if (data.before && data.after) return data;
+  } catch {}
+  return null;
 }
 
 // Memoized gallery card for better performance
