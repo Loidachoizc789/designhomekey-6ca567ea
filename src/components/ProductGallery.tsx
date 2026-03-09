@@ -304,7 +304,16 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
                   <div className="w-full h-[40vh] sm:h-[50vh] flex items-center justify-center">
                     <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full" />
                   </div>
-                ) : getMediaType(currentMedia?.media_url || '', currentMedia?.media_type) === 'youtube' ? (
+                ) : getMediaType(currentMedia?.media_url || '', currentMedia?.media_type) === 'comparison' ? (() => {
+                  const comp = parseComparison(currentMedia?.media_url || '');
+                  return comp ? (
+                    <ImageComparisonSlider
+                      beforeImage={comp.before}
+                      afterImage={comp.after}
+                      className="w-full h-[50vh] sm:h-[65vh]"
+                    />
+                  ) : null;
+                })() : getMediaType(currentMedia?.media_url || '', currentMedia?.media_type) === 'youtube' ? (
                   <iframe
                     key={currentMedia?.media_url}
                     src={getYouTubeEmbedUrl(currentMedia?.media_url || '') || ''}
