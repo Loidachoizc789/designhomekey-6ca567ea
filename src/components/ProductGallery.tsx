@@ -1,6 +1,6 @@
 import { useState, memo, useRef, useCallback, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
-import { ChevronLeft, ChevronRight, Images, Play, Maximize2, Minimize2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Images, Play, Maximize2, Minimize2, SplitSquareHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { useProductMedia } from "@/hooks/useProductMedia";
 import OptimizedImage from "@/components/OptimizedImage";
+import ImageComparisonSlider from "@/components/ImageComparisonSlider";
 import { isYouTubeUrl, getYouTubeEmbedUrl, getYouTubeThumbnail } from "@/lib/youtube";
 
 interface GalleryItem {
