@@ -24,6 +24,9 @@ const ProductMediaManager = ({ productId }: ProductMediaManagerProps) => {
   const [media, setMedia] = useState<ProductMedia[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
+  const [comparisonBefore, setComparisonBefore] = useState<File | null>(null);
+  const [comparisonAfter, setComparisonAfter] = useState<File | null>(null);
+  const [comparisonUploading, setComparisonUploading] = useState(false);
 
   useEffect(() => {
     fetchMedia();
