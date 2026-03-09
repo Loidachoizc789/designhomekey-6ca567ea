@@ -366,7 +366,20 @@ const ProductMediaManager = ({ productId }: ProductMediaManagerProps) => {
                 key={item.id}
                 className="relative group aspect-square rounded-lg overflow-hidden border border-border bg-card"
               >
-                {item.media_type === "youtube" ? (
+                {item.media_type === "comparison" ? (() => {
+                  try {
+                    const data = JSON.parse(item.media_url);
+                    return (
+                      <ImageComparisonSlider
+                        beforeImage={data.before}
+                        afterImage={data.after}
+                        className="w-full h-full"
+                      />
+                    );
+                  } catch {
+                    return <div className="w-full h-full bg-muted flex items-center justify-center text-xs">Invalid</div>;
+                  }
+                })() : item.media_type === "youtube" ? (
                   <img
                     src={getYouTubeThumbnail(item.media_url) || ""}
                     alt={`YouTube ${index + 1}`}
