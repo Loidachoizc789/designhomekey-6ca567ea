@@ -465,10 +465,10 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
         </DialogContent>
       </Dialog>
 
-      {/* Fullscreen Overlay */}
-      {isFullscreen && currentMedia && (
+      {/* Fullscreen Overlay - rendered via portal to avoid dialog z-index conflicts */}
+      {isFullscreen && currentMedia && createPortal(
         <div 
-          className="fixed inset-0 z-[100] bg-black flex items-center justify-center"
+          className="fixed inset-0 z-[9999] bg-black flex items-center justify-center"
           onClick={(e) => e.stopPropagation()}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
