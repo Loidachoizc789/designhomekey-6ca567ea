@@ -1,6 +1,6 @@
 import { useState, memo, useRef, useCallback, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
-import { ChevronLeft, ChevronRight, Images, Play, Maximize2, Minimize2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Images, Play, Maximize2, Minimize2, SplitSquareHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { useProductMedia } from "@/hooks/useProductMedia";
 import OptimizedImage from "@/components/OptimizedImage";
+import ImageComparisonSlider from "@/components/ImageComparisonSlider";
 import { isYouTubeUrl, getYouTubeEmbedUrl, getYouTubeThumbnail } from "@/lib/youtube";
 
 interface GalleryItem {
@@ -36,10 +37,19 @@ function isVideoUrl(url: string) {
   );
 }
 
-function getMediaType(url: string, type?: string): 'youtube' | 'video' | 'image' {
+function getMediaType(url: string, type?: string): 'youtube' | 'video' | 'image' | 'comparison' {
+  if (type === 'comparison') return 'comparison';
   if (type === 'youtube' || isYouTubeUrl(url)) return 'youtube';
   if (type === 'video' || isVideoUrl(url)) return 'video';
   return 'image';
+}
+
+function parseComparison(url: string): { before: string; after: string } | null {
+  try {
+    const data = JSON.parse(url);
+    if (data.before && data.after) return data;
+  } catch {}
+  return null;
 }
 
 // Memoized gallery card for better performance
@@ -294,7 +304,16 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
                   <div className="w-full h-[40vh] sm:h-[50vh] flex items-center justify-center">
                     <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full" />
                   </div>
-                ) : getMediaType(currentMedia?.media_url || '', currentMedia?.media_type) === 'youtube' ? (
+                ) : getMediaType(currentMedia?.media_url || '', currentMedia?.media_type) === 'comparison' ? (() => {
+                  const comp = parseComparison(currentMedia?.media_url || '');
+                  return comp ? (
+                    <ImageComparisonSlider
+                      beforeImage={comp.before}
+                      afterImage={comp.after}
+                      className="w-full h-[50vh] sm:h-[65vh]"
+                    />
+                  ) : null;
+                })() : getMediaType(currentMedia?.media_url || '', currentMedia?.media_type) === 'youtube' ? (
                   <iframe
                     key={currentMedia?.media_url}
                     src={getYouTubeEmbedUrl(currentMedia?.media_url || '') || ''}
@@ -391,25 +410,29 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
                             : 'border-border/50 hover:border-primary/50'
                         }`}
                       >
-                        {getMediaType(m.media_url, m.media_type) === 'youtube' ? (
-                          <img 
-                            src={getYouTubeThumbnail(m.media_url, 'default') || ''} 
-                            alt="" 
-                            className="w-full h-full object-cover"
-                            loading="lazy"
-                          />
-                        ) : getMediaType(m.media_url, m.media_type) === 'video' ? (
-                          <div className="w-full h-full bg-card flex items-center justify-center">
-                            <Play className="w-3.5 h-3.5 text-muted-foreground" />
-                          </div>
-                        ) : (
-                          <img 
-                            src={m.media_url} 
-                            alt="" 
-                            className="w-full h-full object-cover"
-                            loading="lazy"
-                          />
-                        )}
+                      {getMediaType(m.media_url, m.media_type) === 'comparison' ? (
+                        <div className="w-full h-full bg-card flex items-center justify-center">
+                          <SplitSquareHorizontal className="w-3.5 h-3.5 text-muted-foreground" />
+                        </div>
+                      ) : getMediaType(m.media_url, m.media_type) === 'youtube' ? (
+                        <img 
+                          src={getYouTubeThumbnail(m.media_url, 'default') || ''} 
+                          alt="" 
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      ) : getMediaType(m.media_url, m.media_type) === 'video' ? (
+                        <div className="w-full h-full bg-card flex items-center justify-center">
+                          <Play className="w-3.5 h-3.5 text-muted-foreground" />
+                        </div>
+                      ) : (
+                        <img 
+                          src={m.media_url} 
+                          alt="" 
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      )}
                       </button>
                     ))}
                   </div>
@@ -468,7 +491,16 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
           </button>
 
           {/* Media */}
-          {getMediaType(currentMedia.media_url, currentMedia.media_type) === 'youtube' ? (
+          {getMediaType(currentMedia.media_url, currentMedia.media_type) === 'comparison' ? (() => {
+            const comp = parseComparison(currentMedia.media_url);
+            return comp ? (
+              <ImageComparisonSlider
+                beforeImage={comp.before}
+                afterImage={comp.after}
+                className="w-[90vw] h-[80vh]"
+              />
+            ) : null;
+          })() : getMediaType(currentMedia.media_url, currentMedia.media_type) === 'youtube' ? (
             <iframe
               src={getYouTubeEmbedUrl(currentMedia.media_url) || ''}
               className="w-[90vw] h-[80vh]"
@@ -540,7 +572,11 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
                         : 'border-white/20 opacity-60 hover:opacity-100'
                     }`}
                   >
-                    {getMediaType(m.media_url, m.media_type) === 'youtube' ? (
+                    {getMediaType(m.media_url, m.media_type) === 'comparison' ? (
+                      <div className="w-full h-full bg-white/10 flex items-center justify-center">
+                        <SplitSquareHorizontal className="w-4 h-4 text-white" />
+                      </div>
+                    ) : getMediaType(m.media_url, m.media_type) === 'youtube' ? (
                       <img 
                         src={getYouTubeThumbnail(m.media_url, 'default') || ''} 
                         alt="" 
