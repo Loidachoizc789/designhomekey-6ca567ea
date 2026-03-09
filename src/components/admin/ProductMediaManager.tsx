@@ -406,7 +406,11 @@ const ProductMediaManager = ({ productId }: ProductMediaManagerProps) => {
                 
                 {/* Type indicator */}
                 <div className="absolute top-1 left-1">
-                  {item.media_type === "youtube" ? (
+                  {item.media_type === "comparison" ? (
+                    <div className="w-6 h-6 rounded bg-accent/80 flex items-center justify-center">
+                      <SplitSquareHorizontal className="w-3 h-3 text-accent-foreground" />
+                    </div>
+                  ) : item.media_type === "youtube" ? (
                     <div className="w-6 h-6 rounded bg-destructive/80 flex items-center justify-center">
                       <Video className="w-3 h-3 text-destructive-foreground" />
                     </div>
