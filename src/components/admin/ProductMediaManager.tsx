@@ -272,6 +272,80 @@ const ProductMediaManager = ({ productId }: ProductMediaManagerProps) => {
             Thêm URL
           </Button>
         </div>
+
+        {/* Comparison Upload */}
+        <div className="mt-4 p-4 border border-border rounded-lg bg-muted/30">
+          <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
+            <SplitSquareHorizontal className="w-4 h-4 text-primary" />
+            Image Comparison Slider (Before/After)
+          </h4>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="text-xs text-muted-foreground mb-1 block">Ảnh Before</label>
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setComparisonBefore(e.target.files?.[0] || null)}
+                className="text-xs"
+              />
+              {comparisonBefore && (
+                <p className="text-xs text-muted-foreground mt-1 truncate">{comparisonBefore.name}</p>
+              )}
+            </div>
+            <div>
+              <label className="text-xs text-muted-foreground mb-1 block">Ảnh After</label>
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setComparisonAfter(e.target.files?.[0] || null)}
+                className="text-xs"
+              />
+              {comparisonAfter && (
+                <p className="text-xs text-muted-foreground mt-1 truncate">{comparisonAfter.name}</p>
+              )}
+            </div>
+          </div>
+          <Button
+            className="mt-3 w-full"
+            disabled={!comparisonBefore || !comparisonAfter || comparisonUploading}
+            onClick={async () => {
+              if (!comparisonBefore || !comparisonAfter) return;
+              setComparisonUploading(true);
+              try {
+                const urls: string[] = [];
+                for (const file of [comparisonBefore, comparisonAfter]) {
+                  const compressed = await compressImage(file);
+                  const ext = compressed.file.name.split(".").pop()?.toLowerCase();
+                  const fileName = `products/${productId}/${Date.now()}_comp_${urls.length}.${ext}`;
+                  const { error: upErr } = await supabase.storage.from("category-images").upload(fileName, compressed.file);
+                  if (upErr) throw upErr;
+                  const { data: urlData } = supabase.storage.from("category-images").getPublicUrl(fileName);
+                  urls.push(urlData.publicUrl);
+                }
+                const comparisonData = JSON.stringify({ before: urls[0], after: urls[1] });
+                const { error: insertErr } = await supabase.from("product_media").insert({
+                  product_id: productId,
+                  media_url: comparisonData,
+                  media_type: "comparison",
+                  display_order: media.length,
+                });
+                if (insertErr) throw insertErr;
+                toast({ title: "Đã thêm Comparison Slider" });
+                setComparisonBefore(null);
+                setComparisonAfter(null);
+                fetchMedia();
+              } catch (err) {
+                console.error("Comparison upload error:", err);
+                toast({ title: "Lỗi", description: "Không thể tạo comparison", variant: "destructive" });
+              } finally {
+                setComparisonUploading(false);
+              }
+            }}
+          >
+            {comparisonUploading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <SplitSquareHorizontal className="w-4 h-4 mr-2" />}
+            Tạo Comparison Slider
+          </Button>
+        </div>
       </div>
 
       {/* Media Grid */}
