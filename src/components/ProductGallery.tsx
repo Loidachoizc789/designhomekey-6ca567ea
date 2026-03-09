@@ -491,7 +491,16 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
           </button>
 
           {/* Media */}
-          {getMediaType(currentMedia.media_url, currentMedia.media_type) === 'youtube' ? (
+          {getMediaType(currentMedia.media_url, currentMedia.media_type) === 'comparison' ? (() => {
+            const comp = parseComparison(currentMedia.media_url);
+            return comp ? (
+              <ImageComparisonSlider
+                beforeImage={comp.before}
+                afterImage={comp.after}
+                className="w-[90vw] h-[80vh]"
+              />
+            ) : null;
+          })() : getMediaType(currentMedia.media_url, currentMedia.media_type) === 'youtube' ? (
             <iframe
               src={getYouTubeEmbedUrl(currentMedia.media_url) || ''}
               className="w-[90vw] h-[80vh]"
