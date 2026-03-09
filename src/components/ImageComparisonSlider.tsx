@@ -17,7 +17,22 @@ const ImageComparisonSlider = memo(({
 }: ImageComparisonSliderProps) => {
   const [position, setPosition] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
+  const [containerWidth, setContainerWidth] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Track container width with ResizeObserver
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        setContainerWidth(entry.contentRect.width);
+      }
+    });
+    ro.observe(el);
+    setContainerWidth(el.offsetWidth);
+    return () => ro.disconnect();
+  }, []);
 
   const getPositionFromEvent = useCallback((clientX: number) => {
     if (!containerRef.current) return 50;
@@ -90,8 +105,8 @@ const ImageComparisonSlider = memo(({
         <img
           src={beforeImage}
           alt={beforeLabel}
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{ width: containerRef.current ? `${containerRef.current.offsetWidth}px` : '100%', maxWidth: 'none' }}
+          className="absolute top-0 left-0 h-full object-cover"
+          style={{ width: containerWidth > 0 ? `${containerWidth}px` : '100vw', maxWidth: 'none' }}
           draggable={false}
         />
       </div>
