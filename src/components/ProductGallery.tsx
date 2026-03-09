@@ -595,7 +595,8 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
               </div>
             </div>
           )}
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
