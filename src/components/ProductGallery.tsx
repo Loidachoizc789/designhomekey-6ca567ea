@@ -250,6 +250,10 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
   }, [handleMediaNext, handleMediaPrevious]);
 
   const currentMedia = uniqueMedia[mediaIndex];
+  const currentMediaType = getMediaType(currentMedia?.media_url || '', currentMedia?.media_type);
+  const currentComparison = currentMediaType === 'comparison'
+    ? parseComparison(currentMedia?.media_url || '')
+    : null;
 
   return (
     <>
