@@ -250,6 +250,10 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
   }, [handleMediaNext, handleMediaPrevious]);
 
   const currentMedia = uniqueMedia[mediaIndex];
+  const currentMediaType = getMediaType(currentMedia?.media_url || '', currentMedia?.media_type);
+  const currentComparison = currentMediaType === 'comparison'
+    ? parseComparison(currentMedia?.media_url || '')
+    : null;
 
   return (
     <>
@@ -298,23 +302,22 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
               <div 
                 className="relative w-full overflow-hidden rounded-t-lg bg-background flex items-center justify-center"
                 style={{ minHeight: '300px' }}
-                onTouchStart={handleTouchStart}
-                onTouchEnd={handleTouchEnd}
+                onTouchStart={currentMediaType === 'comparison' ? undefined : handleTouchStart}
+                onTouchEnd={currentMediaType === 'comparison' ? undefined : handleTouchEnd}
               >
                 {mediaLoading ? (
                   <div className="w-full h-[40vh] sm:h-[50vh] flex items-center justify-center">
                     <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full" />
                   </div>
-                ) : getMediaType(currentMedia?.media_url || '', currentMedia?.media_type) === 'comparison' ? (() => {
-                  const comp = parseComparison(currentMedia?.media_url || '');
-                  return comp ? (
+                ) : currentMediaType === 'comparison' ? (
+                  currentComparison ? (
                     <ImageComparisonSlider
-                      beforeImage={comp.before}
-                      afterImage={comp.after}
+                      beforeImage={currentComparison.before}
+                      afterImage={currentComparison.after}
                       className="w-full h-[50vh] sm:h-[65vh]"
                     />
-                  ) : null;
-                })() : getMediaType(currentMedia?.media_url || '', currentMedia?.media_type) === 'youtube' ? (
+                  ) : null
+                ) : currentMediaType === 'youtube' ? (
                   <iframe
                     key={currentMedia?.media_url}
                     src={getYouTubeEmbedUrl(currentMedia?.media_url || '') || ''}
@@ -323,7 +326,7 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
                     allowFullScreen
                     title="YouTube video"
                   />
-                ) : getMediaType(currentMedia?.media_url || '', currentMedia?.media_type) === 'video' ? (
+                ) : currentMediaType === 'video' ? (
                   <video
                     key={currentMedia?.media_url}
                     src={currentMedia?.media_url}
@@ -470,8 +473,8 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
         <div 
           className="fixed inset-0 z-[9999] bg-black flex items-center justify-center"
           onClick={(e) => e.stopPropagation()}
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
+          onTouchStart={currentMediaType === 'comparison' ? undefined : handleTouchStart}
+          onTouchEnd={currentMediaType === 'comparison' ? undefined : handleTouchEnd}
           onPointerDown={(e) => e.stopPropagation()}
         >
           {/* Close / Minimize button */}
@@ -492,16 +495,17 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
           </button>
 
           {/* Media */}
-          {getMediaType(currentMedia.media_url, currentMedia.media_type) === 'comparison' ? (() => {
-            const comp = parseComparison(currentMedia.media_url);
-            return comp ? (
-              <ImageComparisonSlider
-                beforeImage={comp.before}
-                afterImage={comp.after}
-                className="w-[90vw] h-[80vh]"
-              />
-            ) : null;
-          })() : getMediaType(currentMedia.media_url, currentMedia.media_type) === 'youtube' ? (
+          {currentMediaType === 'comparison' ? (
+            currentComparison ? (
+              <div className="w-[92vw] h-[86vh] max-w-[1800px]">
+                <ImageComparisonSlider
+                  beforeImage={currentComparison.before}
+                  afterImage={currentComparison.after}
+                  className="w-full h-full"
+                />
+              </div>
+            ) : null
+          ) : currentMediaType === 'youtube' ? (
             <iframe
               src={getYouTubeEmbedUrl(currentMedia.media_url) || ''}
               className="w-[90vw] h-[80vh]"
@@ -510,7 +514,7 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
               title="YouTube video"
               onClick={(e: any) => e.stopPropagation()}
             />
-          ) : getMediaType(currentMedia.media_url, currentMedia.media_type) === 'video' ? (
+          ) : currentMediaType === 'video' ? (
             <video
               src={currentMedia.media_url}
               className="max-w-full max-h-full object-contain"

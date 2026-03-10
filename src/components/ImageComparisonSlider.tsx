@@ -17,22 +17,7 @@ const ImageComparisonSlider = memo(({
 }: ImageComparisonSliderProps) => {
   const [position, setPosition] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
-  const [containerWidth, setContainerWidth] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
-
-  // Track container width with ResizeObserver
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    const ro = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        setContainerWidth(entry.contentRect.width);
-      }
-    });
-    ro.observe(el);
-    setContainerWidth(el.offsetWidth);
-    return () => ro.disconnect();
-  }, []);
 
   const getPositionFromEvent = useCallback((clientX: number) => {
     if (!containerRef.current) return 50;
@@ -46,93 +31,77 @@ const ImageComparisonSlider = memo(({
     setPosition(getPositionFromEvent(clientX));
   }, [isDragging, getPositionFromEvent]);
 
-  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+  const handlePointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     e.preventDefault();
+    containerRef.current?.setPointerCapture?.(e.pointerId);
     setIsDragging(true);
     setPosition(getPositionFromEvent(e.clientX));
-  }, [getPositionFromEvent]);
-
-  const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    setIsDragging(true);
-    setPosition(getPositionFromEvent(e.touches[0].clientX));
   }, [getPositionFromEvent]);
 
   useEffect(() => {
     if (!isDragging) return;
 
-    const onMouseMove = (e: MouseEvent) => {
+    const onPointerMove = (e: PointerEvent) => {
       e.preventDefault();
       handleMove(e.clientX);
     };
-    const onTouchMove = (e: TouchEvent) => {
-      handleMove(e.touches[0].clientX);
-    };
-    const onEnd = () => setIsDragging(false);
 
-    window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("mouseup", onEnd);
-    window.addEventListener("touchmove", onTouchMove, { passive: true });
-    window.addEventListener("touchend", onEnd);
+    const onPointerEnd = () => setIsDragging(false);
+
+    window.addEventListener("pointermove", onPointerMove);
+    window.addEventListener("pointerup", onPointerEnd);
+    window.addEventListener("pointercancel", onPointerEnd);
 
     return () => {
-      window.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("mouseup", onEnd);
-      window.removeEventListener("touchmove", onTouchMove);
-      window.removeEventListener("touchend", onEnd);
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerup", onPointerEnd);
+      window.removeEventListener("pointercancel", onPointerEnd);
     };
   }, [isDragging, handleMove]);
 
   return (
     <div
       ref={containerRef}
-      className={`relative overflow-hidden select-none cursor-col-resize ${className}`}
-      onMouseDown={handleMouseDown}
-      onTouchStart={handleTouchStart}
+      className={`relative h-full w-full overflow-hidden select-none cursor-col-resize bg-muted ${className}`}
+      onPointerDown={handlePointerDown}
+      style={{ touchAction: "none" }}
+      role="img"
+      aria-label={`${beforeLabel} and ${afterLabel} image comparison`}
     >
-      {/* After image (full width background) */}
       <img
         src={afterImage}
         alt={afterLabel}
-        className="w-full h-full object-cover block"
+        className="absolute inset-0 h-full w-full object-contain pointer-events-none"
         draggable={false}
       />
 
-      {/* Before image (clipped) */}
-      <div
-        className="absolute inset-0 overflow-hidden"
-        style={{ width: `${position}%` }}
-      >
-        <img
-          src={beforeImage}
-          alt={beforeLabel}
-          className="absolute top-0 left-0 h-full object-cover"
-          style={{ width: containerWidth > 0 ? `${containerWidth}px` : '100vw', maxWidth: 'none' }}
-          draggable={false}
-        />
-      </div>
+      <img
+        src={beforeImage}
+        alt={beforeLabel}
+        className="absolute inset-0 h-full w-full object-contain pointer-events-none"
+        style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
+        draggable={false}
+      />
 
-      {/* Slider line */}
       <div
-        className="absolute top-0 bottom-0 w-0.5 bg-white shadow-lg z-10"
-        style={{ left: `${position}%`, transform: 'translateX(-50%)' }}
+        className="absolute inset-y-0 z-10 w-px bg-foreground/80 shadow-lg"
+        style={{ left: `${position}%`, transform: "translateX(-50%)" }}
       >
-        {/* Handle */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm shadow-lg flex items-center justify-center border-2 border-white">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="text-foreground">
+        <div className="absolute left-1/2 top-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-background/90 text-foreground shadow-lg backdrop-blur-sm">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
             <path d="M7 4L3 10L7 16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             <path d="M13 4L17 10L13 16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </div>
       </div>
 
-      {/* Labels */}
-      <div className="absolute top-3 left-3 z-10">
-        <span className="px-2 py-1 text-xs font-medium bg-black/60 backdrop-blur-sm text-white rounded">
+      <div className="absolute left-3 top-3 z-10">
+        <span className="rounded border border-border/60 bg-background/80 px-2 py-1 text-xs font-medium text-foreground backdrop-blur-sm">
           {beforeLabel}
         </span>
       </div>
-      <div className="absolute top-3 right-3 z-10">
-        <span className="px-2 py-1 text-xs font-medium bg-black/60 backdrop-blur-sm text-white rounded">
+      <div className="absolute right-3 top-3 z-10">
+        <span className="rounded border border-border/60 bg-background/80 px-2 py-1 text-xs font-medium text-foreground backdrop-blur-sm">
           {afterLabel}
         </span>
       </div>
