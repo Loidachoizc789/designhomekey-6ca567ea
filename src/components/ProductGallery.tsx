@@ -473,8 +473,8 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
         <div 
           className="fixed inset-0 z-[9999] bg-black flex items-center justify-center"
           onClick={(e) => e.stopPropagation()}
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
+          onTouchStart={currentMediaType === 'comparison' ? undefined : handleTouchStart}
+          onTouchEnd={currentMediaType === 'comparison' ? undefined : handleTouchEnd}
           onPointerDown={(e) => e.stopPropagation()}
         >
           {/* Close / Minimize button */}
@@ -495,16 +495,17 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
           </button>
 
           {/* Media */}
-          {getMediaType(currentMedia.media_url, currentMedia.media_type) === 'comparison' ? (() => {
-            const comp = parseComparison(currentMedia.media_url);
-            return comp ? (
-              <ImageComparisonSlider
-                beforeImage={comp.before}
-                afterImage={comp.after}
-                className="w-[90vw] h-[80vh]"
-              />
-            ) : null;
-          })() : getMediaType(currentMedia.media_url, currentMedia.media_type) === 'youtube' ? (
+          {currentMediaType === 'comparison' ? (
+            currentComparison ? (
+              <div className="w-[92vw] h-[86vh] max-w-[1800px]">
+                <ImageComparisonSlider
+                  beforeImage={currentComparison.before}
+                  afterImage={currentComparison.after}
+                  className="w-full h-full"
+                />
+              </div>
+            ) : null
+          ) : currentMediaType === 'youtube' ? (
             <iframe
               src={getYouTubeEmbedUrl(currentMedia.media_url) || ''}
               className="w-[90vw] h-[80vh]"
@@ -513,7 +514,7 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
               title="YouTube video"
               onClick={(e: any) => e.stopPropagation()}
             />
-          ) : getMediaType(currentMedia.media_url, currentMedia.media_type) === 'video' ? (
+          ) : currentMediaType === 'video' ? (
             <video
               src={currentMedia.media_url}
               className="max-w-full max-h-full object-contain"
