@@ -92,7 +92,7 @@ const specs = [
 
 const Studio3D = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const currentTab = searchParams.get("tab") === "event" ? "event" : "virtual";
+  const currentTab = searchParams.get("tab") === "virtual" ? "virtual" : "event";
 
   const { images: virtualImages, loading: virtualLoading } = useCategoryImages("3d-virtual");
   const { images: eventImages, loading: eventLoading } = useCategoryImages("3d-event");
