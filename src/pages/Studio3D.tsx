@@ -92,7 +92,7 @@ const specs = [
 
 const Studio3D = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const currentTab = searchParams.get("tab") === "event" ? "event" : "virtual";
+  const currentTab = searchParams.get("tab") === "virtual" ? "virtual" : "event";
 
   const { images: virtualImages, loading: virtualLoading } = useCategoryImages("3d-virtual");
   const { images: eventImages, loading: eventLoading } = useCategoryImages("3d-event");
@@ -246,13 +246,13 @@ const Studio3D = () => {
 
             <Tabs value={currentTab} onValueChange={handleTabChange} className="w-full">
               <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-10">
-                <TabsTrigger value="virtual" className="flex items-center gap-2 text-base py-3">
-                  <Video className="w-4 h-4" />
-                  3D Virtual
-                </TabsTrigger>
                 <TabsTrigger value="event" className="flex items-center gap-2 text-base py-3">
                   <Layers className="w-4 h-4" />
                   3D Event
+                </TabsTrigger>
+                <TabsTrigger value="virtual" className="flex items-center gap-2 text-base py-3">
+                  <Video className="w-4 h-4" />
+                  3D Virtual
                 </TabsTrigger>
               </TabsList>
 
