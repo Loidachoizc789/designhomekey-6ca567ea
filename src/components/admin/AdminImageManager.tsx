@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
-import { Loader2, Plus, Trash2, Edit2, Upload, X, Video, Image as ImageIcon, Images } from "lucide-react";
+import { Loader2, Plus, Trash2, Edit2, Upload, X, Video, Image as ImageIcon, Images, ChevronUp, ChevronDown, CheckSquare, Square } from "lucide-react";
 import { compressImage, formatBytes } from "@/lib/imageCompression";
 import {
   Dialog,
@@ -37,6 +37,8 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
   const [mediaDialogOpen, setMediaDialogOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<CategoryImage | null>(null);
   const [editingImage, setEditingImage] = useState<CategoryImage | null>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [selectMode, setSelectMode] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -60,11 +62,7 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
       setImages(data || []);
     } catch (err) {
       console.error("Error fetching images:", err);
-      toast({
-        title: "Lỗi",
-        description: "Không thể tải danh sách ảnh",
-        variant: "destructive",
-      });
+      toast({ title: "Lỗi", description: "Không thể tải danh sách ảnh", variant: "destructive" });
     } finally {
       setLoading(false);
     }
@@ -75,11 +73,7 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
     if (!file) return;
 
     if (file.size > 500 * 1024 * 1024) {
-      toast({
-        title: "Lỗi",
-        description: "File quá lớn. Tối đa 500MB.",
-        variant: "destructive",
-      });
+      toast({ title: "Lỗi", description: "File quá lớn. Tối đa 500MB.", variant: "destructive" });
       return;
     }
 
@@ -97,28 +91,15 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
         });
       }
 
-      const { error: uploadError } = await supabase.storage
-        .from("category-images")
-        .upload(fileName, uploadFile);
-
+      const { error: uploadError } = await supabase.storage.from("category-images").upload(fileName, uploadFile);
       if (uploadError) throw uploadError;
 
-      const { data: urlData } = supabase.storage
-        .from("category-images")
-        .getPublicUrl(fileName);
-
+      const { data: urlData } = supabase.storage.from("category-images").getPublicUrl(fileName);
       setFormData({ ...formData, image_url: urlData.publicUrl });
-      toast({
-        title: "Thành công",
-        description: "Đã upload ảnh",
-      });
+      toast({ title: "Thành công", description: "Đã upload ảnh" });
     } catch (err) {
       console.error("Upload error:", err);
-      toast({
-        title: "Lỗi upload",
-        description: "Không thể upload ảnh",
-        variant: "destructive",
-      });
+      toast({ title: "Lỗi upload", description: "Không thể upload ảnh", variant: "destructive" });
     } finally {
       setUploading(false);
     }
@@ -126,38 +107,23 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (!formData.title || !formData.image_url) {
-      toast({
-        title: "Lỗi",
-        description: "Vui lòng điền tiêu đề và upload ảnh",
-        variant: "destructive",
-      });
+      toast({ title: "Lỗi", description: "Vui lòng điền tiêu đề và upload ảnh", variant: "destructive" });
       return;
     }
 
     try {
       if (editingImage) {
-        const { error } = await supabase
-          .from("category_images")
-          .update({
-            title: formData.title,
-            description: formData.description || null,
-            image_url: formData.image_url,
-          })
-          .eq("id", editingImage.id);
-
+        const { error } = await supabase.from("category_images").update({
+          title: formData.title, description: formData.description || null, image_url: formData.image_url,
+        }).eq("id", editingImage.id);
         if (error) throw error;
         toast({ title: "Đã cập nhật ảnh" });
       } else {
         const { error } = await supabase.from("category_images").insert({
-          title: formData.title,
-          description: formData.description || null,
-          image_url: formData.image_url,
-          category_slug: categorySlug,
-          display_order: images.length,
+          title: formData.title, description: formData.description || null, image_url: formData.image_url,
+          category_slug: categorySlug, display_order: images.length,
         });
-
         if (error) throw error;
         toast({ title: "Đã thêm ảnh mới" });
       }
@@ -168,43 +134,75 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
       fetchImages();
     } catch (err) {
       console.error("Save error:", err);
-      toast({
-        title: "Lỗi",
-        description: "Không thể lưu ảnh",
-        variant: "destructive",
-      });
+      toast({ title: "Lỗi", description: "Không thể lưu ảnh", variant: "destructive" });
     }
   };
 
   const handleEdit = (image: CategoryImage) => {
     setEditingImage(image);
-    setFormData({
-      title: image.title,
-      description: image.description || "",
-      image_url: image.image_url,
-    });
+    setFormData({ title: image.title, description: image.description || "", image_url: image.image_url });
     setDialogOpen(true);
   };
 
   const handleDelete = async (id: string) => {
     if (!confirm("Bạn có chắc muốn xóa ảnh này?")) return;
-
     try {
-      const { error } = await supabase
-        .from("category_images")
-        .delete()
-        .eq("id", id);
-
+      const { error } = await supabase.from("category_images").delete().eq("id", id);
       if (error) throw error;
       toast({ title: "Đã xóa ảnh" });
       fetchImages();
     } catch (err) {
       console.error("Delete error:", err);
-      toast({
-        title: "Lỗi",
-        description: "Không thể xóa ảnh",
-        variant: "destructive",
-      });
+      toast({ title: "Lỗi", description: "Không thể xóa ảnh", variant: "destructive" });
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedIds.size === 0) return;
+    if (!confirm(`Xóa ${selectedIds.size} sản phẩm đã chọn?`)) return;
+    try {
+      const { error } = await supabase.from("category_images").delete().in("id", Array.from(selectedIds));
+      if (error) throw error;
+      toast({ title: `Đã xóa ${selectedIds.size} sản phẩm` });
+      setSelectedIds(new Set());
+      setSelectMode(false);
+      fetchImages();
+    } catch (err) {
+      console.error("Bulk delete error:", err);
+      toast({ title: "Lỗi", description: "Không thể xóa", variant: "destructive" });
+    }
+  };
+
+  const toggleSelect = (id: string) => {
+    const next = new Set(selectedIds);
+    if (next.has(id)) next.delete(id); else next.add(id);
+    setSelectedIds(next);
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedIds.size === images.length) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(images.map(img => img.id)));
+    }
+  };
+
+  const handleMove = async (index: number, direction: "up" | "down") => {
+    const targetIndex = direction === "up" ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= images.length) return;
+
+    const current = images[index];
+    const target = images[targetIndex];
+
+    try {
+      await Promise.all([
+        supabase.from("category_images").update({ display_order: target.display_order }).eq("id", current.id),
+        supabase.from("category_images").update({ display_order: current.display_order }).eq("id", target.id),
+      ]);
+      fetchImages();
+    } catch (err) {
+      console.error("Move error:", err);
+      toast({ title: "Lỗi", description: "Không thể di chuyển", variant: "destructive" });
     }
   };
 
@@ -230,129 +228,94 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-2">
         <h2 className="font-display text-xl font-semibold">
           Ảnh danh mục: <span className="text-primary">{categorySlug}</span>
         </h2>
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogTrigger asChild>
-            <Button onClick={openAddDialog}>
-              <Plus className="w-4 h-4 mr-2" />
-              Thêm sản phẩm
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-lg">
-            <DialogHeader>
-              <DialogTitle>
-                {editingImage ? "Chỉnh sửa sản phẩm" : "Thêm sản phẩm mới"}
-              </DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label>Tiêu đề *</Label>
-                <Input
-                  value={formData.title}
-                  onChange={(e) =>
-                    setFormData({ ...formData, title: e.target.value })
-                  }
-                  placeholder="Tên sản phẩm/ảnh"
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Mô tả</Label>
-                <Textarea
-                  value={formData.description}
-                  onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
-                  }
-                  placeholder="Mô tả ngắn về sản phẩm"
-                  rows={3}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Ảnh đại diện *</Label>
-                {formData.image_url ? (
-                  <div className="relative">
-                    {formData.image_url.match(/\.(mp4|webm|mov)$/i) ? (
-                      <div className="w-full h-48 bg-card flex items-center justify-center rounded-lg">
-                        <Video className="w-12 h-12 text-muted-foreground" />
-                      </div>
-                    ) : (
-                      <img
-                        src={formData.image_url}
-                        alt="Preview"
-                        className="w-full h-48 object-cover rounded-lg"
-                      />
-                    )}
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      size="sm"
-                      className="absolute top-2 right-2"
-                      onClick={() =>
-                        setFormData({ ...formData, image_url: "" })
-                      }
-                    >
-                      <X className="w-4 h-4" />
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="border-2 border-dashed border-border rounded-lg p-8 text-center">
-                    <Input
-                      type="file"
-                      accept="image/*,video/*"
-                      onChange={handleFileUpload}
-                      className="hidden"
-                      id="file-upload"
-                      disabled={uploading}
-                    />
-                    <label
-                      htmlFor="file-upload"
-                      className="cursor-pointer flex flex-col items-center gap-2"
-                    >
-                      {uploading ? (
-                        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <div className="flex items-center gap-2">
+          {images.length > 0 && (
+            <>
+              <Button
+                size="sm"
+                variant={selectMode ? "default" : "outline"}
+                onClick={() => {
+                  setSelectMode(!selectMode);
+                  if (selectMode) setSelectedIds(new Set());
+                }}
+              >
+                <CheckSquare className="w-4 h-4 mr-1" />
+                {selectMode ? "Hủy chọn" : "Chọn nhiều"}
+              </Button>
+              {selectMode && (
+                <>
+                  <Button size="sm" variant="outline" onClick={toggleSelectAll}>
+                    {selectedIds.size === images.length ? "Bỏ chọn tất cả" : "Chọn tất cả"}
+                  </Button>
+                  <Button size="sm" variant="destructive" onClick={handleBulkDelete} disabled={selectedIds.size === 0}>
+                    <Trash2 className="w-4 h-4 mr-1" />
+                    Xóa ({selectedIds.size})
+                  </Button>
+                </>
+              )}
+            </>
+          )}
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogTrigger asChild>
+              <Button onClick={openAddDialog}>
+                <Plus className="w-4 h-4 mr-2" />
+                Thêm sản phẩm
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-lg">
+              <DialogHeader>
+                <DialogTitle>{editingImage ? "Chỉnh sửa sản phẩm" : "Thêm sản phẩm mới"}</DialogTitle>
+              </DialogHeader>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Tiêu đề *</Label>
+                  <Input value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} placeholder="Tên sản phẩm/ảnh" required />
+                </div>
+                <div className="space-y-2">
+                  <Label>Mô tả</Label>
+                  <Textarea value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} placeholder="Mô tả ngắn về sản phẩm" rows={3} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Ảnh đại diện *</Label>
+                  {formData.image_url ? (
+                    <div className="relative">
+                      {formData.image_url.match(/\.(mp4|webm|mov)$/i) ? (
+                        <div className="w-full h-48 bg-card flex items-center justify-center rounded-lg"><Video className="w-12 h-12 text-muted-foreground" /></div>
                       ) : (
-                        <>
-                          <Upload className="w-8 h-8 text-muted-foreground" />
-                          <span className="text-sm text-muted-foreground">
-                            Click để upload (max 500MB)
-                          </span>
-                        </>
+                        <img src={formData.image_url} alt="Preview" className="w-full h-48 object-cover rounded-lg" />
                       )}
-                    </label>
-                  </div>
-                )}
-                <p className="text-xs text-muted-foreground">
-                  Hoặc dán URL ảnh trực tiếp:
-                </p>
-                <Input
-                  value={formData.image_url}
-                  onChange={(e) =>
-                    setFormData({ ...formData, image_url: e.target.value })
-                  }
-                  placeholder="https://..."
-                />
-              </div>
-
-              <div className="flex justify-end gap-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setDialogOpen(false)}
-                >
-                  Hủy
-                </Button>
-                <Button type="submit">
-                  {editingImage ? "Cập nhật" : "Thêm"}
-                </Button>
-              </div>
-            </form>
-          </DialogContent>
-        </Dialog>
+                      <Button type="button" variant="destructive" size="sm" className="absolute top-2 right-2" onClick={() => setFormData({ ...formData, image_url: "" })}>
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="border-2 border-dashed border-border rounded-lg p-8 text-center">
+                      <Input type="file" accept="image/*,video/*" onChange={handleFileUpload} className="hidden" id="file-upload" disabled={uploading} />
+                      <label htmlFor="file-upload" className="cursor-pointer flex flex-col items-center gap-2">
+                        {uploading ? <Loader2 className="w-8 h-8 animate-spin text-primary" /> : (
+                          <>
+                            <Upload className="w-8 h-8 text-muted-foreground" />
+                            <span className="text-sm text-muted-foreground">Click để upload (max 500MB)</span>
+                          </>
+                        )}
+                      </label>
+                    </div>
+                  )}
+                  <p className="text-xs text-muted-foreground">Hoặc dán URL ảnh trực tiếp:</p>
+                  <Input value={formData.image_url} onChange={(e) => setFormData({ ...formData, image_url: e.target.value })} placeholder="https://..." />
+                </div>
+                <div className="flex justify-end gap-2">
+                  <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Hủy</Button>
+                  <Button type="submit">{editingImage ? "Cập nhật" : "Thêm"}</Button>
+                </div>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
 
       {/* Images Grid */}
@@ -367,60 +330,69 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {images.map((image) => (
+          {images.map((image, index) => (
             <div
               key={image.id}
-              className="glass-card overflow-hidden group"
+              className={`glass-card overflow-hidden group transition-all ${
+                selectMode && selectedIds.has(image.id) ? "ring-2 ring-primary" : ""
+              }`}
+              onClick={selectMode ? () => toggleSelect(image.id) : undefined}
             >
               <div className="relative aspect-video">
-                {image.image_url.match(/\.(mp4|webm|mov)$/i) ? (
-                  <div className="w-full h-full bg-card flex items-center justify-center">
-                    <Video className="w-12 h-12 text-muted-foreground" />
+                {/* Select checkbox */}
+                {selectMode && (
+                  <div className="absolute top-2 left-2 z-10">
+                    <div className={`w-6 h-6 rounded flex items-center justify-center ${selectedIds.has(image.id) ? "bg-primary text-primary-foreground" : "bg-background/80 text-foreground"}`}>
+                      {selectedIds.has(image.id) ? <CheckSquare className="w-4 h-4" /> : <Square className="w-4 h-4" />}
+                    </div>
                   </div>
-                ) : (
-                  <img
-                    src={image.image_url}
-                    alt={image.title}
-                    className="w-full h-full object-cover"
-                  />
                 )}
-                <div className="absolute inset-0 bg-background/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                  <Button size="sm" variant="secondary" onClick={() => handleEdit(image)}>
-                    <Edit2 className="w-4 h-4" />
-                  </Button>
-                  <Button 
-                    size="sm" 
-                    variant="default"
-                    onClick={() => openMediaManager(image)}
-                  >
-                    <Images className="w-4 h-4" />
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="destructive"
-                    onClick={() => handleDelete(image.id)}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
+
+                {/* Order number */}
+                <div className="absolute top-2 right-2 z-10 w-6 h-6 rounded bg-background/80 flex items-center justify-center text-xs font-medium">
+                  {index + 1}
                 </div>
+
+                {image.image_url.match(/\.(mp4|webm|mov)$/i) ? (
+                  <div className="w-full h-full bg-card flex items-center justify-center"><Video className="w-12 h-12 text-muted-foreground" /></div>
+                ) : (
+                  <img src={image.image_url} alt={image.title} className="w-full h-full object-cover" />
+                )}
+
+                {!selectMode && (
+                  <div className="absolute inset-0 bg-background/80 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
+                    <div className="flex items-center gap-1">
+                      <Button size="sm" variant="secondary" onClick={() => handleMove(index, "up")} disabled={index === 0} title="Di chuyển lên">
+                        <ChevronUp className="w-4 h-4" />
+                      </Button>
+                      <Button size="sm" variant="secondary" onClick={() => handleMove(index, "down")} disabled={index === images.length - 1} title="Di chuyển xuống">
+                        <ChevronDown className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Button size="sm" variant="secondary" onClick={() => handleEdit(image)}>
+                        <Edit2 className="w-4 h-4" />
+                      </Button>
+                      <Button size="sm" variant="default" onClick={() => openMediaManager(image)}>
+                        <Images className="w-4 h-4" />
+                      </Button>
+                      <Button size="sm" variant="destructive" onClick={() => handleDelete(image.id)}>
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="p-3">
                 <div className="flex items-center justify-between">
                   <h3 className="font-medium text-sm truncate">{image.title}</h3>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="text-xs text-primary"
-                    onClick={() => openMediaManager(image)}
-                  >
+                  <Button variant="ghost" size="sm" className="text-xs text-primary" onClick={(e) => { e.stopPropagation(); openMediaManager(image); }}>
                     <Images className="w-3 h-3 mr-1" />
                     Media
                   </Button>
                 </div>
                 {image.description && (
-                  <p className="text-xs text-muted-foreground truncate mt-1">
-                    {image.description}
-                  </p>
+                  <p className="text-xs text-muted-foreground truncate mt-1">{image.description}</p>
                 )}
               </div>
             </div>
@@ -437,9 +409,7 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
               Quản lý Media: {selectedProduct?.title}
             </DialogTitle>
           </DialogHeader>
-          {selectedProduct && (
-            <ProductMediaManager productId={selectedProduct.id} />
-          )}
+          {selectedProduct && <ProductMediaManager productId={selectedProduct.id} />}
         </DialogContent>
       </Dialog>
     </div>
