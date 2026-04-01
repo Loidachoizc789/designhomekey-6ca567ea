@@ -145,6 +145,7 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [selectMode, setSelectMode] = useState(false);
   const [formData, setFormData] = useState({ title: "", description: "", image_url: "" });
+  const [activeDragId, setActiveDragId] = useState<string | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
