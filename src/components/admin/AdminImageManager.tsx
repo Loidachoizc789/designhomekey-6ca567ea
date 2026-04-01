@@ -64,8 +64,9 @@ const SortableImageItem = ({ image, index, selectMode, selectedIds, onToggleSele
 
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0.5 : 1,
+    transition: transition || 'transform 200ms ease',
+    opacity: isDragging ? 0.3 : 1,
+    scale: isDragging ? '0.95' : '1',
     zIndex: isDragging ? 50 : undefined,
   };
 
