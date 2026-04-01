@@ -383,7 +383,7 @@ const ProductMediaManager = ({ productId }: ProductMediaManagerProps) => {
             <p className="text-muted-foreground">Chưa có media nào</p>
           </div>
         ) : (
-          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
             <SortableContext items={media.map(m => m.id)} strategy={rectSortingStrategy}>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                 {media.map((item, index) => (
@@ -400,6 +400,23 @@ const ProductMediaManager = ({ productId }: ProductMediaManagerProps) => {
                 ))}
               </div>
             </SortableContext>
+            <DragOverlay dropAnimation={{ duration: 200, easing: 'ease' }}>
+              {activeDragId ? (() => {
+                const item = media.find(m => m.id === activeDragId);
+                if (!item) return null;
+                return (
+                  <div className="aspect-square rounded-lg overflow-hidden border-2 border-primary shadow-2xl shadow-primary/20 bg-card rotate-2 scale-105">
+                    {item.media_type === "video" || item.media_type === "youtube" ? (
+                      <div className="w-full h-full bg-card flex items-center justify-center"><Video className="w-12 h-12 text-muted-foreground" /></div>
+                    ) : item.media_type === "comparison" ? (
+                      <div className="w-full h-full bg-card flex items-center justify-center"><SplitSquareHorizontal className="w-12 h-12 text-muted-foreground" /></div>
+                    ) : (
+                      <img src={item.media_url} alt="Dragging" className="w-full h-full object-cover" />
+                    )}
+                  </div>
+                );
+              })() : null}
+            </DragOverlay>
           </DndContext>
         )}
       </div>
