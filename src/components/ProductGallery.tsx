@@ -103,6 +103,11 @@ const GalleryCard = memo(({
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           
+          {/* Watermark */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <img src={watermarkLogo} alt="" className="w-1/3 h-auto opacity-[0.15] blur-[1px] select-none" draggable={false} />
+          </div>
+          
           {/* Category Badge */}
           <div className="absolute top-3 left-3">
             <span className="px-3 py-1 text-xs font-medium bg-primary/90 backdrop-blur-sm rounded-full text-primary-foreground">
