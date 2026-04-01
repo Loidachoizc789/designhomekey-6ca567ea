@@ -1,4 +1,5 @@
 import { useState, memo, useRef, useCallback, useEffect, useMemo } from "react";
+import watermarkLogo from "@/assets/watermark-logo.png";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Images, Play, Maximize2, Minimize2, SplitSquareHorizontal } from "lucide-react";
@@ -101,6 +102,11 @@ const GalleryCard = memo(({
             />
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          
+          {/* Watermark */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <img src={watermarkLogo} alt="" className="w-1/3 h-auto opacity-[0.15] blur-[1px] select-none" draggable={false} />
+          </div>
           
           {/* Category Badge */}
           <div className="absolute top-3 left-3">
