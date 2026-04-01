@@ -342,12 +342,17 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
                     playsInline
                   />
                 ) : (
-                  <img
-                    key={currentMedia?.media_url}
-                    src={currentMedia?.media_url}
-                    alt={selectedItem.title}
-                    className="max-w-full max-h-[60vh] sm:max-h-[70vh] object-contain transition-opacity duration-150 mx-auto"
-                  />
+                  <div className="relative inline-flex items-center justify-center">
+                    <img
+                      key={currentMedia?.media_url}
+                      src={currentMedia?.media_url}
+                      alt={selectedItem.title}
+                      className="max-w-full max-h-[60vh] sm:max-h-[70vh] object-contain transition-opacity duration-150 mx-auto"
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                      <img src={watermarkLogo} alt="" className="w-1/4 h-auto opacity-[0.15] blur-[1px] select-none" draggable={false} />
+                    </div>
+                  </div>
                 )}
                 
                 {/* Media Navigation Arrows */}
