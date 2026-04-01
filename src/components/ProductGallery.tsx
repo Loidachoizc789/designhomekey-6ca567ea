@@ -1,4 +1,5 @@
 import { useState, memo, useRef, useCallback, useEffect, useMemo } from "react";
+import watermarkLogo from "@/assets/watermark-logo.png";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Images, Play, Maximize2, Minimize2, SplitSquareHorizontal } from "lucide-react";
