@@ -23,6 +23,8 @@ import {
   useSensor,
   useSensors,
   DragEndEvent,
+  DragStartEvent,
+  DragOverlay,
 } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -62,8 +64,9 @@ const SortableImageItem = ({ image, index, selectMode, selectedIds, onToggleSele
 
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0.5 : 1,
+    transition: transition || 'transform 200ms ease',
+    opacity: isDragging ? 0.3 : 1,
+    scale: isDragging ? '0.95' : '1',
     zIndex: isDragging ? 50 : undefined,
   };
 
@@ -142,6 +145,7 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [selectMode, setSelectMode] = useState(false);
   const [formData, setFormData] = useState({ title: "", description: "", image_url: "" });
+  const [activeDragId, setActiveDragId] = useState<string | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -162,7 +166,12 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
     } finally { setLoading(false); }
   };
 
+  const handleDragStart = (event: DragStartEvent) => {
+    setActiveDragId(event.active.id as string);
+  };
+
   const handleDragEnd = async (event: DragEndEvent) => {
+    setActiveDragId(null);
     const { active, over } = event;
     if (!over || active.id === over.id) return;
 
@@ -379,7 +388,7 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
           <Button className="mt-4" onClick={openAddDialog}><Plus className="w-4 h-4 mr-2" />Thêm sản phẩm đầu tiên</Button>
         </div>
       ) : (
-        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
           <SortableContext items={images.map(img => img.id)} strategy={rectSortingStrategy}>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {images.map((image, index) => (
@@ -397,6 +406,26 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
               ))}
             </div>
           </SortableContext>
+          <DragOverlay dropAnimation={{ duration: 200, easing: 'ease' }}>
+            {activeDragId ? (() => {
+              const image = images.find(img => img.id === activeDragId);
+              if (!image) return null;
+              return (
+                <div className="rounded-lg overflow-hidden border-2 border-primary shadow-2xl shadow-primary/20 bg-card rotate-2 scale-105">
+                  <div className="aspect-video">
+                    {image.image_url.match(/\.(mp4|webm|mov)$/i) ? (
+                      <div className="w-full h-full bg-card flex items-center justify-center"><Video className="w-12 h-12 text-muted-foreground" /></div>
+                    ) : (
+                      <img src={image.image_url} alt={image.title} className="w-full h-full object-cover" />
+                    )}
+                  </div>
+                  <div className="p-3 bg-card">
+                    <h3 className="font-medium text-sm truncate">{image.title}</h3>
+                  </div>
+                </div>
+              );
+            })() : null}
+          </DragOverlay>
         </DndContext>
       )}
 
