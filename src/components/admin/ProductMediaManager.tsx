@@ -168,7 +168,12 @@ const ProductMediaManager = ({ productId }: ProductMediaManagerProps) => {
     } finally { setLoading(false); }
   };
 
+  const handleDragStart = (event: DragStartEvent) => {
+    setActiveDragId(event.active.id as string);
+  };
+
   const handleDragEnd = async (event: DragEndEvent) => {
+    setActiveDragId(null);
     const { active, over } = event;
     if (!over || active.id === over.id) return;
 
