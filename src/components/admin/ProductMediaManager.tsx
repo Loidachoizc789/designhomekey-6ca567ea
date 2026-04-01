@@ -140,6 +140,7 @@ const ProductMediaManager = ({ productId }: ProductMediaManagerProps) => {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [selectMode, setSelectMode] = useState(false);
   const [urlInput, setUrlInput] = useState("");
+  const [activeDragId, setActiveDragId] = useState<string | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
