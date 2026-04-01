@@ -535,12 +535,17 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
               onClick={(e) => e.stopPropagation()}
             />
           ) : (
-            <img
-              src={currentMedia.media_url}
-              alt={selectedItem?.title || ''}
-              className="max-w-full max-h-full object-contain"
-              onClick={(e) => e.stopPropagation()}
-            />
+            <div className="relative inline-flex items-center justify-center max-w-full max-h-full">
+              <img
+                src={currentMedia.media_url}
+                alt={selectedItem?.title || ''}
+                className="max-w-full max-h-full object-contain"
+                onClick={(e) => e.stopPropagation()}
+              />
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <img src={watermarkLogo} alt="" className="w-1/4 h-auto opacity-[0.15] blur-[1px] select-none" draggable={false} />
+              </div>
+            </div>
           )}
 
           {/* Navigation arrows */}
