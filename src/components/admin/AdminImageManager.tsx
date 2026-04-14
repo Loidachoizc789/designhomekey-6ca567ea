@@ -74,10 +74,11 @@ const SortableImageItem = ({ image, index, selectMode, selectedIds, onToggleSele
     <div
       ref={setNodeRef}
       style={style}
-      className={`glass-card overflow-hidden group transition-all ${
+      className={`glass-card overflow-hidden group transition-all cursor-grab active:cursor-grabbing ${
         selectMode && selectedIds.has(image.id) ? "ring-2 ring-primary" : ""
       }`}
       onClick={selectMode ? () => onToggleSelect(image.id) : undefined}
+      {...(selectMode ? {} : { ...attributes, ...listeners })}
     >
       <div className="relative aspect-video">
         {selectMode && (
@@ -87,6 +88,10 @@ const SortableImageItem = ({ image, index, selectMode, selectedIds, onToggleSele
             </div>
           </div>
         )}
+        {/* Drag indicator + order number */}
+        <div className="absolute top-2 left-2 z-10 flex items-center gap-1">
+          {!selectMode && <div className="w-6 h-6 rounded bg-background/80 flex items-center justify-center"><GripVertical className="w-4 h-4 text-muted-foreground" /></div>}
+        </div>
         <div className="absolute top-2 right-2 z-10 w-6 h-6 rounded bg-background/80 flex items-center justify-center text-xs font-medium">
           {index + 1}
         </div>
@@ -96,39 +101,26 @@ const SortableImageItem = ({ image, index, selectMode, selectedIds, onToggleSele
         ) : (
           <img src={image.image_url} alt={image.title} className="w-full h-full object-cover" />
         )}
-
-        {!selectMode && (
-          <div className="absolute inset-0 bg-background/80 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
-            <div
-              {...attributes}
-              {...listeners}
-              className="cursor-grab active:cursor-grabbing p-2 rounded bg-secondary text-secondary-foreground hover:bg-secondary/80"
-              title="Kéo để sắp xếp"
-            >
-              <GripVertical className="w-5 h-5" />
-            </div>
-            <div className="flex items-center gap-1">
-              <Button size="sm" variant="secondary" onClick={() => onEdit(image)}>
-                <Edit2 className="w-4 h-4" />
-              </Button>
-              <Button size="sm" variant="default" onClick={() => onOpenMedia(image)}>
-                <Images className="w-4 h-4" />
-              </Button>
-              <Button size="sm" variant="destructive" onClick={() => onDelete(image.id)}>
-                <Trash2 className="w-4 h-4" />
-              </Button>
-            </div>
-          </div>
-        )}
       </div>
       <div className="p-3">
         <div className="flex items-center justify-between">
-          <h3 className="font-medium text-sm truncate">{image.title}</h3>
-          <Button variant="ghost" size="sm" className="text-xs text-primary" onClick={(e) => { e.stopPropagation(); onOpenMedia(image); }}>
-            <Images className="w-3 h-3 mr-1" />Media
-          </Button>
+          <h3 className="font-medium text-sm truncate flex-1">{image.title}</h3>
         </div>
         {image.description && <p className="text-xs text-muted-foreground truncate mt-1">{image.description}</p>}
+        {/* Action buttons - always visible */}
+        {!selectMode && (
+          <div className="flex items-center gap-1 mt-2" onPointerDown={(e) => e.stopPropagation()}>
+            <Button size="sm" variant="secondary" className="h-7 text-xs" onClick={() => onEdit(image)}>
+              <Edit2 className="w-3 h-3 mr-1" />Sửa
+            </Button>
+            <Button size="sm" variant="default" className="h-7 text-xs" onClick={() => onOpenMedia(image)}>
+              <Images className="w-3 h-3 mr-1" />Media
+            </Button>
+            <Button size="sm" variant="destructive" className="h-7 text-xs" onClick={() => onDelete(image.id)}>
+              <Trash2 className="w-3 h-3" />
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -64,10 +64,11 @@ const SortableMediaItem = ({ item, index, selectMode, selectedIds, onToggleSelec
     <div
       ref={setNodeRef}
       style={style}
-      className={`relative group aspect-square rounded-lg overflow-hidden border bg-card transition-all ${
+      className={`relative group aspect-square rounded-lg overflow-hidden border bg-card transition-all cursor-grab active:cursor-grabbing ${
         selectMode && selectedIds.has(item.id) ? "border-primary ring-2 ring-primary/50" : "border-border"
       }`}
       onClick={selectMode ? () => onToggleSelect(item.id) : undefined}
+      {...(selectMode ? {} : { ...attributes, ...listeners })}
     >
       {item.media_type === "comparison" ? (() => {
         try {
@@ -92,9 +93,12 @@ const SortableMediaItem = ({ item, index, selectMode, selectedIds, onToggleSelec
         </div>
       )}
 
-      {/* Type indicator */}
+      {/* Drag handle + type indicator - always visible */}
       {!selectMode && (
-        <div className="absolute top-1 left-1">
+        <div className="absolute top-1 left-1 flex items-center gap-0.5">
+          <div className="w-6 h-6 rounded bg-background/80 flex items-center justify-center">
+            <GripVertical className="w-3 h-3 text-muted-foreground" />
+          </div>
           {item.media_type === "comparison" ? (
             <div className="w-6 h-6 rounded bg-accent/80 flex items-center justify-center"><SplitSquareHorizontal className="w-3 h-3 text-accent-foreground" /></div>
           ) : item.media_type === "youtube" || item.media_type === "video" ? (
@@ -110,19 +114,11 @@ const SortableMediaItem = ({ item, index, selectMode, selectedIds, onToggleSelec
         {index + 1}
       </div>
 
-      {/* Hover actions (non-select mode) */}
+      {/* Delete button - visible on hover */}
       {!selectMode && (
-        <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
-          <div
-            {...attributes}
-            {...listeners}
-            className="cursor-grab active:cursor-grabbing p-2 rounded bg-secondary text-secondary-foreground hover:bg-secondary/80"
-            title="Kéo để sắp xếp"
-          >
-            <GripVertical className="w-5 h-5" />
-          </div>
-          <Button size="sm" variant="destructive" onClick={() => onDelete(item.id)}>
-            <Trash2 className="w-4 h-4" />
+        <div className="absolute bottom-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity" onPointerDown={(e) => e.stopPropagation()}>
+          <Button size="icon" variant="destructive" className="w-7 h-7" onClick={() => onDelete(item.id)}>
+            <Trash2 className="w-3 h-3" />
           </Button>
         </div>
       )}
