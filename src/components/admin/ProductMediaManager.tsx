@@ -52,11 +52,10 @@ interface SortableMediaItemProps {
 const SortableMediaItem = ({ item, index, selectMode, selectedIds, onToggleSelect, onDelete, mediaLength }: SortableMediaItemProps) => {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: item.id });
 
-  const style = {
-    transform: CSS.Transform.toString(transform),
+  const style: React.CSSProperties = {
+    transform: CSS.Transform.toString(transform ? { ...transform, scaleX: isDragging ? 0.95 : 1, scaleY: isDragging ? 0.95 : 1 } : null),
     transition: transition || 'transform 200ms ease',
     opacity: isDragging ? 0.3 : 1,
-    scale: isDragging ? '0.95' : '1',
     zIndex: isDragging ? 50 : undefined,
   };
 

@@ -62,11 +62,10 @@ interface SortableImageItemProps {
 const SortableImageItem = ({ image, index, selectMode, selectedIds, onToggleSelect, onEdit, onDelete, onOpenMedia }: SortableImageItemProps) => {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: image.id });
 
-  const style = {
-    transform: CSS.Transform.toString(transform),
+  const style: React.CSSProperties = {
+    transform: CSS.Transform.toString(transform ? { ...transform, scaleX: isDragging ? 0.95 : 1, scaleY: isDragging ? 0.95 : 1 } : null),
     transition: transition || 'transform 200ms ease',
     opacity: isDragging ? 0.3 : 1,
-    scale: isDragging ? '0.95' : '1',
     zIndex: isDragging ? 50 : undefined,
   };
 
