@@ -70,19 +70,27 @@ const SortableMediaItem = ({ item, index, selectMode, selectedIds, onToggleSelec
       onClick={selectMode ? () => onToggleSelect(item.id) : undefined}
       {...(selectMode ? {} : { ...attributes, ...listeners })}
     >
-      {item.media_type === "comparison" ? (() => {
-        try {
-          const data = JSON.parse(item.media_url);
-          return <ImageComparisonSlider beforeImage={data.before} afterImage={data.after} className="w-full h-full" />;
-        } catch { return <div className="w-full h-full bg-muted flex items-center justify-center text-xs">Invalid</div>; }
-      })() : item.media_type === "youtube" ? (
-        <img src={getYouTubeThumbnail(item.media_url) || ""} alt={`YouTube ${index + 1}`} className="w-full h-full object-cover" />
-      ) : item.media_type === "video" ? (
-        <video src={item.media_url} className="w-full h-full object-cover" muted
-          onMouseEnter={(e) => e.currentTarget.play()} onMouseLeave={(e) => { e.currentTarget.pause(); e.currentTarget.currentTime = 0; }} />
-      ) : (
-        <img src={item.media_url} alt={`Media ${index + 1}`} className="w-full h-full object-cover" />
-      )}
+      <div className="absolute inset-0 pointer-events-none">
+        {item.media_type === "comparison" ? (() => {
+          try {
+            const data = JSON.parse(item.media_url);
+            return (
+              <div className="w-full h-full bg-muted flex items-center justify-center">
+                <SplitSquareHorizontal className="w-8 h-8 text-muted-foreground" />
+                <span className="text-xs text-muted-foreground ml-1">Before/After</span>
+              </div>
+            );
+          } catch { return <div className="w-full h-full bg-muted flex items-center justify-center text-xs">Invalid</div>; }
+        })() : item.media_type === "youtube" ? (
+          <img src={getYouTubeThumbnail(item.media_url) || ""} alt={`YouTube ${index + 1}`} className="w-full h-full object-cover" />
+        ) : item.media_type === "video" ? (
+          <div className="w-full h-full bg-card flex items-center justify-center">
+            <Video className="w-8 h-8 text-muted-foreground" />
+          </div>
+        ) : (
+          <img src={item.media_url} alt={`Media ${index + 1}`} className="w-full h-full object-cover" />
+        )}
+      </div>
 
       {/* Select checkbox */}
       {selectMode && (
