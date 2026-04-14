@@ -63,6 +63,8 @@ const OptimizedImage = forwardRef<HTMLImageElement, OptimizedImageProps>(
               className
             )}
             onLoad={() => setIsLoaded(true)}
+            onContextMenu={(e) => e.preventDefault()}
+            onDragStart={(e) => e.preventDefault()}
             loading={priority ? "eager" : "lazy"}
             decoding="async"
             fetchPriority={priority ? "high" : "auto"}
