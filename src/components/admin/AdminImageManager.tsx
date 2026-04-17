@@ -71,7 +71,7 @@ interface SortableImageItemProps {
   onMoveToSub: (id: string, subSlug: string | null) => void;
 }
 
-const SortableImageItem = ({ image, index, selectMode, selectedIds, onToggleSelect, onEdit, onDelete, onOpenMedia }: SortableImageItemProps) => {
+const SortableImageItem = ({ image, index, selectMode, selectedIds, subcategories, onToggleSelect, onEdit, onDelete, onOpenMedia, onMoveToSub }: SortableImageItemProps) => {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: image.id });
 
   const style: React.CSSProperties = {
@@ -79,6 +79,10 @@ const SortableImageItem = ({ image, index, selectMode, selectedIds, onToggleSele
     transition,
     opacity: isDragging ? 0.3 : 1,
   };
+
+  const currentSubName = image.subcategory_slug
+    ? subcategories.find((s) => s.slug === image.subcategory_slug)?.name || image.subcategory_slug
+    : null;
 
   return (
     <div
@@ -98,13 +102,17 @@ const SortableImageItem = ({ image, index, selectMode, selectedIds, onToggleSele
             </div>
           </div>
         )}
-        {/* Drag indicator + order number */}
         <div className="absolute top-2 left-2 z-10 flex items-center gap-1">
           {!selectMode && <div className="w-6 h-6 rounded bg-background/80 flex items-center justify-center"><GripVertical className="w-4 h-4 text-muted-foreground" /></div>}
         </div>
         <div className="absolute top-2 right-2 z-10 w-6 h-6 rounded bg-background/80 flex items-center justify-center text-xs font-medium">
           {index + 1}
         </div>
+        {currentSubName && (
+          <div className="absolute bottom-2 left-2 z-10 px-2 py-0.5 rounded bg-primary/90 text-primary-foreground text-[10px] font-medium">
+            {currentSubName}
+          </div>
+        )}
 
         {image.image_url.match(/\.(mp4|webm|mov)$/i) ? (
           <div className="w-full h-full bg-card flex items-center justify-center"><Video className="w-12 h-12 text-muted-foreground" /></div>
@@ -117,19 +125,40 @@ const SortableImageItem = ({ image, index, selectMode, selectedIds, onToggleSele
           <h3 className="font-medium text-sm truncate flex-1">{image.title}</h3>
         </div>
         {image.description && <p className="text-xs text-muted-foreground truncate mt-1">{image.description}</p>}
-        {/* Action buttons - always visible */}
         {!selectMode && (
-          <div className="flex items-center gap-1 mt-2" onPointerDown={(e) => e.stopPropagation()}>
-            <Button size="sm" variant="secondary" className="h-7 text-xs" onClick={() => onEdit(image)}>
-              <Edit2 className="w-3 h-3 mr-1" />Sửa
-            </Button>
-            <Button size="sm" variant="default" className="h-7 text-xs" onClick={() => onOpenMedia(image)}>
-              <Images className="w-3 h-3 mr-1" />Media
-            </Button>
-            <Button size="sm" variant="destructive" className="h-7 text-xs" onClick={() => onDelete(image.id)}>
-              <Trash2 className="w-3 h-3" />
-            </Button>
-          </div>
+          <>
+            {subcategories.length > 0 && (
+              <div className="mt-2" onPointerDown={(e) => e.stopPropagation()}>
+                <Select
+                  value={image.subcategory_slug || "__none__"}
+                  onValueChange={(v) => onMoveToSub(image.id, v === "__none__" ? null : v)}
+                >
+                  <SelectTrigger className="h-7 text-xs">
+                    <SelectValue placeholder="Danh mục con" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="__none__">— Không phân loại —</SelectItem>
+                    {subcategories.map((s) => (
+                      <SelectItem key={s.slug} value={s.slug}>
+                        {s.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+            <div className="flex items-center gap-1 mt-2" onPointerDown={(e) => e.stopPropagation()}>
+              <Button size="sm" variant="secondary" className="h-7 text-xs" onClick={() => onEdit(image)}>
+                <Edit2 className="w-3 h-3 mr-1" />Sửa
+              </Button>
+              <Button size="sm" variant="default" className="h-7 text-xs" onClick={() => onOpenMedia(image)}>
+                <Images className="w-3 h-3 mr-1" />Media
+              </Button>
+              <Button size="sm" variant="destructive" className="h-7 text-xs" onClick={() => onDelete(image.id)}>
+                <Trash2 className="w-3 h-3" />
+              </Button>
+            </div>
+          </>
         )}
       </div>
     </div>
