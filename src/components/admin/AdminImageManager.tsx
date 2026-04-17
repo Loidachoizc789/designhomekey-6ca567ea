@@ -185,7 +185,7 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
   const [filterSub, setFilterSub] = useState<string>("__all__"); // "__all__" | "__none__" | slug
   const [bulkMoveOpen, setBulkMoveOpen] = useState(false);
 
-  const { subcategories, refetch: refetchSubs } = useSubcategories(categorySlug);
+  const { subcategories } = useSubcategories(categorySlug);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
