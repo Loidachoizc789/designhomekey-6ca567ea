@@ -350,8 +350,40 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
 
   const openAddDialog = () => {
     setEditingImage(null);
-    setFormData({ title: "", description: "", image_url: "" });
+    const defaultSub = filterSub === "__all__" || filterSub === "__none__" ? null : filterSub;
+    setFormData({ title: "", description: "", image_url: "", subcategory_slug: defaultSub });
     setDialogOpen(true);
+  };
+
+  const handleMoveToSub = async (id: string, subSlug: string | null) => {
+    try {
+      const { error } = await supabase.from("category_images").update({ subcategory_slug: subSlug }).eq("id", id);
+      if (error) throw error;
+      toast({ title: "Đã chuyển danh mục con" });
+      fetchImages();
+    } catch (err) {
+      console.error(err);
+      toast({ title: "Lỗi", description: "Không chuyển được", variant: "destructive" });
+    }
+  };
+
+  const handleBulkMove = async (subSlug: string | null) => {
+    if (selectedIds.size === 0) return;
+    try {
+      const { error } = await supabase
+        .from("category_images")
+        .update({ subcategory_slug: subSlug })
+        .in("id", Array.from(selectedIds));
+      if (error) throw error;
+      toast({ title: `Đã chuyển ${selectedIds.size} ảnh` });
+      setSelectedIds(new Set());
+      setSelectMode(false);
+      setBulkMoveOpen(false);
+      fetchImages();
+    } catch (err) {
+      console.error(err);
+      toast({ title: "Lỗi", description: "Không chuyển được", variant: "destructive" });
+    }
   };
 
   const openMediaManager = (product: CategoryImage) => {
