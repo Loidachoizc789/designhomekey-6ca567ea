@@ -457,6 +457,25 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
                   <Label>Mô tả</Label>
                   <Textarea value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} placeholder="Mô tả ngắn về sản phẩm" rows={3} />
                 </div>
+                {subcategories.length > 0 && (
+                  <div className="space-y-2">
+                    <Label>Danh mục con</Label>
+                    <Select
+                      value={formData.subcategory_slug || "__none__"}
+                      onValueChange={(v) => setFormData({ ...formData, subcategory_slug: v === "__none__" ? null : v })}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Chọn danh mục con" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="__none__">— Không phân loại —</SelectItem>
+                        {subcategories.map((s) => (
+                          <SelectItem key={s.slug} value={s.slug}>{s.name}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
                 <div className="space-y-2">
                   <Label>Ảnh đại diện *</Label>
                   {formData.image_url ? (
