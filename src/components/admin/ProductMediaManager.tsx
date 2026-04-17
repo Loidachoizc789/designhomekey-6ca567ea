@@ -53,10 +53,9 @@ const SortableMediaItem = ({ item, index, selectMode, selectedIds, onToggleSelec
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: item.id });
 
   const style: React.CSSProperties = {
-    transform: CSS.Transform.toString(transform ? { ...transform, scaleX: isDragging ? 0.95 : 1, scaleY: isDragging ? 0.95 : 1 } : null),
-    transition: transition || 'transform 200ms ease',
+    transform: CSS.Transform.toString(transform),
+    transition,
     opacity: isDragging ? 0.3 : 1,
-    zIndex: isDragging ? 50 : undefined,
   };
 
   return (
