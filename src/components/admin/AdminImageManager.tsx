@@ -267,17 +267,29 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
     }
     try {
       if (editingImage) {
-        const { error } = await supabase.from("category_images").update({ title: formData.title, description: formData.description || null, image_url: formData.image_url }).eq("id", editingImage.id);
+        const { error } = await supabase.from("category_images").update({
+          title: formData.title,
+          description: formData.description || null,
+          image_url: formData.image_url,
+          subcategory_slug: formData.subcategory_slug,
+        }).eq("id", editingImage.id);
         if (error) throw error;
         toast({ title: "Đã cập nhật ảnh" });
       } else {
-        const { error } = await supabase.from("category_images").insert({ title: formData.title, description: formData.description || null, image_url: formData.image_url, category_slug: categorySlug, display_order: images.length });
+        const { error } = await supabase.from("category_images").insert({
+          title: formData.title,
+          description: formData.description || null,
+          image_url: formData.image_url,
+          category_slug: categorySlug,
+          subcategory_slug: formData.subcategory_slug,
+          display_order: images.length,
+        });
         if (error) throw error;
         toast({ title: "Đã thêm ảnh mới" });
       }
       setDialogOpen(false);
       setEditingImage(null);
-      setFormData({ title: "", description: "", image_url: "" });
+      setFormData({ title: "", description: "", image_url: "", subcategory_slug: null });
       fetchImages();
     } catch (err) {
       console.error("Save error:", err);
@@ -287,7 +299,12 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
 
   const handleEdit = (image: CategoryImage) => {
     setEditingImage(image);
-    setFormData({ title: image.title, description: image.description || "", image_url: image.image_url });
+    setFormData({
+      title: image.title,
+      description: image.description || "",
+      image_url: image.image_url,
+      subcategory_slug: image.subcategory_slug,
+    });
     setDialogOpen(true);
   };
 
