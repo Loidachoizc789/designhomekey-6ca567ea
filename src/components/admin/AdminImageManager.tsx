@@ -51,6 +51,7 @@ interface CategoryImage {
   image_url: string;
   display_order: number;
   category_slug: string;
+  subcategory_slug: string | null;
 }
 
 interface AdminImageManagerProps {
@@ -62,10 +63,12 @@ interface SortableImageItemProps {
   index: number;
   selectMode: boolean;
   selectedIds: Set<string>;
+  subcategories: { slug: string; name: string }[];
   onToggleSelect: (id: string) => void;
   onEdit: (image: CategoryImage) => void;
   onDelete: (id: string) => void;
   onOpenMedia: (image: CategoryImage) => void;
+  onMoveToSub: (id: string, subSlug: string | null) => void;
 }
 
 const SortableImageItem = ({ image, index, selectMode, selectedIds, onToggleSelect, onEdit, onDelete, onOpenMedia }: SortableImageItemProps) => {
