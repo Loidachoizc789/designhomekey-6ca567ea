@@ -605,7 +605,8 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
             })() : null}
           </DragOverlay>
         </DndContext>
-      )}
+        );
+      })()}
 
       {/* Media Manager Dialog */}
       <Dialog open={mediaDialogOpen} onOpenChange={setMediaDialogOpen}>
