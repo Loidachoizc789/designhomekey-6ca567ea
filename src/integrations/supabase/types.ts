@@ -55,6 +55,7 @@ export type Database = {
           display_order: number
           id: string
           image_url: string
+          subcategory_slug: string | null
           title: string
           updated_at: string
         }
@@ -65,6 +66,7 @@ export type Database = {
           display_order?: number
           id?: string
           image_url: string
+          subcategory_slug?: string | null
           title: string
           updated_at?: string
         }
@@ -75,6 +77,7 @@ export type Database = {
           display_order?: number
           id?: string
           image_url?: string
+          subcategory_slug?: string | null
           title?: string
           updated_at?: string
         }
@@ -331,6 +334,36 @@ export type Database = {
           id?: string
           updated_at?: string
           value?: Json
+        }
+        Relationships: []
+      }
+      subcategories: {
+        Row: {
+          category_slug: string
+          created_at: string
+          display_order: number
+          id: string
+          name: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          category_slug: string
+          created_at?: string
+          display_order?: number
+          id?: string
+          name: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          category_slug?: string
+          created_at?: string
+          display_order?: number
+          id?: string
+          name?: string
+          slug?: string
+          updated_at?: string
         }
         Relationships: []
       }

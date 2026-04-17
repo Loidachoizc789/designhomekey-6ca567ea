@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
-import { Loader2, Plus, Trash2, Edit2, Upload, X, Video, Image as ImageIcon, Images, GripVertical, CheckSquare, Square } from "lucide-react";
+import { Loader2, Plus, Trash2, Edit2, Upload, X, Video, Image as ImageIcon, Images, GripVertical, CheckSquare, Square, FolderInput } from "lucide-react";
 import { compressImage, formatBytes } from "@/lib/imageCompression";
 import {
   Dialog,
@@ -14,7 +14,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import ProductMediaManager from "./ProductMediaManager";
+import AdminSubcategoryManager from "./AdminSubcategoryManager";
+import { useSubcategories } from "@/hooks/useSubcategories";
 import {
   DndContext,
   closestCenter,
@@ -42,6 +51,7 @@ interface CategoryImage {
   image_url: string;
   display_order: number;
   category_slug: string;
+  subcategory_slug: string | null;
 }
 
 interface AdminImageManagerProps {
@@ -53,13 +63,15 @@ interface SortableImageItemProps {
   index: number;
   selectMode: boolean;
   selectedIds: Set<string>;
+  subcategories: { slug: string; name: string }[];
   onToggleSelect: (id: string) => void;
   onEdit: (image: CategoryImage) => void;
   onDelete: (id: string) => void;
   onOpenMedia: (image: CategoryImage) => void;
+  onMoveToSub: (id: string, subSlug: string | null) => void;
 }
 
-const SortableImageItem = ({ image, index, selectMode, selectedIds, onToggleSelect, onEdit, onDelete, onOpenMedia }: SortableImageItemProps) => {
+const SortableImageItem = ({ image, index, selectMode, selectedIds, subcategories, onToggleSelect, onEdit, onDelete, onOpenMedia, onMoveToSub }: SortableImageItemProps) => {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: image.id });
 
   const style: React.CSSProperties = {
@@ -67,6 +79,10 @@ const SortableImageItem = ({ image, index, selectMode, selectedIds, onToggleSele
     transition,
     opacity: isDragging ? 0.3 : 1,
   };
+
+  const currentSubName = image.subcategory_slug
+    ? subcategories.find((s) => s.slug === image.subcategory_slug)?.name || image.subcategory_slug
+    : null;
 
   return (
     <div
@@ -86,13 +102,17 @@ const SortableImageItem = ({ image, index, selectMode, selectedIds, onToggleSele
             </div>
           </div>
         )}
-        {/* Drag indicator + order number */}
         <div className="absolute top-2 left-2 z-10 flex items-center gap-1">
           {!selectMode && <div className="w-6 h-6 rounded bg-background/80 flex items-center justify-center"><GripVertical className="w-4 h-4 text-muted-foreground" /></div>}
         </div>
         <div className="absolute top-2 right-2 z-10 w-6 h-6 rounded bg-background/80 flex items-center justify-center text-xs font-medium">
           {index + 1}
         </div>
+        {currentSubName && (
+          <div className="absolute bottom-2 left-2 z-10 px-2 py-0.5 rounded bg-primary/90 text-primary-foreground text-[10px] font-medium">
+            {currentSubName}
+          </div>
+        )}
 
         {image.image_url.match(/\.(mp4|webm|mov)$/i) ? (
           <div className="w-full h-full bg-card flex items-center justify-center"><Video className="w-12 h-12 text-muted-foreground" /></div>
@@ -105,19 +125,40 @@ const SortableImageItem = ({ image, index, selectMode, selectedIds, onToggleSele
           <h3 className="font-medium text-sm truncate flex-1">{image.title}</h3>
         </div>
         {image.description && <p className="text-xs text-muted-foreground truncate mt-1">{image.description}</p>}
-        {/* Action buttons - always visible */}
         {!selectMode && (
-          <div className="flex items-center gap-1 mt-2" onPointerDown={(e) => e.stopPropagation()}>
-            <Button size="sm" variant="secondary" className="h-7 text-xs" onClick={() => onEdit(image)}>
-              <Edit2 className="w-3 h-3 mr-1" />Sửa
-            </Button>
-            <Button size="sm" variant="default" className="h-7 text-xs" onClick={() => onOpenMedia(image)}>
-              <Images className="w-3 h-3 mr-1" />Media
-            </Button>
-            <Button size="sm" variant="destructive" className="h-7 text-xs" onClick={() => onDelete(image.id)}>
-              <Trash2 className="w-3 h-3" />
-            </Button>
-          </div>
+          <>
+            {subcategories.length > 0 && (
+              <div className="mt-2" onPointerDown={(e) => e.stopPropagation()}>
+                <Select
+                  value={image.subcategory_slug || "__none__"}
+                  onValueChange={(v) => onMoveToSub(image.id, v === "__none__" ? null : v)}
+                >
+                  <SelectTrigger className="h-7 text-xs">
+                    <SelectValue placeholder="Danh mục con" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="__none__">— Không phân loại —</SelectItem>
+                    {subcategories.map((s) => (
+                      <SelectItem key={s.slug} value={s.slug}>
+                        {s.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+            <div className="flex items-center gap-1 mt-2" onPointerDown={(e) => e.stopPropagation()}>
+              <Button size="sm" variant="secondary" className="h-7 text-xs" onClick={() => onEdit(image)}>
+                <Edit2 className="w-3 h-3 mr-1" />Sửa
+              </Button>
+              <Button size="sm" variant="default" className="h-7 text-xs" onClick={() => onOpenMedia(image)}>
+                <Images className="w-3 h-3 mr-1" />Media
+              </Button>
+              <Button size="sm" variant="destructive" className="h-7 text-xs" onClick={() => onDelete(image.id)}>
+                <Trash2 className="w-3 h-3" />
+              </Button>
+            </div>
+          </>
         )}
       </div>
     </div>
@@ -134,8 +175,17 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
   const [editingImage, setEditingImage] = useState<CategoryImage | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [selectMode, setSelectMode] = useState(false);
-  const [formData, setFormData] = useState({ title: "", description: "", image_url: "" });
+  const [formData, setFormData] = useState<{ title: string; description: string; image_url: string; subcategory_slug: string | null }>({
+    title: "",
+    description: "",
+    image_url: "",
+    subcategory_slug: null,
+  });
   const [activeDragId, setActiveDragId] = useState<string | null>(null);
+  const [filterSub, setFilterSub] = useState<string>("__all__"); // "__all__" | "__none__" | slug
+  const [bulkMoveOpen, setBulkMoveOpen] = useState(false);
+
+  const { subcategories } = useSubcategories(categorySlug);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -217,17 +267,29 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
     }
     try {
       if (editingImage) {
-        const { error } = await supabase.from("category_images").update({ title: formData.title, description: formData.description || null, image_url: formData.image_url }).eq("id", editingImage.id);
+        const { error } = await supabase.from("category_images").update({
+          title: formData.title,
+          description: formData.description || null,
+          image_url: formData.image_url,
+          subcategory_slug: formData.subcategory_slug,
+        }).eq("id", editingImage.id);
         if (error) throw error;
         toast({ title: "Đã cập nhật ảnh" });
       } else {
-        const { error } = await supabase.from("category_images").insert({ title: formData.title, description: formData.description || null, image_url: formData.image_url, category_slug: categorySlug, display_order: images.length });
+        const { error } = await supabase.from("category_images").insert({
+          title: formData.title,
+          description: formData.description || null,
+          image_url: formData.image_url,
+          category_slug: categorySlug,
+          subcategory_slug: formData.subcategory_slug,
+          display_order: images.length,
+        });
         if (error) throw error;
         toast({ title: "Đã thêm ảnh mới" });
       }
       setDialogOpen(false);
       setEditingImage(null);
-      setFormData({ title: "", description: "", image_url: "" });
+      setFormData({ title: "", description: "", image_url: "", subcategory_slug: null });
       fetchImages();
     } catch (err) {
       console.error("Save error:", err);
@@ -237,7 +299,12 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
 
   const handleEdit = (image: CategoryImage) => {
     setEditingImage(image);
-    setFormData({ title: image.title, description: image.description || "", image_url: image.image_url });
+    setFormData({
+      title: image.title,
+      description: image.description || "",
+      image_url: image.image_url,
+      subcategory_slug: image.subcategory_slug,
+    });
     setDialogOpen(true);
   };
 
@@ -283,8 +350,40 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
 
   const openAddDialog = () => {
     setEditingImage(null);
-    setFormData({ title: "", description: "", image_url: "" });
+    const defaultSub = filterSub === "__all__" || filterSub === "__none__" ? null : filterSub;
+    setFormData({ title: "", description: "", image_url: "", subcategory_slug: defaultSub });
     setDialogOpen(true);
+  };
+
+  const handleMoveToSub = async (id: string, subSlug: string | null) => {
+    try {
+      const { error } = await supabase.from("category_images").update({ subcategory_slug: subSlug }).eq("id", id);
+      if (error) throw error;
+      toast({ title: "Đã chuyển danh mục con" });
+      fetchImages();
+    } catch (err) {
+      console.error(err);
+      toast({ title: "Lỗi", description: "Không chuyển được", variant: "destructive" });
+    }
+  };
+
+  const handleBulkMove = async (subSlug: string | null) => {
+    if (selectedIds.size === 0) return;
+    try {
+      const { error } = await supabase
+        .from("category_images")
+        .update({ subcategory_slug: subSlug })
+        .in("id", Array.from(selectedIds));
+      if (error) throw error;
+      toast({ title: `Đã chuyển ${selectedIds.size} ảnh` });
+      setSelectedIds(new Set());
+      setSelectMode(false);
+      setBulkMoveOpen(false);
+      fetchImages();
+    } catch (err) {
+      console.error(err);
+      toast({ title: "Lỗi", description: "Không chuyển được", variant: "destructive" });
+    }
   };
 
   const openMediaManager = (product: CategoryImage) => {
@@ -312,6 +411,30 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
               {selectMode && (
                 <>
                   <Button size="sm" variant="outline" onClick={toggleSelectAll}>{selectedIds.size === images.length ? "Bỏ chọn tất cả" : "Chọn tất cả"}</Button>
+                  {subcategories.length > 0 && (
+                    <Dialog open={bulkMoveOpen} onOpenChange={setBulkMoveOpen}>
+                      <DialogTrigger asChild>
+                        <Button size="sm" variant="outline" disabled={selectedIds.size === 0}>
+                          <FolderInput className="w-4 h-4 mr-1" />Chuyển ({selectedIds.size})
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Chuyển {selectedIds.size} ảnh sang danh mục con</DialogTitle>
+                        </DialogHeader>
+                        <div className="space-y-2">
+                          <Button variant="outline" className="w-full justify-start" onClick={() => handleBulkMove(null)}>
+                            — Không phân loại —
+                          </Button>
+                          {subcategories.map((s) => (
+                            <Button key={s.slug} variant="outline" className="w-full justify-start" onClick={() => handleBulkMove(s.slug)}>
+                              {s.name}
+                            </Button>
+                          ))}
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+                  )}
                   <Button size="sm" variant="destructive" onClick={handleBulkDelete} disabled={selectedIds.size === 0}><Trash2 className="w-4 h-4 mr-1" />Xóa ({selectedIds.size})</Button>
                 </>
               )}
@@ -334,6 +457,25 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
                   <Label>Mô tả</Label>
                   <Textarea value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} placeholder="Mô tả ngắn về sản phẩm" rows={3} />
                 </div>
+                {subcategories.length > 0 && (
+                  <div className="space-y-2">
+                    <Label>Danh mục con</Label>
+                    <Select
+                      value={formData.subcategory_slug || "__none__"}
+                      onValueChange={(v) => setFormData({ ...formData, subcategory_slug: v === "__none__" ? null : v })}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Chọn danh mục con" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="__none__">— Không phân loại —</SelectItem>
+                        {subcategories.map((s) => (
+                          <SelectItem key={s.slug} value={s.slug}>{s.name}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
                 <div className="space-y-2">
                   <Label>Ảnh đại diện *</Label>
                   {formData.image_url ? (
@@ -370,32 +512,78 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
         </div>
       </div>
 
-      {/* Images Grid */}
-      {images.length === 0 ? (
-        <div className="glass-card p-12 text-center">
-          <ImageIcon className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-          <p className="text-muted-foreground">Chưa có ảnh nào trong danh mục này</p>
-          <Button className="mt-4" onClick={openAddDialog}><Plus className="w-4 h-4 mr-2" />Thêm sản phẩm đầu tiên</Button>
+      {/* Subcategory Manager */}
+      <AdminSubcategoryManager categorySlug={categorySlug} />
+
+      {/* Filter bar */}
+      {subcategories.length > 0 && (
+        <div className="glass-card p-3 flex flex-wrap items-center gap-2">
+          <span className="text-sm text-muted-foreground mr-1">Lọc:</span>
+          <Button size="sm" variant={filterSub === "__all__" ? "default" : "outline"} onClick={() => setFilterSub("__all__")}>
+            Tất cả ({images.length})
+          </Button>
+          <Button size="sm" variant={filterSub === "__none__" ? "default" : "outline"} onClick={() => setFilterSub("__none__")}>
+            Chưa phân loại ({images.filter((i) => !i.subcategory_slug).length})
+          </Button>
+          {subcategories.map((s) => (
+            <Button
+              key={s.slug}
+              size="sm"
+              variant={filterSub === s.slug ? "default" : "outline"}
+              onClick={() => setFilterSub(s.slug)}
+            >
+              {s.name} ({images.filter((i) => i.subcategory_slug === s.slug).length})
+            </Button>
+          ))}
         </div>
-      ) : (
-        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-          <SortableContext items={images.map(img => img.id)} strategy={rectSortingStrategy}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              {images.map((image, index) => (
-                <SortableImageItem
-                  key={image.id}
-                  image={image}
-                  index={index}
-                  selectMode={selectMode}
-                  selectedIds={selectedIds}
-                  onToggleSelect={toggleSelect}
-                  onEdit={handleEdit}
-                  onDelete={handleDelete}
-                  onOpenMedia={openMediaManager}
-                />
-              ))}
+      )}
+
+      {/* Images Grid */}
+      {(() => {
+        const visibleImages =
+          filterSub === "__all__"
+            ? images
+            : filterSub === "__none__"
+            ? images.filter((i) => !i.subcategory_slug)
+            : images.filter((i) => i.subcategory_slug === filterSub);
+
+        if (images.length === 0) {
+          return (
+            <div className="glass-card p-12 text-center">
+              <ImageIcon className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+              <p className="text-muted-foreground">Chưa có ảnh nào trong danh mục này</p>
+              <Button className="mt-4" onClick={openAddDialog}><Plus className="w-4 h-4 mr-2" />Thêm sản phẩm đầu tiên</Button>
             </div>
-          </SortableContext>
+          );
+        }
+        if (visibleImages.length === 0) {
+          return (
+            <div className="glass-card p-8 text-center text-muted-foreground">
+              Không có ảnh trong bộ lọc này
+            </div>
+          );
+        }
+        return (
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+            <SortableContext items={visibleImages.map((img) => img.id)} strategy={rectSortingStrategy}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {visibleImages.map((image, index) => (
+                  <SortableImageItem
+                    key={image.id}
+                    image={image}
+                    index={index}
+                    selectMode={selectMode}
+                    selectedIds={selectedIds}
+                    subcategories={subcategories}
+                    onToggleSelect={toggleSelect}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                    onOpenMedia={openMediaManager}
+                    onMoveToSub={handleMoveToSub}
+                  />
+                ))}
+              </div>
+            </SortableContext>
           <DragOverlay dropAnimation={{ duration: 200, easing: 'ease' }}>
             {activeDragId ? (() => {
               const image = images.find(img => img.id === activeDragId);
@@ -417,7 +605,8 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
             })() : null}
           </DragOverlay>
         </DndContext>
-      )}
+        );
+      })()}
 
       {/* Media Manager Dialog */}
       <Dialog open={mediaDialogOpen} onOpenChange={setMediaDialogOpen}>
