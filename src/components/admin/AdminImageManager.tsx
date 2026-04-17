@@ -512,32 +512,78 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
         </div>
       </div>
 
-      {/* Images Grid */}
-      {images.length === 0 ? (
-        <div className="glass-card p-12 text-center">
-          <ImageIcon className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-          <p className="text-muted-foreground">Chưa có ảnh nào trong danh mục này</p>
-          <Button className="mt-4" onClick={openAddDialog}><Plus className="w-4 h-4 mr-2" />Thêm sản phẩm đầu tiên</Button>
+      {/* Subcategory Manager */}
+      <AdminSubcategoryManager categorySlug={categorySlug} />
+
+      {/* Filter bar */}
+      {subcategories.length > 0 && (
+        <div className="glass-card p-3 flex flex-wrap items-center gap-2">
+          <span className="text-sm text-muted-foreground mr-1">Lọc:</span>
+          <Button size="sm" variant={filterSub === "__all__" ? "default" : "outline"} onClick={() => setFilterSub("__all__")}>
+            Tất cả ({images.length})
+          </Button>
+          <Button size="sm" variant={filterSub === "__none__" ? "default" : "outline"} onClick={() => setFilterSub("__none__")}>
+            Chưa phân loại ({images.filter((i) => !i.subcategory_slug).length})
+          </Button>
+          {subcategories.map((s) => (
+            <Button
+              key={s.slug}
+              size="sm"
+              variant={filterSub === s.slug ? "default" : "outline"}
+              onClick={() => setFilterSub(s.slug)}
+            >
+              {s.name} ({images.filter((i) => i.subcategory_slug === s.slug).length})
+            </Button>
+          ))}
         </div>
-      ) : (
-        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-          <SortableContext items={images.map(img => img.id)} strategy={rectSortingStrategy}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              {images.map((image, index) => (
-                <SortableImageItem
-                  key={image.id}
-                  image={image}
-                  index={index}
-                  selectMode={selectMode}
-                  selectedIds={selectedIds}
-                  onToggleSelect={toggleSelect}
-                  onEdit={handleEdit}
-                  onDelete={handleDelete}
-                  onOpenMedia={openMediaManager}
-                />
-              ))}
+      )}
+
+      {/* Images Grid */}
+      {(() => {
+        const visibleImages =
+          filterSub === "__all__"
+            ? images
+            : filterSub === "__none__"
+            ? images.filter((i) => !i.subcategory_slug)
+            : images.filter((i) => i.subcategory_slug === filterSub);
+
+        if (images.length === 0) {
+          return (
+            <div className="glass-card p-12 text-center">
+              <ImageIcon className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+              <p className="text-muted-foreground">Chưa có ảnh nào trong danh mục này</p>
+              <Button className="mt-4" onClick={openAddDialog}><Plus className="w-4 h-4 mr-2" />Thêm sản phẩm đầu tiên</Button>
             </div>
-          </SortableContext>
+          );
+        }
+        if (visibleImages.length === 0) {
+          return (
+            <div className="glass-card p-8 text-center text-muted-foreground">
+              Không có ảnh trong bộ lọc này
+            </div>
+          );
+        }
+        return (
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+            <SortableContext items={visibleImages.map((img) => img.id)} strategy={rectSortingStrategy}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {visibleImages.map((image, index) => (
+                  <SortableImageItem
+                    key={image.id}
+                    image={image}
+                    index={index}
+                    selectMode={selectMode}
+                    selectedIds={selectedIds}
+                    subcategories={subcategories}
+                    onToggleSelect={toggleSelect}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                    onOpenMedia={openMediaManager}
+                    onMoveToSub={handleMoveToSub}
+                  />
+                ))}
+              </div>
+            </SortableContext>
           <DragOverlay dropAnimation={{ duration: 200, easing: 'ease' }}>
             {activeDragId ? (() => {
               const image = images.find(img => img.id === activeDragId);
