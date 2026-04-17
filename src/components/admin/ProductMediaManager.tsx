@@ -3,13 +3,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
-import { Loader2, Plus, Trash2, Upload, X, Video, Image as ImageIcon, GripVertical, SplitSquareHorizontal, CheckSquare, Square } from "lucide-react";
+import { Loader2, Plus, Trash2, Upload, Video, Image as ImageIcon, GripVertical, SplitSquareHorizontal, CheckSquare, Square } from "lucide-react";
 import { compressImage, formatBytes } from "@/lib/imageCompression";
 import { isYouTubeUrl, getYouTubeThumbnail } from "@/lib/youtube";
-import ImageComparisonSlider from "@/components/ImageComparisonSlider";
 import {
   DndContext,
   closestCenter,
+  pointerWithin,
+  type CollisionDetection,
   KeyboardSensor,
   PointerSensor,
   useSensor,
@@ -56,13 +57,14 @@ const SortableMediaItem = ({ item, index, selectMode, selectedIds, onToggleSelec
     transform: CSS.Transform.toString(transform),
     transition,
     opacity: isDragging ? 0.3 : 1,
+    touchAction: "none",
   };
 
   return (
     <div
       ref={setNodeRef}
       style={style}
-      className={`relative group aspect-square rounded-lg overflow-hidden border bg-card transition-all cursor-grab active:cursor-grabbing ${
+      className={`relative group aspect-square rounded-lg overflow-hidden border bg-card transition-all select-none touch-none will-change-transform cursor-grab active:cursor-grabbing ${
         selectMode && selectedIds.has(item.id) ? "border-primary ring-2 ring-primary/50" : "border-border"
       }`}
       onClick={selectMode ? () => onToggleSelect(item.id) : undefined}
@@ -71,14 +73,16 @@ const SortableMediaItem = ({ item, index, selectMode, selectedIds, onToggleSelec
       <div className="absolute inset-0 pointer-events-none">
         {item.media_type === "comparison" ? (() => {
           try {
-            const data = JSON.parse(item.media_url);
+            JSON.parse(item.media_url);
             return (
               <div className="w-full h-full bg-muted flex items-center justify-center">
                 <SplitSquareHorizontal className="w-8 h-8 text-muted-foreground" />
                 <span className="text-xs text-muted-foreground ml-1">Before/After</span>
               </div>
             );
-          } catch { return <div className="w-full h-full bg-muted flex items-center justify-center text-xs">Invalid</div>; }
+          } catch {
+            return <div className="w-full h-full bg-muted flex items-center justify-center text-xs">Invalid</div>;
+          }
         })() : item.media_type === "youtube" ? (
           <img src={getYouTubeThumbnail(item.media_url) || ""} alt={`YouTube ${index + 1}`} className="w-full h-full object-cover" />
         ) : item.media_type === "video" ? (
@@ -90,7 +94,6 @@ const SortableMediaItem = ({ item, index, selectMode, selectedIds, onToggleSelec
         )}
       </div>
 
-      {/* Select checkbox */}
       {selectMode && (
         <div className="absolute top-1 left-1 z-10">
           <div className={`w-6 h-6 rounded flex items-center justify-center ${selectedIds.has(item.id) ? "bg-primary text-primary-foreground" : "bg-background/80 text-foreground"}`}>
@@ -99,7 +102,6 @@ const SortableMediaItem = ({ item, index, selectMode, selectedIds, onToggleSelec
         </div>
       )}
 
-      {/* Drag handle + type indicator - always visible */}
       {!selectMode && (
         <div className="absolute top-1 left-1 flex items-center gap-0.5">
           <div className="w-6 h-6 rounded bg-background/80 flex items-center justify-center">
@@ -115,12 +117,10 @@ const SortableMediaItem = ({ item, index, selectMode, selectedIds, onToggleSelec
         </div>
       )}
 
-      {/* Order number */}
       <div className="absolute top-1 right-1 w-6 h-6 rounded bg-background/80 flex items-center justify-center text-xs font-medium">
         {index + 1}
       </div>
 
-      {/* Delete button - visible on hover */}
       {!selectMode && (
         <div className="absolute bottom-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity" onPointerDown={(e) => e.stopPropagation()}>
           <Button size="icon" variant="destructive" className="w-7 h-7" onClick={() => onDelete(item.id)}>
@@ -144,8 +144,18 @@ const ProductMediaManager = ({ productId }: ProductMediaManagerProps) => {
   const [urlInput, setUrlInput] = useState("");
   const [activeDragId, setActiveDragId] = useState<string | null>(null);
 
+  const collisionDetectionStrategy: CollisionDetection = (args) => {
+    const pointerCollisions = pointerWithin(args);
+
+    if (pointerCollisions.length > 0) {
+      return pointerCollisions;
+    }
+
+    return closestCenter(args);
+  };
+
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(PointerSensor, { activationConstraint: { distance: 2 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
@@ -294,7 +304,6 @@ const ProductMediaManager = ({ productId }: ProductMediaManagerProps) => {
 
   return (
     <div className="space-y-6">
-      {/* Upload Section */}
       <div className="glass-card p-6">
         <h3 className="font-semibold mb-4 flex items-center gap-2"><Plus className="w-4 h-4" />Thêm Media (Không giới hạn số lượng)</h3>
         <div className="border-2 border-dashed border-border rounded-lg p-6 text-center mb-4">
@@ -310,7 +319,6 @@ const ProductMediaManager = ({ productId }: ProductMediaManagerProps) => {
           <Button onClick={() => { handleUrlAdd(urlInput); setUrlInput(""); }} disabled={!urlInput}><Plus className="w-4 h-4 mr-2" /> Thêm URL</Button>
         </div>
 
-        {/* Comparison Upload */}
         <div className="mt-4 p-4 border border-border rounded-lg bg-muted/30">
           <h4 className="text-sm font-medium mb-3 flex items-center gap-2"><SplitSquareHorizontal className="w-4 h-4 text-primary" />Image Comparison Slider (Before/After)</h4>
           <div className="grid grid-cols-2 gap-3">
@@ -360,7 +368,6 @@ const ProductMediaManager = ({ productId }: ProductMediaManagerProps) => {
         </div>
       </div>
 
-      {/* Media Grid */}
       <div>
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-semibold">Thư viện media ({media.length} items)</h3>
@@ -385,7 +392,7 @@ const ProductMediaManager = ({ productId }: ProductMediaManagerProps) => {
             <p className="text-muted-foreground">Chưa có media nào</p>
           </div>
         ) : (
-          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+          <DndContext sensors={sensors} collisionDetection={collisionDetectionStrategy} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
             <SortableContext items={media.map(m => m.id)} strategy={rectSortingStrategy}>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                 {media.map((item, index) => (
