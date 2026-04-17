@@ -175,8 +175,17 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
   const [editingImage, setEditingImage] = useState<CategoryImage | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [selectMode, setSelectMode] = useState(false);
-  const [formData, setFormData] = useState({ title: "", description: "", image_url: "" });
+  const [formData, setFormData] = useState<{ title: string; description: string; image_url: string; subcategory_slug: string | null }>({
+    title: "",
+    description: "",
+    image_url: "",
+    subcategory_slug: null,
+  });
   const [activeDragId, setActiveDragId] = useState<string | null>(null);
+  const [filterSub, setFilterSub] = useState<string>("__all__"); // "__all__" | "__none__" | slug
+  const [bulkMoveOpen, setBulkMoveOpen] = useState(false);
+
+  const { subcategories, refetch: refetchSubs } = useSubcategories(categorySlug);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
