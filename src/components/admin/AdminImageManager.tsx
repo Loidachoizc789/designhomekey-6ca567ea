@@ -411,6 +411,30 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
               {selectMode && (
                 <>
                   <Button size="sm" variant="outline" onClick={toggleSelectAll}>{selectedIds.size === images.length ? "Bỏ chọn tất cả" : "Chọn tất cả"}</Button>
+                  {subcategories.length > 0 && (
+                    <Dialog open={bulkMoveOpen} onOpenChange={setBulkMoveOpen}>
+                      <DialogTrigger asChild>
+                        <Button size="sm" variant="outline" disabled={selectedIds.size === 0}>
+                          <FolderInput className="w-4 h-4 mr-1" />Chuyển ({selectedIds.size})
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Chuyển {selectedIds.size} ảnh sang danh mục con</DialogTitle>
+                        </DialogHeader>
+                        <div className="space-y-2">
+                          <Button variant="outline" className="w-full justify-start" onClick={() => handleBulkMove(null)}>
+                            — Không phân loại —
+                          </Button>
+                          {subcategories.map((s) => (
+                            <Button key={s.slug} variant="outline" className="w-full justify-start" onClick={() => handleBulkMove(s.slug)}>
+                              {s.name}
+                            </Button>
+                          ))}
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+                  )}
                   <Button size="sm" variant="destructive" onClick={handleBulkDelete} disabled={selectedIds.size === 0}><Trash2 className="w-4 h-4 mr-1" />Xóa ({selectedIds.size})</Button>
                 </>
               )}
