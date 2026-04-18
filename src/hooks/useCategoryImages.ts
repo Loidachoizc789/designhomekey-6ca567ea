@@ -10,7 +10,7 @@ interface CategoryImage {
   category_slug: string;
 }
 
-export const useCategoryImages = (categorySlug: string) => {
+export const useCategoryImages = (categorySlug: string, subcategorySlug?: string) => {
   const [images, setImages] = useState<CategoryImage[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -19,11 +19,17 @@ export const useCategoryImages = (categorySlug: string) => {
     const fetchImages = async () => {
       try {
         setLoading(true);
-        const { data, error } = await supabase
+        let query = supabase
           .from("category_images")
           .select("*")
           .eq("category_slug", categorySlug)
           .order("display_order", { ascending: true });
+
+        if (subcategorySlug) {
+          query = query.eq("subcategory_slug", subcategorySlug);
+        }
+
+        const { data, error } = await query;
 
         if (error) throw error;
         setImages(data || []);
@@ -37,9 +43,12 @@ export const useCategoryImages = (categorySlug: string) => {
 
     fetchImages();
 
-    // Set up realtime subscription
+    const channelName = subcategorySlug
+      ? `category-images-${categorySlug}-${subcategorySlug}`
+      : `category-images-${categorySlug}`;
+
     const channel = supabase
-      .channel(`category-images-${categorySlug}`)
+      .channel(channelName)
       .on(
         "postgres_changes",
         {
@@ -49,7 +58,6 @@ export const useCategoryImages = (categorySlug: string) => {
           filter: `category_slug=eq.${categorySlug}`,
         },
         () => {
-          // Refetch when changes occur
           fetchImages();
         }
       )
@@ -58,7 +66,7 @@ export const useCategoryImages = (categorySlug: string) => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [categorySlug]);
+  }, [categorySlug, subcategorySlug]);
 
   // Transform to include productId for fetching media
   const imagesWithProductId = images.map(img => ({
