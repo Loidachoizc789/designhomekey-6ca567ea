@@ -231,18 +231,24 @@ const MotionGraphics = () => {
             </div>
           ) : subcategories.length > 0 ? (
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="mx-auto mb-8 flex flex-wrap justify-center gap-2 h-auto bg-card/50 p-2 rounded-2xl">
-                <TabsTrigger value="all" className="rounded-xl">
-                  Tất cả ({allItems.length})
+              <TabsList className="mx-auto mb-10 flex w-full max-w-2xl gap-2 h-auto p-2">
+                <TabsTrigger
+                  value="all"
+                  className="flex-1 flex items-center justify-center gap-2 text-base py-3"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  Tất cả
                 </TabsTrigger>
-                {subcategories.map((sub) => {
-                  const count = allItems.filter((it) => it.subcategory_slug === sub.slug).length;
-                  return (
-                    <TabsTrigger key={sub.slug} value={sub.slug} className="rounded-xl">
-                      {sub.name} ({count})
-                    </TabsTrigger>
-                  );
-                })}
+                {subcategories.map((sub) => (
+                  <TabsTrigger
+                    key={sub.slug}
+                    value={sub.slug}
+                    className="flex-1 flex items-center justify-center gap-2 text-base py-3"
+                  >
+                    <Film className="w-4 h-4" />
+                    {sub.name}
+                  </TabsTrigger>
+                ))}
               </TabsList>
               <TabsContent value={activeTab} className="mt-0">
                 <ProductGallery items={filteredItems} />
