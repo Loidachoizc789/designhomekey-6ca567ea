@@ -18,11 +18,9 @@ import AdminBulkCompressor from "@/components/admin/AdminBulkCompressor";
 
 const CATEGORY_SLUGS = [
   { slug: "thiet-ke-2d", name: "Thiết Kế 2D" },
-  { slug: "3d-virtual", name: "3D Virtual" },
-  { slug: "3d-event", name: "3D Event" },
+  { slug: "3d-design", name: "Thiết Kế 3D" },
   { slug: "model-3d", name: "Model 3D" },
-  { slug: "noi-that", name: "Nội Thất" },
-  { slug: "ngoai-that", name: "Ngoại Thất" },
+  { slug: "noi-ngoai-that", name: "Nội Ngoại Thất" },
   { slug: "after-effects", name: "After Effects" },
 ];
 
