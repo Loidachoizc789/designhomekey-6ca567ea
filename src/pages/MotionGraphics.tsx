@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import { Film, Sparkles, Zap, Video, Play, Phone } from "lucide-react";
+import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProductGallery from "@/components/ProductGallery";
 import CategoryNavbar from "@/components/CategoryNavbar";
 import Footer from "@/components/sections/Footer";
@@ -10,6 +12,7 @@ import SEOHead from "@/components/SEOHead";
 import { useCategoryImages } from "@/hooks/useCategoryImages";
 import { useCategoryPricing } from "@/hooks/useCategoryPricing";
 import { useCategoryPageImage } from "@/hooks/useCategoryPageImage";
+import { useSubcategories } from "@/hooks/useSubcategories";
 import CategoryPricingDisplay from "@/components/CategoryPricingDisplay";
 import setLivestream from "@/assets/set-livestream.jpg";
 import setTalkshow from "@/assets/set-talkshow.jpg";
@@ -97,17 +100,29 @@ const MotionGraphics = () => {
   const { images, loading } = useCategoryImages("after-effects");
   const { pricing, notes, loading: pricingLoading } = useCategoryPricing("after-effects");
   const { imageUrl: deliverablesImage } = useCategoryPageImage("after-effects", "deliverables");
+  const { subcategories } = useSubcategories("after-effects");
+  const [activeTab, setActiveTab] = useState<string>("all");
 
-  const galleryItems = images.length > 0 
-    ? images.map((img) => ({
-        id: img.id,
-        title: img.title,
-        description: img.description || "",
-        image: img.image_url,
-        category: "Motion Graphics",
-        productId: img.productId,
-      }))
-    : defaultGalleryItems;
+  const allItems = useMemo(
+    () =>
+      images.length > 0
+        ? images.map((img) => ({
+            id: img.id,
+            title: img.title,
+            description: img.description || "",
+            image: img.image_url,
+            category: "Motion Graphics",
+            productId: img.productId,
+            subcategory_slug: (img as any).subcategory_slug as string | null,
+          }))
+        : defaultGalleryItems.map((d) => ({ ...d, subcategory_slug: null as string | null })),
+    [images]
+  );
+
+  const filteredItems = useMemo(() => {
+    if (activeTab === "all") return allItems;
+    return allItems.filter((it) => it.subcategory_slug === activeTab);
+  }, [allItems, activeTab]);
 
   return (
     <div className="relative min-h-screen bg-background">
@@ -214,8 +229,27 @@ const MotionGraphics = () => {
             <div className="text-center py-12">
               <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full mx-auto" />
             </div>
+          ) : subcategories.length > 0 ? (
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <TabsList className="mx-auto mb-8 flex flex-wrap justify-center gap-2 h-auto bg-card/50 p-2 rounded-2xl">
+                <TabsTrigger value="all" className="rounded-xl">
+                  Tất cả ({allItems.length})
+                </TabsTrigger>
+                {subcategories.map((sub) => {
+                  const count = allItems.filter((it) => it.subcategory_slug === sub.slug).length;
+                  return (
+                    <TabsTrigger key={sub.slug} value={sub.slug} className="rounded-xl">
+                      {sub.name} ({count})
+                    </TabsTrigger>
+                  );
+                })}
+              </TabsList>
+              <TabsContent value={activeTab} className="mt-0">
+                <ProductGallery items={filteredItems} />
+              </TabsContent>
+            </Tabs>
           ) : (
-            <ProductGallery items={galleryItems} />
+            <ProductGallery items={allItems} />
           )}
         </div>
       </section>
