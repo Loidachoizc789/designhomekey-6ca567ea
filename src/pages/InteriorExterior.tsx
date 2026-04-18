@@ -139,8 +139,8 @@ const InteriorExterior = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentTab = searchParams.get("tab") === "exterior" ? "exterior" : "interior";
 
-  const { images: interiorDbImages, loading: interiorLoading } = useCategoryImages("noi-that");
-  const { images: exteriorDbImages, loading: exteriorLoading } = useCategoryImages("ngoai-that");
+  const { images: interiorDbImages, loading: interiorLoading } = useCategoryImages("noi-ngoai-that", "noi-that");
+  const { images: exteriorDbImages, loading: exteriorLoading } = useCategoryImages("noi-ngoai-that", "ngoai-that");
   const { imageUrl: deliverablesImage } = useCategoryPageImage("noi-ngoai-that", "deliverables");
 
   const {

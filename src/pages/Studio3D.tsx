@@ -94,8 +94,8 @@ const Studio3D = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentTab = searchParams.get("tab") === "virtual" ? "virtual" : "event";
 
-  const { images: virtualImages, loading: virtualLoading } = useCategoryImages("3d-virtual");
-  const { images: eventImages, loading: eventLoading } = useCategoryImages("3d-event");
+  const { images: virtualImages, loading: virtualLoading } = useCategoryImages("3d-design", "3d-virtual");
+  const { images: eventImages, loading: eventLoading } = useCategoryImages("3d-design", "3d-event");
   const { imageUrl: deliverablesImage } = useCategoryPageImage("phim-truong-3d", "deliverables");
 
   const {
