@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -192,19 +192,45 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
-  useEffect(() => { fetchImages(); }, [categorySlug]);
-
-  const fetchImages = async () => {
+  const fetchImages = useCallback(async (silent = false) => {
     try {
-      setLoading(true);
-      const { data, error } = await supabase.from("category_images").select("*").eq("category_slug", categorySlug).order("display_order", { ascending: true });
+      if (!silent) setLoading(true);
+      const { data, error } = await supabase
+        .from("category_images")
+        .select("*")
+        .eq("category_slug", categorySlug)
+        .order("display_order", { ascending: true });
       if (error) throw error;
       setImages(data || []);
     } catch (err) {
       console.error("Error fetching images:", err);
       toast({ title: "Lỗi", description: "Không thể tải danh sách ảnh", variant: "destructive" });
-    } finally { setLoading(false); }
-  };
+    } finally {
+      if (!silent) setLoading(false);
+    }
+  }, [categorySlug]);
+
+  useEffect(() => {
+    fetchImages();
+
+    const channel = supabase
+      .channel(`admin-category-images-${categorySlug}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "category_images",
+          filter: `category_slug=eq.${categorySlug}`,
+        },
+        () => fetchImages(true)
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [categorySlug, fetchImages]);
 
   const handleDragStart = (event: DragStartEvent) => {
     setActiveDragId(event.active.id as string);
@@ -290,7 +316,6 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
       setDialogOpen(false);
       setEditingImage(null);
       setFormData({ title: "", description: "", image_url: "", subcategory_slug: null });
-      fetchImages();
     } catch (err) {
       console.error("Save error:", err);
       toast({ title: "Lỗi", description: "Không thể lưu ảnh", variant: "destructive" });
@@ -314,7 +339,6 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
       const { error } = await supabase.from("category_images").delete().eq("id", id);
       if (error) throw error;
       toast({ title: "Đã xóa ảnh" });
-      fetchImages();
     } catch (err) {
       console.error("Delete error:", err);
       toast({ title: "Lỗi", description: "Không thể xóa ảnh", variant: "destructive" });
@@ -330,7 +354,6 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
       toast({ title: `Đã xóa ${selectedIds.size} sản phẩm` });
       setSelectedIds(new Set());
       setSelectMode(false);
-      fetchImages();
     } catch (err) {
       console.error("Bulk delete error:", err);
       toast({ title: "Lỗi", description: "Không thể xóa", variant: "destructive" });
@@ -359,8 +382,8 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
     try {
       const { error } = await supabase.from("category_images").update({ subcategory_slug: subSlug }).eq("id", id);
       if (error) throw error;
+      setImages((prev) => prev.map((img) => (img.id === id ? { ...img, subcategory_slug: subSlug } : img)));
       toast({ title: "Đã chuyển danh mục con" });
-      fetchImages();
     } catch (err) {
       console.error(err);
       toast({ title: "Lỗi", description: "Không chuyển được", variant: "destructive" });
@@ -370,16 +393,17 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
   const handleBulkMove = async (subSlug: string | null) => {
     if (selectedIds.size === 0) return;
     try {
+      const movingIds = new Set(selectedIds);
       const { error } = await supabase
         .from("category_images")
         .update({ subcategory_slug: subSlug })
-        .in("id", Array.from(selectedIds));
+        .in("id", Array.from(movingIds));
       if (error) throw error;
+      setImages((prev) => prev.map((img) => (movingIds.has(img.id) ? { ...img, subcategory_slug: subSlug } : img)));
       toast({ title: `Đã chuyển ${selectedIds.size} ảnh` });
       setSelectedIds(new Set());
       setSelectMode(false);
       setBulkMoveOpen(false);
-      fetchImages();
     } catch (err) {
       console.error(err);
       toast({ title: "Lỗi", description: "Không chuyển được", variant: "destructive" });
