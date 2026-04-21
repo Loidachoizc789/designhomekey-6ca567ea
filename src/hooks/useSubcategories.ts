@@ -37,7 +37,27 @@ export const useSubcategories = (categorySlug: string | null) => {
 
   useEffect(() => {
     fetchSubcategories();
-  }, [fetchSubcategories]);
+
+    if (!categorySlug) return;
+
+    const channel = supabase
+      .channel(`subcategories-${categorySlug}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "subcategories",
+          filter: `category_slug=eq.${categorySlug}`,
+        },
+        () => fetchSubcategories()
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [fetchSubcategories, categorySlug]);
 
   return { subcategories, loading, refetch: fetchSubcategories };
 };
