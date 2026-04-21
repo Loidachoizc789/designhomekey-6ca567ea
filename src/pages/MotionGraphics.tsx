@@ -238,12 +238,12 @@ const MotionGraphics = () => {
             </div>
           ) : subcategories.length > 0 ? (
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="mx-auto mb-10 flex w-full max-w-2xl gap-2 h-auto p-2">
+              <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-10">
                 {subcategories.map((sub) => (
                   <TabsTrigger
                     key={sub.slug}
                     value={sub.slug}
-                    className="flex-1 flex items-center justify-center gap-2 text-base py-3"
+                    className="flex items-center gap-2 text-base py-3"
                   >
                     <Film className="w-4 h-4" />
                     {sub.name}
