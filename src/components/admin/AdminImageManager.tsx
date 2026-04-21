@@ -339,7 +339,6 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
       const { error } = await supabase.from("category_images").delete().eq("id", id);
       if (error) throw error;
       toast({ title: "Đã xóa ảnh" });
-      fetchImages();
     } catch (err) {
       console.error("Delete error:", err);
       toast({ title: "Lỗi", description: "Không thể xóa ảnh", variant: "destructive" });
@@ -355,7 +354,6 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
       toast({ title: `Đã xóa ${selectedIds.size} sản phẩm` });
       setSelectedIds(new Set());
       setSelectMode(false);
-      fetchImages();
     } catch (err) {
       console.error("Bulk delete error:", err);
       toast({ title: "Lỗi", description: "Không thể xóa", variant: "destructive" });
@@ -384,8 +382,8 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
     try {
       const { error } = await supabase.from("category_images").update({ subcategory_slug: subSlug }).eq("id", id);
       if (error) throw error;
+      setImages((prev) => prev.map((img) => (img.id === id ? { ...img, subcategory_slug: subSlug } : img)));
       toast({ title: "Đã chuyển danh mục con" });
-      fetchImages();
     } catch (err) {
       console.error(err);
       toast({ title: "Lỗi", description: "Không chuyển được", variant: "destructive" });
@@ -395,16 +393,17 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
   const handleBulkMove = async (subSlug: string | null) => {
     if (selectedIds.size === 0) return;
     try {
+      const movingIds = new Set(selectedIds);
       const { error } = await supabase
         .from("category_images")
         .update({ subcategory_slug: subSlug })
-        .in("id", Array.from(selectedIds));
+        .in("id", Array.from(movingIds));
       if (error) throw error;
+      setImages((prev) => prev.map((img) => (movingIds.has(img.id) ? { ...img, subcategory_slug: subSlug } : img)));
       toast({ title: `Đã chuyển ${selectedIds.size} ảnh` });
       setSelectedIds(new Set());
       setSelectMode(false);
       setBulkMoveOpen(false);
-      fetchImages();
     } catch (err) {
       console.error(err);
       toast({ title: "Lỗi", description: "Không chuyển được", variant: "destructive" });
