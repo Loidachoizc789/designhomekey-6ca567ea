@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Film, Sparkles, Zap, Video, Play, Phone } from "lucide-react";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProductGallery from "@/components/ProductGallery";
