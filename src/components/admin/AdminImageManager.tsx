@@ -192,19 +192,45 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
-  useEffect(() => { fetchImages(); }, [categorySlug]);
-
-  const fetchImages = async () => {
+  const fetchImages = useCallback(async (silent = false) => {
     try {
-      setLoading(true);
-      const { data, error } = await supabase.from("category_images").select("*").eq("category_slug", categorySlug).order("display_order", { ascending: true });
+      if (!silent) setLoading(true);
+      const { data, error } = await supabase
+        .from("category_images")
+        .select("*")
+        .eq("category_slug", categorySlug)
+        .order("display_order", { ascending: true });
       if (error) throw error;
       setImages(data || []);
     } catch (err) {
       console.error("Error fetching images:", err);
       toast({ title: "Lỗi", description: "Không thể tải danh sách ảnh", variant: "destructive" });
-    } finally { setLoading(false); }
-  };
+    } finally {
+      if (!silent) setLoading(false);
+    }
+  }, [categorySlug]);
+
+  useEffect(() => {
+    fetchImages();
+
+    const channel = supabase
+      .channel(`admin-category-images-${categorySlug}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "category_images",
+          filter: `category_slug=eq.${categorySlug}`,
+        },
+        () => fetchImages(true)
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [categorySlug, fetchImages]);
 
   const handleDragStart = (event: DragStartEvent) => {
     setActiveDragId(event.active.id as string);
