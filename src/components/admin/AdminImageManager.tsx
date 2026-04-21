@@ -316,7 +316,6 @@ const AdminImageManager = ({ categorySlug }: AdminImageManagerProps) => {
       setDialogOpen(false);
       setEditingImage(null);
       setFormData({ title: "", description: "", image_url: "", subcategory_slug: null });
-      fetchImages();
     } catch (err) {
       console.error("Save error:", err);
       toast({ title: "Lỗi", description: "Không thể lưu ảnh", variant: "destructive" });
