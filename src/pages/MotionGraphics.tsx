@@ -101,7 +101,7 @@ const MotionGraphics = () => {
   const { pricing, notes, loading: pricingLoading } = useCategoryPricing("after-effects");
   const { imageUrl: deliverablesImage } = useCategoryPageImage("after-effects", "deliverables");
   const { subcategories } = useSubcategories("after-effects");
-  const [activeTab, setActiveTab] = useState<string>("all");
+  const [activeTab, setActiveTab] = useState<string>("");
 
   const allItems = useMemo(
     () =>
@@ -119,8 +119,15 @@ const MotionGraphics = () => {
     [images]
   );
 
+  // Default to first subcategory when loaded
+  useEffect(() => {
+    if (subcategories.length > 0 && !activeTab) {
+      setActiveTab(subcategories[0].slug);
+    }
+  }, [subcategories, activeTab]);
+
   const filteredItems = useMemo(() => {
-    if (activeTab === "all") return allItems;
+    if (!activeTab) return allItems;
     return allItems.filter((it) => it.subcategory_slug === activeTab);
   }, [allItems, activeTab]);
 
