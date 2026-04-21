@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Film, Sparkles, Zap, Video, Play, Phone } from "lucide-react";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProductGallery from "@/components/ProductGallery";
@@ -101,7 +101,7 @@ const MotionGraphics = () => {
   const { pricing, notes, loading: pricingLoading } = useCategoryPricing("after-effects");
   const { imageUrl: deliverablesImage } = useCategoryPageImage("after-effects", "deliverables");
   const { subcategories } = useSubcategories("after-effects");
-  const [activeTab, setActiveTab] = useState<string>("all");
+  const [activeTab, setActiveTab] = useState<string>("");
 
   const allItems = useMemo(
     () =>
@@ -119,8 +119,15 @@ const MotionGraphics = () => {
     [images]
   );
 
+  // Default to first subcategory when loaded
+  useEffect(() => {
+    if (subcategories.length > 0 && !activeTab) {
+      setActiveTab(subcategories[0].slug);
+    }
+  }, [subcategories, activeTab]);
+
   const filteredItems = useMemo(() => {
-    if (activeTab === "all") return allItems;
+    if (!activeTab) return allItems;
     return allItems.filter((it) => it.subcategory_slug === activeTab);
   }, [allItems, activeTab]);
 
@@ -232,13 +239,6 @@ const MotionGraphics = () => {
           ) : subcategories.length > 0 ? (
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <TabsList className="mx-auto mb-10 flex w-full max-w-2xl gap-2 h-auto p-2">
-                <TabsTrigger
-                  value="all"
-                  className="flex-1 flex items-center justify-center gap-2 text-base py-3"
-                >
-                  <Sparkles className="w-4 h-4" />
-                  Tất cả
-                </TabsTrigger>
                 {subcategories.map((sub) => (
                   <TabsTrigger
                     key={sub.slug}
