@@ -6,9 +6,9 @@ const RouteScrollToTop = () => {
   const location = useLocation();
 
   useEffect(() => {
-    // Luôn nhảy lên đầu trang khi đổi route (tương thích mọi browser)
+    // Chỉ cuộn lên đầu khi đổi pathname/hash, không cuộn khi chỉ đổi query (vd: ?tab=...)
     window.scrollTo(0, 0);
-  }, [location.pathname, location.search, location.hash]);
+  }, [location.pathname, location.hash]);
 
   return null;
 };
