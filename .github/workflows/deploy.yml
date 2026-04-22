@@ -1,0 +1,55 @@
+name: Build and Deploy to docs/
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [lovable-deploy]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || 'https://eaikzwcazujcddtcwcqk.supabase.co' }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVhaWt6d2NhenVqY2RkdGN3Y3FrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2MDQwMzUsImV4cCI6MjA4NTE4MDAzNX0.--k-fQ-Gh-F9c_Tob1KOTLk0e4r3rpfokaTvfwRLJEw' }}
+          VITE_SUPABASE_PROJECT_ID: ${{ secrets.VITE_SUPABASE_PROJECT_ID || 'eaikzwcazujcddtcwcqk' }}
+        run: bun run build
+
+      - name: Sync dist to docs
+        run: |
+          # Preserve CNAME
+          cp docs/CNAME /tmp/CNAME 2>/dev/null || true
+          rm -rf docs
+          mv dist docs
+          cp /tmp/CNAME docs/CNAME 2>/dev/null || true
+          # SPA fallback for GitHub Pages
+          cp docs/index.html docs/404.html
+
+      - name: Commit and push
+        run: |
+          git config user.name "lovable-deploy-bot"
+          git config user.email "deploy-bot@lovable.app"
+          git add docs/
+          if git diff --staged --quiet; then
+            echo "No changes to deploy"
+          else
+            git commit -m "deploy: sync site from Lovable [skip ci]"
+            git push
+          fi
