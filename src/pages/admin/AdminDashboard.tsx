@@ -15,6 +15,7 @@ import AdminSettingsManager from "@/components/admin/AdminSettingsManager";
 import AdminBannerManager from "@/components/admin/AdminBannerManager";
 import AdminStorageStats from "@/components/admin/AdminStorageStats";
 import AdminBulkCompressor from "@/components/admin/AdminBulkCompressor";
+import AdminDeployManager from "@/components/admin/AdminDeployManager";
 
 const CATEGORY_SLUGS = [
   { slug: "thiet-ke-2d", name: "Thiết Kế 2D" },
@@ -194,7 +195,8 @@ const AdminDashboard = () => {
             <AdminDeliverableImageManager />
           </TabsContent>
 
-          <TabsContent value="settings">
+          <TabsContent value="settings" className="space-y-6">
+            <AdminDeployManager />
             <AdminSettingsManager />
           </TabsContent>
         </Tabs>
