@@ -269,7 +269,10 @@ const Studio3D = () => {
               </motion.div>
 
               <Tabs value={currentTab} onValueChange={handleTabChange} className="w-full">
-                <TabsList className="mx-auto mb-10 flex w-full max-w-3xl flex-wrap justify-center gap-2 bg-transparent p-0 h-auto">
+                <TabsList
+                  className="grid w-full max-w-2xl mx-auto mb-10"
+                  style={{ gridTemplateColumns: `repeat(${availableTabs.length}, minmax(0, 1fr))` }}
+                >
                   {availableTabs.map((tab) => {
                     const Icon = tabIcons[tab.slug] || Images;
                     const count = images.filter((img) => (img as typeof img & { subcategory_slug?: string | null }).subcategory_slug === tab.slug).length;
@@ -278,11 +281,11 @@ const Studio3D = () => {
                       <TabsTrigger
                         key={tab.slug}
                         value={tab.slug}
-                        className="min-w-[160px] flex-1 border border-border bg-background/60 py-3 text-base data-[state=active]:border-primary data-[state=active]:bg-primary/10"
+                        className="flex items-center gap-2 text-base py-3"
                       >
-                        <Icon className="w-4 h-4 mr-2" />
+                        <Icon className="w-4 h-4" />
                         {tab.name}
-                        <span className="ml-2 text-xs text-muted-foreground">({count})</span>
+                        <span className="ml-1 text-xs opacity-70">({count})</span>
                       </TabsTrigger>
                     );
                   })}
