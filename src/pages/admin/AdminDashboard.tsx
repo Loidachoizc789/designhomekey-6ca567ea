@@ -16,6 +16,7 @@ import AdminBannerManager from "@/components/admin/AdminBannerManager";
 import AdminStorageStats from "@/components/admin/AdminStorageStats";
 import AdminBulkCompressor from "@/components/admin/AdminBulkCompressor";
 import AdminDeployManager from "@/components/admin/AdminDeployManager";
+import AdminMetaImagesManager from "@/components/admin/AdminMetaImagesManager";
 
 const CATEGORY_SLUGS = [
   { slug: "thiet-ke-2d", name: "Thiết Kế 2D" },
