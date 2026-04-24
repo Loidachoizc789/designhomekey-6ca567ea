@@ -35,7 +35,7 @@ const SEOHead = ({
     "@type": "Organization",
     name: "DesignHomeKey",
     url: url,
-    logo: image,
+    logo: ogImage,
     description: description,
     contactPoint: {
       "@type": "ContactPoint",
