@@ -112,13 +112,15 @@ const SEOHead = ({
       <meta name="author" content="DesignHomeKey" />
       <meta name="robots" content="index, follow" />
       <link rel="canonical" href={url} />
+      <link rel="icon" href={faviconUrl} />
+      <link rel="apple-touch-icon" href={faviconUrl} />
 
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={type} />
       <meta property="og:url" content={url} />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
-      <meta property="og:image" content={image} />
+      <meta property="og:image" content={ogImage} />
       <meta property="og:site_name" content="DesignHomeKey" />
       <meta property="og:locale" content="vi_VN" />
 
@@ -127,7 +129,7 @@ const SEOHead = ({
       <meta name="twitter:url" content={url} />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={image} />
+      <meta name="twitter:image" content={twitterImage} />
 
       {/* JSON-LD Structured Data */}
       <script type="application/ld+json">
