@@ -198,6 +198,7 @@ const AdminDashboard = () => {
 
           <TabsContent value="settings" className="space-y-6">
             <AdminDeployManager />
+            <AdminMetaImagesManager />
             <AdminSettingsManager />
           </TabsContent>
         </Tabs>
