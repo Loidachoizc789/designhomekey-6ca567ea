@@ -62,7 +62,10 @@ const AdminMetaImagesManager = () => {
     setUploadingKey(key);
     try {
       // Compress non-favicon images; keep favicon as-is to preserve format
-      const fileToUpload = key === "favicon" ? file : await compressImage(file, { maxSizeMB: 0.5, maxWidthOrHeight: 1600 });
+      const fileToUpload =
+        key === "favicon"
+          ? file
+          : (await compressImage(file, { maxWidth: 1600, maxHeight: 1600, quality: 0.85 })).file;
       const ext = fileToUpload.name.split(".").pop() || "png";
       const path = `meta/${key}-${Date.now()}.${ext}`;
 
