@@ -347,10 +347,17 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
                       key={currentMedia?.media_url}
                       src={currentMedia?.media_url}
                       alt={selectedItem.title}
-                      className="max-w-full max-h-[60vh] sm:max-h-[70vh] object-contain transition-opacity duration-150 mx-auto"
+                      className="max-w-full max-h-[60vh] sm:max-h-[70vh] object-contain transition-opacity duration-150 mx-auto select-none"
+                      style={{ WebkitTouchCallout: 'none', WebkitUserSelect: 'none', userSelect: 'none', pointerEvents: 'none' } as React.CSSProperties}
                       onContextMenu={(e) => e.preventDefault()}
                       onDragStart={(e) => e.preventDefault()}
                       draggable={false}
+                    />
+                    <div
+                      className="absolute inset-0"
+                      onContextMenu={(e) => e.preventDefault()}
+                      onTouchStart={(e) => e.preventDefault()}
+                      style={{ WebkitTouchCallout: 'none', WebkitUserSelect: 'none', userSelect: 'none' } as React.CSSProperties}
                     />
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                       <img src={watermarkLogo} alt="" className="w-1/4 h-auto opacity-[0.15] blur-[1px] select-none" draggable={false} />
@@ -539,14 +546,21 @@ const ProductGallery = ({ items }: ProductGalleryProps) => {
             />
           ) : (
             <div className="relative inline-flex items-center justify-center max-w-full max-h-full">
-               <img
+              <img
                 src={currentMedia.media_url}
                 alt={selectedItem?.title || ''}
-                className="max-w-full max-h-full object-contain"
-                onClick={(e) => e.stopPropagation()}
+                className="max-w-full max-h-full object-contain select-none"
+                style={{ WebkitTouchCallout: 'none', WebkitUserSelect: 'none', userSelect: 'none', pointerEvents: 'none' } as React.CSSProperties}
                 onContextMenu={(e) => e.preventDefault()}
                 onDragStart={(e) => e.preventDefault()}
                 draggable={false}
+              />
+              <div
+                className="absolute inset-0"
+                onClick={(e) => e.stopPropagation()}
+                onContextMenu={(e) => e.preventDefault()}
+                onTouchStart={(e) => e.preventDefault()}
+                style={{ WebkitTouchCallout: 'none', WebkitUserSelect: 'none', userSelect: 'none' } as React.CSSProperties}
               />
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                 <img src={watermarkLogo} alt="" className="w-1/4 h-auto opacity-[0.15] blur-[1px] select-none" draggable={false} />
