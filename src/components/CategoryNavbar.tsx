@@ -84,7 +84,7 @@ const CategoryNavbar = () => {
               className="relative bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-10 py-6 text-lg font-semibold shadow-lg shadow-primary/30 hover:shadow-primary/50 hover:scale-105 transition-all duration-300 animate-pulse-glow"
               asChild
             >
-              <a href="https://www.facebook.com/61587057484656" target="_blank" rel="noopener noreferrer">
+              <a href="https://m.me/61587057484656" target="_blank" rel="noopener noreferrer">
                 Liên hệ ngay
               </a>
             </Button>
@@ -139,7 +139,7 @@ const CategoryNavbar = () => {
                   className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-full text-base py-5 font-semibold shadow-lg shadow-primary/30"
                   asChild
                 >
-                  <a href="https://www.facebook.com/61587057484656" target="_blank" rel="noopener noreferrer">
+                  <a href="https://m.me/61587057484656" target="_blank" rel="noopener noreferrer">
                     Liên hệ ngay
                   </a>
                 </Button>
