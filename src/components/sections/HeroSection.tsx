@@ -172,6 +172,20 @@ const HeroSection = () => {
                 </div>
               </motion.div>
             )}
+
+            <motion.div
+              key="page-views"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 1 + stats.length * 0.15, duration: 0.5 }}
+              className="text-center">
+              <div className="font-display text-3xl sm:text-4xl md:text-5xl font-bold gradient-text mb-2 tabular-nums">
+                {views !== null ? views.toLocaleString("vi-VN") : "—"}
+              </div>
+              <div className="text-xs sm:text-sm text-muted-foreground uppercase tracking-wider">
+                Lượt truy cập
+              </div>
+            </motion.div>
           </motion.div>
         </motion.div>
       </div>
