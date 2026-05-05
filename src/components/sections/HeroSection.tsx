@@ -22,6 +22,7 @@ const defaultStats = [
 
 
 const HeroSection = () => {
+  const isMobile = useIsMobile();
   const [stats, setStats] = useState<{value: string;label: string;}[]>(defaultStats);
   const [views, setViews] = useState<number | null>(null);
 
