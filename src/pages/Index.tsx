@@ -4,6 +4,7 @@ import SEOHead from "@/components/SEOHead";
 import HeroSection from "@/components/sections/HeroSection";
 import BannerSlider from "@/components/sections/BannerSlider";
 import Footer from "@/components/sections/Footer";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Lazy load all non-critical components
 const FloatingShapes = lazy(() => import("@/components/FloatingShapes"));
@@ -23,13 +24,16 @@ const SectionFallback = () => (
 );
 
 const Index = () => {
+  const isMobile = useIsMobile();
   return (
     <>
       <SEOHead />
       <main className="relative min-h-screen bg-background text-foreground overflow-x-hidden">
-        <Suspense fallback={null}>
-          <FloatingShapes />
-        </Suspense>
+        {!isMobile && (
+          <Suspense fallback={null}>
+            <FloatingShapes />
+          </Suspense>
+        )}
         <Navbar />
         <BannerSlider />
         <HeroSection />

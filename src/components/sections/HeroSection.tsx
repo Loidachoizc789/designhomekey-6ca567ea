@@ -5,6 +5,7 @@ import ParticleField from "@/components/ParticleField";
 import GalaxyBackground from "@/components/GalaxyBackground";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface HomepageStat {
   id: string;
@@ -21,6 +22,7 @@ const defaultStats = [
 
 
 const HeroSection = () => {
+  const isMobile = useIsMobile();
   const [stats, setStats] = useState<{value: string;label: string;}[]>(defaultStats);
   const [views, setViews] = useState<number | null>(null);
 
@@ -73,11 +75,11 @@ const HeroSection = () => {
 
   return (
     <section className="relative flex items-start justify-center overflow-hidden bg-background">
-      {/* Galaxy Background Effect */}
-      <GalaxyBackground />
-      
-      {/* Particle Field */}
-      <ParticleField />
+      {/* Galaxy Background Effect - desktop only for performance */}
+      {!isMobile && <GalaxyBackground />}
+
+      {/* Particle Field - desktop only for performance */}
+      {!isMobile && <ParticleField />}
 
       {/* Grid Pattern Overlay */}
       <div className="absolute inset-0 grid-pattern opacity-10" />
