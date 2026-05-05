@@ -112,7 +112,7 @@ const Navbar = () => {
                 className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-10 py-6 text-lg font-medium"
                 asChild
               >
-                <a href="#contact">Liên hệ</a>
+                <a href="https://m.me/61587057484656" target="_blank" rel="noopener noreferrer">Liên hệ</a>
               </Button>
             </div>
 
@@ -158,7 +158,7 @@ const Navbar = () => {
                     className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-full text-base py-5"
                     asChild
                   >
-                    <a href="#contact" onClick={() => setIsMobileMenuOpen(false)}>
+                    <a href="https://m.me/61587057484656" target="_blank" rel="noopener noreferrer" onClick={() => setIsMobileMenuOpen(false)}>
                       Liên hệ
                     </a>
                   </Button>

@@ -22,6 +22,7 @@ const defaultStats = [
 
 const HeroSection = () => {
   const [stats, setStats] = useState<{value: string;label: string;}[]>(defaultStats);
+  const [views, setViews] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -35,6 +36,39 @@ const HeroSection = () => {
       }
     };
     fetchStats();
+  }, []);
+
+  useEffect(() => {
+    const init = async () => {
+      // Increment once per browser session
+      const key = "dhk_view_counted";
+      if (!sessionStorage.getItem(key)) {
+        sessionStorage.setItem(key, "1");
+        await supabase.rpc("increment_page_view");
+      }
+      const { data } = await supabase
+        .from("page_views")
+        .select("count")
+        .eq("id", "total")
+        .maybeSingle();
+      if (data) setViews(Number(data.count));
+    };
+    init();
+
+    const channel = supabase
+      .channel("page-views-live")
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "page_views", filter: "id=eq.total" },
+        (payload: any) => {
+          if (payload.new?.count != null) setViews(Number(payload.new.count));
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   return (
@@ -138,6 +172,20 @@ const HeroSection = () => {
                 </div>
               </motion.div>
             )}
+
+            <motion.div
+              key="page-views"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 1 + stats.length * 0.15, duration: 0.5 }}
+              className="text-center">
+              <div className="font-display text-3xl sm:text-4xl md:text-5xl font-bold gradient-text mb-2 tabular-nums">
+                {views !== null ? views.toLocaleString("vi-VN") : "—"}
+              </div>
+              <div className="text-xs sm:text-sm text-muted-foreground uppercase tracking-wider">
+                Lượt truy cập
+              </div>
+            </motion.div>
           </motion.div>
         </motion.div>
       </div>

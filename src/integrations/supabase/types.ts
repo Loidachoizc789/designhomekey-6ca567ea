@@ -278,6 +278,24 @@ export type Database = {
         }
         Relationships: []
       }
+      page_views: {
+        Row: {
+          count: number
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          count?: number
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          count?: number
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       product_media: {
         Row: {
           created_at: string
@@ -393,6 +411,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      increment_page_view: { Args: never; Returns: number }
       is_admin: { Args: { _user_id?: string }; Returns: boolean }
       validate_pricing_items: { Args: { items: Json }; Returns: boolean }
     }
