@@ -75,11 +75,11 @@ const HeroSection = () => {
 
   return (
     <section className="relative flex items-start justify-center overflow-hidden bg-background">
-      {/* Galaxy Background Effect */}
-      <GalaxyBackground />
-      
-      {/* Particle Field */}
-      <ParticleField />
+      {/* Galaxy Background Effect - desktop only for performance */}
+      {!isMobile && <GalaxyBackground />}
+
+      {/* Particle Field - desktop only for performance */}
+      {!isMobile && <ParticleField />}
 
       {/* Grid Pattern Overlay */}
       <div className="absolute inset-0 grid-pattern opacity-10" />
