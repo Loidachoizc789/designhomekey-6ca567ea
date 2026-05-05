@@ -4,6 +4,7 @@ import SEOHead from "@/components/SEOHead";
 import HeroSection from "@/components/sections/HeroSection";
 import BannerSlider from "@/components/sections/BannerSlider";
 import Footer from "@/components/sections/Footer";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Lazy load all non-critical components
 const FloatingShapes = lazy(() => import("@/components/FloatingShapes"));
