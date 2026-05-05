@@ -22,6 +22,7 @@ const defaultStats = [
 
 const HeroSection = () => {
   const [stats, setStats] = useState<{value: string;label: string;}[]>(defaultStats);
+  const [views, setViews] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -35,6 +36,39 @@ const HeroSection = () => {
       }
     };
     fetchStats();
+  }, []);
+
+  useEffect(() => {
+    const init = async () => {
+      // Increment once per browser session
+      const key = "dhk_view_counted";
+      if (!sessionStorage.getItem(key)) {
+        sessionStorage.setItem(key, "1");
+        await supabase.rpc("increment_page_view");
+      }
+      const { data } = await supabase
+        .from("page_views")
+        .select("count")
+        .eq("id", "total")
+        .maybeSingle();
+      if (data) setViews(Number(data.count));
+    };
+    init();
+
+    const channel = supabase
+      .channel("page-views-live")
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "page_views", filter: "id=eq.total" },
+        (payload: any) => {
+          if (payload.new?.count != null) setViews(Number(payload.new.count));
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   return (
