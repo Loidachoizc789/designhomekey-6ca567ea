@@ -5,6 +5,7 @@ import ParticleField from "@/components/ParticleField";
 import GalaxyBackground from "@/components/GalaxyBackground";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface HomepageStat {
   id: string;
