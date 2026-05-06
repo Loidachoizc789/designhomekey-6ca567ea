@@ -321,8 +321,10 @@
   .dot-16 { right: 22%; top: 2800px; width: 16px; height: 16px; background: #FF9A00; --dot-color: #FF9A00; --dot-opacity: 0.7;  --dot-speed: 3.5s; --dot-glow: 22px; animation-delay: 1.3s; }
 
   @media (max-width: 768px) {
-    .floating-shape, .glow-dot, .particle-field, .galaxy-stars { display: none; }
+    .glow-dot, .particle-field, .galaxy-stars { display: none; }
     .animate-nebula-1, .animate-nebula-2 { animation: none; opacity: 0.3; }
+    /* Keep software logos floating on mobile, but lighter */
+    .floating-shape { filter: none !important; will-change: auto; }
   }
   @media (prefers-reduced-motion: reduce) {
     .floating-shape, .glow-dot, .particle-field, .galaxy-stars,
