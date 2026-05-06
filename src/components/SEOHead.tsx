@@ -14,7 +14,7 @@ const DEFAULT_IMAGE =
   "https://storage.googleapis.com/gpt-engineer-file-uploads/eYs6YXAZ9gZLsgQ9VzAYz4s2Gx62/uploads/1769290787813-ChatGPT Image Jan 25, 2026, 04_19_34 AM_upscayl_4x_upscayl-standard-4x (2).png";
 
 const SEOHead = ({
-  title = "DesignHomeKey - Thiết kế 3D, 2D & Virtual Production",
+  title = "DesignHomeKey - Phim Trường 3D & Virtual Production",
   description = "Dịch vụ thiết kế phim trường 3D, thiết kế 2D, model 3D và nội ngoại thất chuyên nghiệp. Virtual Production sets cho livestream, talkshow & events.",
   keywords = "thiết kế 3D, phim trường 3D, virtual production, thiết kế 2D, model 3D, nội thất, ngoại thất, livestream, talkshow, events, DesignHomeKey",
   image,
