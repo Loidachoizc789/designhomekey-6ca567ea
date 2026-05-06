@@ -74,7 +74,7 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section className="relative flex items-start justify-center overflow-hidden bg-background">
+    <section className="relative flex items-start justify-center overflow-hidden bg-background min-h-[520px] sm:min-h-[600px]">
       {/* Galaxy Background Effect - desktop only for performance */}
       {!isMobile && <GalaxyBackground />}
 
