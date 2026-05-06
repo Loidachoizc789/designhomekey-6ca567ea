@@ -63,7 +63,7 @@ const AdminLogin = () => {
       <div className="glass-card p-8 max-w-md w-full">
         <div className="text-center mb-8">
           <img
-            src="/lovable-uploads/1052d8d6-1118-4206-be15-c73ee5a0188e.png"
+            src="/lovable-uploads/1052d8d6-1118-4206-be15-c73ee5a0188e.webp"
             alt="DesignHomeKey"
             className="h-16 mx-auto mb-4"
           />

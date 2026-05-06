@@ -105,7 +105,7 @@ const AdminDashboard = () => {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-4">
               <img
-                src="/lovable-uploads/1052d8d6-1118-4206-be15-c73ee5a0188e.png"
+                src="/lovable-uploads/1052d8d6-1118-4206-be15-c73ee5a0188e.webp"
                 alt="DesignHomeKey"
                 className="h-8"
               />

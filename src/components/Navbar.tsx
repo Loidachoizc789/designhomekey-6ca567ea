@@ -76,7 +76,7 @@ const Navbar = () => {
               <img
                 alt="DesignHomeKey"
                 className="h-14 sm:h-16 md:h-20 lg:h-24 w-auto"
-                src="/lovable-uploads/1052d8d6-1118-4206-be15-c73ee5a0188e.png"
+                src="/lovable-uploads/1052d8d6-1118-4206-be15-c73ee5a0188e.webp"
                 width="240"
                 height="96"
                 fetchPriority="high"
