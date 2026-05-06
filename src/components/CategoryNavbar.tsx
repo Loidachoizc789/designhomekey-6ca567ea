@@ -45,7 +45,7 @@ const CategoryNavbar = () => {
           {/* Logo - Larger and pushed to left edge */}
           <Link to="/" className="flex items-center flex-shrink-0">
             <img
-              src="/lovable-uploads/1052d8d6-1118-4206-be15-c73ee5a0188e.png"
+              src="/lovable-uploads/1052d8d6-1118-4206-be15-c73ee5a0188e.webp"
               alt="DesignHomeKey"
               className="h-12 sm:h-14 md:h-16 lg:h-20 w-auto"
             />
