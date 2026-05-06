@@ -29,9 +29,11 @@ const Index = () => {
     <>
       <SEOHead />
       <main className="relative min-h-screen bg-background text-foreground overflow-x-hidden">
-        <Suspense fallback={null}>
-          <FloatingShapes />
-        </Suspense>
+        {!isMobile && (
+          <Suspense fallback={null}>
+            <FloatingShapes />
+          </Suspense>
+        )}
         <Navbar />
         <BannerSlider />
         <HeroSection />
