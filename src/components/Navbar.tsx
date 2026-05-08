@@ -79,7 +79,7 @@ const Navbar = () => {
                 src="/lovable-uploads/1052d8d6-1118-4206-be15-c73ee5a0188e.webp"
                 width="240"
                 height="96"
-                fetchPriority="high"
+                fetchpriority="high"
               />
             </a>
 
