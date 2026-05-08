@@ -41,7 +41,6 @@ const FloatingShapes = memo(({ className = "z-[1]" }: FloatingShapesProps) => {
             borderColor: `${app.color}50`,
             borderWidth: "1.5px",
             borderStyle: "solid",
-            contentVisibility: "auto",
           }}
         >
           <span
