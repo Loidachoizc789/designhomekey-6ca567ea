@@ -41,7 +41,14 @@ const BannerSlider = () => {
   const prev = useCallback(() => setCurrent((c) => (c - 1 + banners.length) % banners.length), [banners.length]);
   const next = useCallback(() => setCurrent((c) => (c + 1) % banners.length), [banners.length]);
 
-  if (loading || banners.length === 0) return null;
+  if (loading) {
+    return (
+      <section className="w-full px-4 sm:px-6 pt-24 md:pt-28 pb-0">
+        <div className="relative w-full overflow-hidden rounded-xl bg-card/30" style={{ aspectRatio: '5/1', maxWidth: '1600px', margin: '0 auto' }} />
+      </section>
+    );
+  }
+  if (banners.length === 0) return null;
 
   const banner = banners[current];
 

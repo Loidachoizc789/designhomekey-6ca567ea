@@ -67,7 +67,7 @@ const OptimizedImage = forwardRef<HTMLImageElement, OptimizedImageProps>(
             onDragStart={(e) => e.preventDefault()}
             loading={priority ? "eager" : "lazy"}
             decoding="async"
-            fetchPriority={priority ? "high" : "auto"}
+            {...({ fetchpriority: priority ? "high" : "auto" } as any)}
             {...props}
           />
         )}
