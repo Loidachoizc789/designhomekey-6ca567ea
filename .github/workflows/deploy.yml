@@ -39,7 +39,44 @@ jobs:
           rm -rf docs
           mv dist docs
           cp /tmp/CNAME docs/CNAME 2>/dev/null || true
-          # SPA fallback for GitHub Pages
+
+      - name: Inject meta images from Supabase (og/twitter/favicon)
+        env:
+          SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || 'https://eaikzwcazujcddtcwcqk.supabase.co' }}
+          SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVhaWt6d2NhenVqY2RkdGN3Y3FrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2MDQwMzUsImV4cCI6MjA4NTE4MDAzNX0.--k-fQ-Gh-F9c_Tob1KOTLk0e4r3rpfokaTvfwRLJEw' }}
+        run: |
+          node <<'EOF'
+          const fs = require('fs');
+          const url = process.env.SUPABASE_URL;
+          const key = process.env.SUPABASE_ANON_KEY;
+          (async () => {
+            const res = await fetch(`${url}/rest/v1/site_settings?id=in.(og_image,twitter_image,favicon)&select=id,value`, {
+              headers: { apikey: key, Authorization: `Bearer ${key}` }
+            });
+            if (!res.ok) { console.error('Fetch failed', res.status); return; }
+            const rows = await res.json();
+            const map = {};
+            rows.forEach(r => { if (r.value && r.value.url) map[r.id] = r.value.url; });
+            console.log('Meta images from DB:', map);
+
+            let html = fs.readFileSync('docs/index.html', 'utf8');
+            const replaceMeta = (prop, val) => {
+              if (!val) return;
+              const re = new RegExp(`(<meta\\s+property="${prop}"\\s+content=")[^"]*(")`, 'g');
+              if (re.test(html)) html = html.replace(re, `$1${val}$2`);
+              const re2 = new RegExp(`(<meta\\s+name="${prop}"\\s+content=")[^"]*(")`, 'g');
+              if (re2.test(html)) html = html.replace(re2, `$1${val}$2`);
+            };
+            replaceMeta('og:image', map.og_image);
+            replaceMeta('twitter:image', map.twitter_image || map.og_image);
+            if (map.favicon) {
+              html = html.replace(/(<link\s+rel="icon"[^>]*href=")[^"]*(")/g, `$1${map.favicon}$2`);
+            }
+            fs.writeFileSync('docs/index.html', html);
+            console.log('Injected meta images into docs/index.html');
+          })().catch(e => { console.error(e); process.exit(1); });
+          EOF
+          # SPA fallback for GitHub Pages (after injection)
           cp docs/index.html docs/404.html
 
       - name: Commit and push
