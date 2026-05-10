@@ -62,11 +62,13 @@ const AdminMetaImagesManager = () => {
     setUploadingKey(key);
     try {
       // Compress non-favicon images; keep favicon as-is to preserve format
+      // Favicon: keep original. OG/Twitter: convert to JPEG (Facebook does NOT support WebP).
       const fileToUpload =
         key === "favicon"
           ? file
-          : (await compressImage(file, { maxWidth: 1600, maxHeight: 1600, quality: 0.85 })).file;
+          : (await compressImageToJpeg(file, { maxWidth: 1200, maxHeight: 1200, quality: 0.88 })).file;
       const ext = fileToUpload.name.split(".").pop() || "png";
+      const path = `meta/${key}-${Date.now()}.${ext}`;
       const path = `meta/${key}-${Date.now()}.${ext}`;
 
       const { error: uploadError } = await supabase.storage
