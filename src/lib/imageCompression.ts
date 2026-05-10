@@ -111,6 +111,80 @@ export const compressImage = (
   });
 };
 
+/**
+ * Compress an image to JPEG (Facebook OG-compatible).
+ * Use this for og:image / twitter:image since Facebook does NOT support WebP.
+ */
+export const compressImageToJpeg = (
+  file: File,
+  options: CompressionOptions = {}
+): Promise<CompressionResult> => {
+  const opts = { ...DEFAULT_OPTIONS, ...options };
+
+  if (!isImageFile(file)) {
+    return Promise.resolve({
+      file,
+      originalSize: file.size,
+      compressedSize: file.size,
+      wasCompressed: false,
+    });
+  }
+
+  return new Promise((resolve) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      let { width, height } = img;
+      if (width > opts.maxWidth! || height > opts.maxHeight!) {
+        const ratio = Math.min(opts.maxWidth! / width, opts.maxHeight! / height);
+        width = Math.round(width * ratio);
+        height = Math.round(height * ratio);
+      }
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        resolve({ file, originalSize: file.size, compressedSize: file.size, wasCompressed: false });
+        return;
+      }
+      // White background to flatten transparency for JPEG
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, width, height);
+      ctx.drawImage(img, 0, 0, width, height);
+
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) {
+            resolve({ file, originalSize: file.size, compressedSize: file.size, wasCompressed: false });
+            return;
+          }
+          const compressedFile = new File(
+            [blob],
+            file.name.replace(/\.[^.]+$/, ".jpg"),
+            { type: "image/jpeg", lastModified: Date.now() }
+          );
+          resolve({
+            file: compressedFile,
+            originalSize: file.size,
+            compressedSize: compressedFile.size,
+            wasCompressed: true,
+          });
+        },
+        "image/jpeg",
+        opts.quality
+      );
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      resolve({ file, originalSize: file.size, compressedSize: file.size, wasCompressed: false });
+    };
+    img.src = url;
+  });
+};
+
 export const formatBytes = (bytes: number): string => {
   if (bytes === 0) return "0 B";
   const k = 1024;
