@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
 import { Loader2, Upload, Trash2, Image as ImageIcon } from "lucide-react";
-import { compressImage } from "@/lib/imageCompression";
+import { compressImage, compressImageToJpeg } from "@/lib/imageCompression";
 
 type MetaKey = "og_image" | "twitter_image" | "favicon";
 
